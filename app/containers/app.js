@@ -18,6 +18,7 @@ class App extends Component {
 
         const { dispatch } = this.props;
         dispatch(updateFields({count: 2016}))
+       // dispatch(updateFields({myActionData:[]}))
     }
 
 
@@ -36,21 +37,6 @@ class App extends Component {
                            return (<Component navigator={navigator}
                                               route={route} {...passProps} {...route.params} {...this.props}/>)
                        }}
-                       navigationBar={
-                           <Navigator.NavigationBar
-                               routeMapper={{
-                                   LeftButton: (route, navigator, index, navState) =>
-                                   { return (<Text>Cancel</Text>); },
-                                   RightButton: (route, navigator, index, navState) =>
-                                   { return (<Text>Done</Text>); },
-                                   Title: (route, navigator, index, navState) =>
-                                   {
-                                       console.log(route,index,navState);
-                                       return (<Text>Awesome Nav Bar</Text>); },
-                               }}
-                               style={{backgroundColor: '#fff'}}
-                           />
-                       }
             />
         )
     }

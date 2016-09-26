@@ -12,13 +12,14 @@ import {
 import TabNavigator from 'react-native-tab-navigator';
 import HomeView from '../pages/HomeView'
 import FetchTestView from '../pages/FetchTestView'
+import MyView from '../pages/My/MyView'
 
 const tabBarItems = [
     {
         title: '首页',
         renderIcon: require('../image/icon_buss_normal.png'),
         renderSelectedIcon: require('../image/icon_buss_cur.png'),
-        component: HomeView
+        component: MyView
     },
     {
         title: '爱车',

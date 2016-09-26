@@ -2,7 +2,7 @@
  * Created by DB on 16/7/18.
  */
 
-export function request(url, params = {}, successBlock, failBlack) {
+export function requestGET(url, params = {}, successBlock, failBlack) {
 
     //把传进来的参数加工成GET模式
     let newURL = url;
@@ -35,6 +35,25 @@ export function request(url, params = {}, successBlock, failBlack) {
                 failBlack(error);
             }
         )
+}
+
+export function requestPOST(url, params = {}, successBlock, failBlack) {
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify(params)
+    })
+        .then((response) => response.json())
+        .then((data) => {
+                successBlock(data)
+            }
+        )
+        .catch((error) => {
+                failBlack(error)
+            }
+        );
 }
 
 export function upLoadImage(url, params, response, loginBlock, successBlock, failBlack) {

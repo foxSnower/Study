@@ -8,12 +8,12 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
-import {request} from '../utils/FetchUtil'
+import {requestGET} from '../utils/FetchUtil'
 
 export default class FetchTestView extends Component {
 
     fetchGET = () => {
-        request('https://suggest.taobao.com/sug?code=utf-8&q=%E6%89%8B%E6%9C%BA',
+        requestGET('https://suggest.taobao.com/sug?code=utf-8&q=%E6%89%8B%E6%9C%BA',
             {},
             (data)=> {
                 alert(JSON.stringify(data))
@@ -24,17 +24,26 @@ export default class FetchTestView extends Component {
         )
     };
 
+//{"API_CODE":"FetchMessage","PARAM":{"LOGIN_USER_ID":"NA"},"PAGE_SIZE":10,"PAGE_INDEX":1,"SORT":"ACT_ORDER ASC,act_start_time DESC"}:
+
+    // JSON.stringify({
+    //     firstParam: 'yourValue',
+    //     secondParam: 'yourOtherValue',
+    // })
+    //
     fetchPOST = () => {
 
-        fetch('https://mywebsite.com/endpoint/', {
+        fetch('http://14.23.175.49:880/Handler.ashx', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                firstParam: 'yourValue',
-                secondParam: 'yourOtherValue',
+                "API_CODE":"FetchMessage",
+                "PARAM":{"LOGIN_USER_ID":"NA"},
+                "PAGE_SIZE":10,
+                "PAGE_INDEX":1,
+                "SORT":"ACT_ORDER ASC,act_start_time DESC"
             })
         })
             .then((response) => response.text())
