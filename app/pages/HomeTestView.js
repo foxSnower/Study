@@ -7,7 +7,7 @@ import {
     View,
     Text
 } from 'react-native';
-import {updateFields} from '../actions/rootAction'
+import {updateFields} from '../actions/fieldsAction'
 import Button from '../components/Button'
 
 export default class HomeView extends Component {

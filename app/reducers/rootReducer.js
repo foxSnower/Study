@@ -4,7 +4,9 @@
 
 import { combineReducers } from 'redux'
 import fields from './fieldsReducer'
+import home from './homeReducer'
 
 export default rootReducer = combineReducers({
-    fields
+    fields,
+    home
 })

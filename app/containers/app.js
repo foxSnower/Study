@@ -9,7 +9,7 @@ import {
 
 import {connect} from 'react-redux';
 import TabBarView from './TabBarView';
-import {updateFields} from '../actions/rootAction'
+import {updateFields} from '../actions/fieldsAction'
 
 class App extends Component {
 
@@ -17,7 +17,7 @@ class App extends Component {
         super(props);
 
         const { dispatch } = this.props;
-        dispatch(updateFields({count: 2016}))
+        dispatch(updateFields({count: 2016}));
        // dispatch(updateFields({myActionData:[]}))
     }
 

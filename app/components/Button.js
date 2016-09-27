@@ -9,7 +9,6 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
-import {updateFields} from '../actions/rootAction'
 
 //export default 关键字 在别的文件中使用
 export default class Button extends Component {
@@ -26,17 +25,6 @@ export default class Button extends Component {
         disabled: false,
         text: "按钮",
         onPress: () => {},
-    };
-
-    onClick = () => {
-
-        const { fields, dispatch } = this.props;
-        dispatch(updateFields({count: 11}))
-    };
-
-    addOne = () => {
-        const { fields, dispatch } = this.props;
-        dispatch(updateFields({count: fields.count+10}))
     };
 
     render() {

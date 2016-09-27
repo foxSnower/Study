@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
-import HomeView from '../pages/HomeView'
+import HomeView from '../pages/HomeTestView'
 import FetchTestView from '../pages/FetchTestView'
-import MyView from '../pages/My/MyView'
+import MyView from '../pages/Home/HomeView'
 
 const tabBarItems = [
     {
