@@ -57,8 +57,8 @@ class HomeView extends Component {
 
                                       }
                                   }>
-                    <Image style={{width: Screen.width}}
-                           resizeMode={"contain"}
+                    <Image style={{width: Screen.width, flex:1}}
+                           resizeMode={"cover"}
                            source={{uri: v.ACT_IMAGE}}
                     />
                 </TouchableOpacity>
@@ -83,6 +83,7 @@ class HomeView extends Component {
 
     //中间 石油报价
     addOilPriceView = (weatherInfo, oilInfo) => {
+        let title = oilInfo ? '今日油价' : '';
         let p93 = oilInfo ? `92/93: ${oilInfo.p93}元／L` : '';
         let p97 = oilInfo ? `92/93: ${oilInfo.p97}元／L` : '';
         return (
@@ -99,7 +100,7 @@ class HomeView extends Component {
                 </View>
 
                 <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                    <Text style={{color:'#666'}}>今日油价</Text>
+                    <Text style={{color:'#666'}}>{title}</Text>
                     <Text style={{marginTop: 8, color:'#32B9EE'}}>{p93}</Text>
                     <Text style={{marginTop: 8, color:'#32B9EE'}}>{p97}</Text>
                 </View>
