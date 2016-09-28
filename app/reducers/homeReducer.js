@@ -5,7 +5,11 @@
 
 import * as types from '../actions/actionTypes';
 
-export default function home(state = {}, action = {}) {
+const initialState = {
+    actionList: []
+};
+
+export default function home(state = initialState, action = {}) {
     switch (action.type) {
         case types.UPDATE_HOME:
             return {...state, ...action.value}; //Object.assign({}, state, action.value);

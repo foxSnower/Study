@@ -14,8 +14,9 @@ import {
 import {connect} from 'react-redux';
 import Swiper from 'react-native-swiper'
 import {Screen, pixel1} from '../../utils/CommonUtil'
-import {updateHome, fetchAction, fetchWeatherInfo} from '../../actions/homeAction'
+import {fetchAction, fetchWeatherInfo} from '../../actions/homeAction'
 import CustomButton from './CustomButton'
+import ActivitieListView from './ActionListView'
 
 class HomeView extends Component {
 
@@ -116,6 +117,11 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1, backgroundColor: '#fff'}}
                                   text="劲爆活动"
                                   image={require('../../image/icon_index_activity.png')}
+                                  onPress={() => {
+                                      this.props.navigator.push({
+                                          component: ActivitieListView,
+                                      })
+                                  }}
                     />
                     <CustomButton style={{flex: 1, backgroundColor: '#fff', marginLeft: pixel1}}
                                   text="用车百科"

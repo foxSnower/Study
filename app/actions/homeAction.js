@@ -95,3 +95,31 @@ export let fetchOilInfo = (provive) => {
     }
 
 };
+
+//获取油价数据
+export let fetchActionList = (pageIndex, listBlock) => {
+
+    return dispatch => {
+
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE":"NewCampaignList",
+                "PARAM":{},
+                "PAGE_SIZE":5,
+                "PAGE_INDEX":pageIndex,
+                "SORT":"to_number(ACT_ORDER) ASC,act_start_time DESC"
+            },
+            (data) => {
+               // dispatch(updateHome({actionList: data.DATA}));
+                listBlock(data.DATA);
+                console.log(111);
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+    }
+
+};
+
