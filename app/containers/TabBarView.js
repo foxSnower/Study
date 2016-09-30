@@ -13,6 +13,9 @@ import TabNavigator from 'react-native-tab-navigator';
 import HomeView from '../pages/HomeTestView'
 import FetchTestView from '../pages/FetchTestView'
 import MyView from '../pages/Home/HomeView'
+import PersonalView from '../pages/Home/PersonalView'
+import BussinessView from '../pages/Home/BussinessView'
+import LoginView from '../pages/Login/LoginView'
 
 const tabBarItems = [
     {
@@ -25,13 +28,13 @@ const tabBarItems = [
         title: '爱车',
         renderIcon: require('../image/icon_msg_normal.png'),
         renderSelectedIcon: require('../image/icon_msg_cur.png'),
-        component: FetchTestView
+        component: BussinessView
     },
     {
         title: '我的',
         renderIcon: require('../image/icon_man_normal.png'),
         renderSelectedIcon: require('../image/icon_man_cur.png'),
-        component: HomeView
+        component: LoginView
     }
 ];
 

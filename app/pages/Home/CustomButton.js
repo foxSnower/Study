@@ -25,7 +25,7 @@ export default class CustomButton extends Component {
 
     render() {
 
-        const {style, textStyle, text, image, onPress} = this.props;
+        const {style, textStyle, text,secTextStyle,secText ,imageStyle,image, onPress} = this.props;
 
         return (
             <TouchableOpacity style={[styles.button, style]}
@@ -34,9 +34,13 @@ export default class CustomButton extends Component {
             >
                 <Image resizeMode={"contain"}
                        source={image}
-                       style={styles.image}
+                       style={[styles.image,imageStyle]}
                 />
                 <Text style={[styles.text, textStyle]}>{text}</Text>
+                {
+                    secText?<Text style={[styles.secText, secTextStyle]}>{secText}</Text>:null
+                }
+
             </TouchableOpacity>
         );
     }
@@ -51,7 +55,6 @@ const styles = StyleSheet.create({
     text: {
         color: '#333',
         textAlign: 'center',
-        fontWeight: 'bold',
         marginBottom: 15,
         fontSize: 15
     },
@@ -59,6 +62,8 @@ const styles = StyleSheet.create({
         height: 30,  //这里布局有点奇怪你随便给个高度就好
         flex: 1,
         marginTop: 15,
-        marginBottom: 15
+    },
+    secText:{
+        color:"#888"
     }
 });
