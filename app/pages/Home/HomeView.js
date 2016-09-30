@@ -115,8 +115,9 @@ class HomeView extends Component {
             <View style={{flex: 1, backgroundColor: '#f4f4f4', marginTop: pixel1}}>
                 <View style={{flex: 3, flexDirection: 'row', backgroundColor: '#f4f4f4'}}>
                     <CustomButton style={{flex: 1, backgroundColor: '#fff'}}
-                                  text="劲爆活动"
+                                  text="劲爆活动a "
                                   image={require('../../image/icon_index_activity.png')}
+                                  textStyle={{marginTop:10}}
                                   onPress={() => {
                                       this.props.navigator.push({
                                           component: ActivitieListView,
@@ -125,6 +126,7 @@ class HomeView extends Component {
                     />
                     <CustomButton style={{flex: 1, backgroundColor: '#fff', marginLeft: pixel1}}
                                   text="用车百科"
+                                  textStyle={{marginTop:10}}
                                   image={require('../../image/icon_index_wiki.png')}
                     />
                 </View>

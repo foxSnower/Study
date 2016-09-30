@@ -29,7 +29,7 @@ export default class DefaultNavBar extends Component {
     };
 
     static defaultProps = {
-        tintColor: '#fff',
+        tintColor: '#343434',
         hideLefButton: false,
         hideRightButton: true,
         onRightClick: ()=>{},
@@ -59,8 +59,8 @@ export default class DefaultNavBar extends Component {
                                               onPress={this.props.onBack}
                                               activeOpacity={0.5}
                             >
-                                <Icon style={{backgroundColor: 'transparent', marginTop: 2}}
-                                      name="ios-arrow-back-outline" size={28} color='#000'/>
+                                <Icon style={{marginTop: 2}}
+                                      name="ios-arrow-back-outline" size={28} color='#fff'/>
                             </TouchableOpacity>
                         </View> : null
                     }
@@ -71,7 +71,7 @@ export default class DefaultNavBar extends Component {
                                           onPress={this.props.onRightClick}
                                           activeOpacity={0.5}
                         >
-                            <Text>{this.props.rightText}</Text>
+                            <Text style={{color:"#fff"}}>{this.props.rightText}</Text>
                         </TouchableOpacity>
                         : null
                     }
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     navBarTitleText: {
         fontSize: 17,
         letterSpacing: 0.5,
-        color: '#333',
+        color: '#fff',
         fontWeight: '500',
     },
 });

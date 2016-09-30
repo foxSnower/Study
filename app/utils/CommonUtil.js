@@ -10,6 +10,8 @@ import {
 export const Screen = Dimensions.get('window');
 
 export const MainColor = '#825897';
+export const BGColor = '#efeff4';
+export const BTNColor = '#ef4f4f';
 
 export const pixelRation = PixelRatio.get();
 
