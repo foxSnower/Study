@@ -29,6 +29,7 @@ export default class HomeView extends Component {
                 <Text style={styles.text} onPress={()=> {
                     this.props.navigator.push({component: HomeView})
                 }}>点击我跳转到新的页面</Text>
+
                 <Button ref="btn" onPress={this.testClick} {...this.props}/>
                 <Button ref="btn1" onPress={this.testClick1} {...this.props}/>
             </View>
