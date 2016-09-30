@@ -4,6 +4,7 @@ import {
     View,
     Text,
     TextInput,
+    Image,
     TouchableOpacity
 } from 'react-native';
 
@@ -11,6 +12,9 @@ import {BGColor,BTNColor,Screen,pixelRation} from '../../utils/CommonUtil';
 import NavBar from '../../components/DefaultNavBar';
 import  LabelInput from '../../components/LabelInput';
 import Button from '../../components/Button';
+import AgreementView from './AgreementView';
+import RegistView from './RegistView';
+
 
 export default class LoginView extends Component{
 
@@ -21,15 +25,23 @@ export default class LoginView extends Component{
           <View style={styles.page}>
               <NavBar title="登录"
                       rightText="注册"
-                      onRightClick={()=>{alert("zhuce")}} />
+                      hideRightButton ={false}
+                      onRightClick={()=>{
+                          this.props.navigator.push({
+                              component:RegistView
+                          })
+                      }} />
+              {/* <Image style={{flex:1,width:Screen.width,height:Screen.height}}
+                     source={require('../../image/0.jpg')}
+                     resizeMode="cover"> */}
               <View style={styles.container}>
-                <LabelInput label="手机号"
-                            labelStyle={{width:50}}
-                            placeholder="请输入用户名"
-                            defaultValue=""
-                            max={11}
-                            keyboardType="numeric"
-                             />
+              <LabelInput label="手机号"
+                        labelStyle={{width:50}}
+                        placeholder="请输入用户名"
+                        defaultValue=""
+                        max={11}
+                        keyboardType="numeric"
+                         />
 
                <LabelInput label="密码"
                            labelStyle={{width:50}}
@@ -47,6 +59,15 @@ export default class LoginView extends Component{
               <Button text="登  录"
                       style={{width:Screen.width-40,backgroundColor:BTNColor,alignSelf:"center",borderRadius:8}}
                       onPress={()=>{alert(1)}} />
+              <Button text="东风日产车主APP使用协议"
+                      textStyle={{color:"#666",fontWeight:"300"}}
+                      style={{marginBottom:10,alignSelf:"center",backgroundColor:BGColor}}
+                      onPress={()=>{
+                          this.props.navigator.push({
+                              component:AgreementView
+                          })
+                      }} />
+              {/* </Image> */}
           </View>
       )
     }

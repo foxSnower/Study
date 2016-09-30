@@ -9,6 +9,8 @@ import{
 import CustomButton from './CustomButton';
 import {Screen, pixel1} from '../../utils/CommonUtil';
 
+import LoginView from '../../pages/Login/LoginView'
+
 
 const imageItems = [
     [
@@ -47,7 +49,14 @@ const imageItems = [
     ]
 ];
 export default class PersonalView extends Component{
-
+    constructor(props){
+     super(props);
+     }
+    onPress = () =>{
+        this.props.navigator.push({
+        component:LoginView
+        })
+    }
     renderMidItem(items){
         let aItems = [];
         items.map((row,index)=>{
@@ -62,7 +71,7 @@ export default class PersonalView extends Component{
                                               key={index2}
                                               textStyle={{marginBottom:10,fontSize:12,marginTop:7}}
                                               text={item.text}
-                                              onPress={()=>{alert(item.targetComponent)}}
+                                              onPress={this.onPress}
                                 />
                             )
                         })

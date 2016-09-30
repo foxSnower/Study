@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
         color: '#333',
         textAlign: 'center',
         marginBottom: 15,
-        fontSize: 15
+        fontSize: 15,
+        fontWeight:"100"
     },
     image: {
         height: 30,  //这里布局有点奇怪你随便给个高度就好
