@@ -10,6 +10,7 @@ import {
     ListView,
     TouchableOpacity,
     RefreshControl,
+    Linking
 } from 'react-native';
 
 import {connect} from 'react-redux';
@@ -101,7 +102,7 @@ class ActivitieListView extends Component {
             <View style={styles.cellView}>
                 <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={
                     () => {
-
+                        Linking.openURL('http://facebook.github.io/react-native/docs/activityindicator.html');
                     }
                 }>
                     <View style={styles.cellTitleView}>

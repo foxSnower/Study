@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
         fontWeight:"100"
     },
     image: {
-        height: 30,  //这里布局有点奇怪你随便给个高度就好
         flex: 1,
+        height: 30,  //这里布局有点奇怪你随便给个高度就好
         marginTop: 15,
     },
     secText:{
