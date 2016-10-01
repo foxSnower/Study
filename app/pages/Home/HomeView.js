@@ -13,7 +13,7 @@ import {
 
 import {connect} from 'react-redux';
 import Swiper from 'react-native-swiper'
-import {Screen, pixel1} from '../../utils/CommonUtil'
+import {Screen, pixel1,Debug} from '../../utils/CommonUtil'
 import {fetchAction, fetchWeatherInfo} from '../../actions/homeAction'
 import CustomButton from './CustomButton'
 import ActivitieListView from './ActionListView'// 用车百科
@@ -24,56 +24,71 @@ import UserDefaults from '../../utils/GlobalStorage'
 class HomeView extends Component {
 
     componentDidMount() {
-
+        let deviceInfo = {};
         //本地存储的使用  通过key存下对应的值
-        UserDefaults.setObject('userID','11111');
+        UserDefaults.setObject('userID',{1:1111,2:22222,3:33333,4:44444});
 
         const {dispatch} = this.props;
         dispatch(fetchAction());
         dispatch(fetchWeatherInfo());
 
-        console.log("Device Unique ID", DeviceInfo.getUniqueID());  // e.g. FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
-// * note this is IDFV on iOS so it will change if all apps from the current apps vendor have been previously uninstalled
+        if(!Debug){
+            deviceInfo.DEVICE_TOKEN = DeviceInfo.getUniqueID();
+            deviceInfo.MODEL = DeviceInfo.getModel();
+            deviceInfo.BRAND = DeviceInfo.getBrand();
+            deviceInfo.VERSION = DeviceInfo.getVersion();
 
-        console.log("Device Manufacturer", DeviceInfo.getManufacturer());  // e.g. Apple
+            UserDefaults.setObject('deviceInfo',deviceInfo);
+        }else{
+            deviceInfo.DEVICE_TOKEN = "abcdefghijklmn";
+            deviceInfo.MODEL = "Android";
+            deviceInfo.BRAND = "小米";
+            deviceInfo.VERSION = "1.0.0";
 
-        console.log("Device Brand", DeviceInfo.getBrand());  // e.g. Apple / htc / Xiaomi
-
-        console.log("Device Model", DeviceInfo.getModel());  // e.g. iPhone 6
-
-        console.log("Device ID", DeviceInfo.getDeviceId());  // e.g. iPhone7,2 / or the board on Android e.g. goldfish
-
-        console.log("System Name", DeviceInfo.getSystemName());  // e.g. iPhone OS
-
-        console.log("System Version", DeviceInfo.getSystemVersion());  // e.g. 9.0
-
-        console.log("Bundle ID", DeviceInfo.getBundleId());  // e.g. com.learnium.mobile
-
-        console.log("Build Number", DeviceInfo.getBuildNumber());  // e.g. 89
-
-        console.log("App Version", DeviceInfo.getVersion());  // e.g. 1.1.0
-
-        console.log("App Version (Readable)", DeviceInfo.getReadableVersion());  // e.g. 1.1.0.89
-
-        console.log("Device Name", DeviceInfo.getDeviceName());  // e.g. Becca's iPhone 6
-
-        console.log("User Agent", DeviceInfo.getUserAgent()); // e.g. Dalvik/2.1.0 (Linux; U; Android 5.1; Google Nexus 4 - 5.1.0 - API 22 - 768x1280 Build/LMY47D)
-
-        console.log("Device Locale", DeviceInfo.getDeviceLocale()); // e.g en-US
-
-        console.log("Device Country", DeviceInfo.getDeviceCountry()); // e.g US
-
-        //console.log("Timezone", DeviceInfo.getTimezone()); // e.g America/Mexico_City
-
-        console.log("App Instance ID", DeviceInfo.getInstanceID()); // ANDROID ONLY - see https://developers.google.com/instance-id/
+            UserDefaults.setObject('deviceInfo',deviceInfo);
+        }
+//         console.log("Device Unique ID", DeviceInfo.getUniqueID());  // e.g. FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
+// // * note this is IDFV on iOS so it will change if all apps from the current apps vendor have been previously uninstalled
+//
+//         console.log("Device Manufacturer", DeviceInfo.getManufacturer());  // e.g. Apple
+//
+//         console.log("Device Brand", DeviceInfo.getBrand());  // e.g. Apple / htc / Xiaomi
+//
+//         console.log("Device Model", DeviceInfo.getModel());  // e.g. iPhone 6
+//
+//         console.log("Device ID", DeviceInfo.getDeviceId());  // e.g. iPhone7,2 / or the board on Android e.g. goldfish
+//
+//         console.log("System Name", DeviceInfo.getSystemName());  // e.g. iPhone OS
+//
+//         console.log("System Version", DeviceInfo.getSystemVersion());  // e.g. 9.0
+//
+//         console.log("Bundle ID", DeviceInfo.getBundleId());  // e.g. com.learnium.mobile
+//
+//         console.log("Build Number", DeviceInfo.getBuildNumber());  // e.g. 89
+//
+//         console.log("App Version", DeviceInfo.getVersion());  // e.g. 1.1.0
+//
+//         console.log("App Version (Readable)", DeviceInfo.getReadableVersion());  // e.g. 1.1.0.89
+//
+//         console.log("Device Name", DeviceInfo.getDeviceName());  // e.g. Becca's iPhone 6
+//
+//         console.log("User Agent", DeviceInfo.getUserAgent()); // e.g. Dalvik/2.1.0 (Linux; U; Android 5.1; Google Nexus 4 - 5.1.0 - API 22 - 768x1280 Build/LMY47D)
+//
+//         console.log("Device Locale", DeviceInfo.getDeviceLocale()); // e.g en-US
+//
+//         console.log("Device Country", DeviceInfo.getDeviceCountry()); // e.g US
+//
+//         //console.log("Timezone", DeviceInfo.getTimezone()); // e.g America/Mexico_City
+//
+//         console.log("App Instance ID", DeviceInfo.getInstanceID()); // ANDROID ONLY - see https://developers.google.com/instance-id/
 
     }
 
     //广告点击事件
     swiperViewClick = () =>{
-        //本地存储的使用   根据key拿到数据  通过回调方法获取
+        //本地存储的使用   根据key拿到数据  通过回调方法获取  我这里都写了啊
         UserDefaults.objectForKey('userID',(data) => {
-            alert(data);
+            alert(data['1']);
         })
     };
 

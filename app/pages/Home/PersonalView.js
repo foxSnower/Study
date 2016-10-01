@@ -56,7 +56,8 @@ export default class PersonalView extends Component{
         this.props.navigator.push({
         component:LoginView
         })
-    }
+    };
+
     renderMidItem(items){
         let aItems = [];
         items.map((row,index)=>{
