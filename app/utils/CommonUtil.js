@@ -7,13 +7,15 @@ import {
     Platform
 } from  'react-native';
 
-export const Screen = Dimensions.get('window');
+export const Debug = true;    //设置开发模式
+export const GM_CALL = "400-830-8899";   //登录异常客服电话
+export const Screen = Dimensions.get('window');   //获取屏幕
 
 export const MainColor = '#825897';
-export const BGColor = '#efeff4';
-export const BTNColor = '#ef4f4f';
+export const BGColor = '#efeff4';      //app背景颜色
+export const BTNColor = '#ef4f4f';     //按钮红色通用
 
-export const pixelRation = PixelRatio.get();
+export const pixelRation = PixelRatio.get();   //1像素的兼容处理
 
 export const pixel1 = 1 / pixelRation;
 
@@ -25,4 +27,11 @@ export function naviGoBack(navigator) {
         return true;
     }
     return false;
+}
+
+export function validateMobile(tel) {    //校验手机
+    if (!tel)
+        return false;
+    var reg = /^0?1[3|4|5|8|7][0-9]\d{8}$/;
+    return reg.test(tel);
 }
