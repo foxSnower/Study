@@ -69,7 +69,7 @@ export default class PersonalView extends Component{
                                               imageStyle={styles.imageItems}
                                               image={item.image}
                                               key={index2}
-                                              textStyle={{marginBottom:10,fontSize:12,marginTop:7}}
+                                              textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
                                               text={item.text}
                                               onPress={this.onPress}
                                 />
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     imageItems:{
         width:50,
         height:50,
-        marginTop:10,
+        marginTop:15,
     },
     bottomItem:{
         width:Screen.width,

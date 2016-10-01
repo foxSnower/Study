@@ -4,7 +4,9 @@
 import React, {Component} from 'react';
 import {
     Navigator,
-    Text
+    Text,
+    View,
+    StatusBar
 } from 'react-native';
 
 import {connect} from 'react-redux';
@@ -16,28 +18,32 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        const { dispatch } = this.props;
+        const {dispatch} = this.props;
         dispatch(updateFields({count: 2016}));
-       // dispatch(updateFields({myActionData:[]}))
+        // dispatch(updateFields({myActionData:[]}))
     }
-
 
 
     render() {
 
         return (
-            <Navigator {...this.props}
-                       initialRoute={{name: 'TabBarView', component: TabBarView}}
-                       configureScene={()=> {
-                           return Navigator.SceneConfigs.PushFromRight;
-                       }}
-                       renderScene={(route, navigator) => {
-                           let Component = route.component;
-                           let passProps = route.passProps;
-                           return (<Component navigator={navigator}
-                                              route={route} {...passProps} {...route.params} {...this.props}/>)
-                       }}
-            />
+            <View style={{flex:1}}>
+                <StatusBar
+                    barStyle="light-content"
+                />
+                <Navigator {...this.props}
+                           initialRoute={{name: 'TabBarView', component: TabBarView}}
+                           configureScene={()=> {
+                               return Navigator.SceneConfigs.PushFromRight;
+                           }}
+                           renderScene={(route, navigator) => {
+                               let Component = route.component;
+                               let passProps = route.passProps;
+                               return (<Component navigator={navigator}
+                                                  route={route} {...passProps} {...route.params} {...this.props}/>)
+                           }}
+                />
+            </View>
         )
     }
 }
