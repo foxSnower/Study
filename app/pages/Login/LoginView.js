@@ -58,10 +58,10 @@ export default class LoginView extends Component{
 
               <Button text="登  录"
                       style={{width:Screen.width-40,backgroundColor:BTNColor,alignSelf:"center",borderRadius:8}}
-                      onPress={()=>{alert(1)}} />
+                      onPress={()=>{this.login}} />
               <Button text="东风日产车主APP使用协议"
                       textStyle={{color:"#666",fontWeight:"300"}}
-                      style={{marginBottom:10,alignSelf:"center",backgroundColor:BGColor}}
+                      style={{marginBottom:10,alignSelf:"flex-end",backgroundColor:BGColor}}
                       onPress={()=>{
                           this.props.navigator.push({
                               component:AgreementView

@@ -74,9 +74,9 @@ export default class BussinessView extends Component{
                                             return (
                                                 <CustomButton style={{flex:1,marginBottom:10}}
                                                               image={item.image}
-                                                              imageStyle={{marginTop:10}}
+                                                              imageStyle={{marginTop:15}}
                                                               key={index2}
-                                                              textStyle={{marginTop:10,marginBottom:5,fontSize:12}}
+                                                              textStyle={{marginTop:15,marginBottom:10,fontSize:12}}
                                                               text={item.text}
                                                               onPress={()=>{
                                                                 this.props.navigator.push({

@@ -117,7 +117,7 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1, backgroundColor: '#fff'}}
                                   text="劲爆活动a "
                                   image={require('../../image/icon_index_activity.png')}
-                                  textStyle={{marginTop:10}}
+                                  textStyle={{marginTop:10,marginBottom:5}}
                                   onPress={() => {
                                       this.props.navigator.push({
                                           component: ActivitieListView,
@@ -126,25 +126,29 @@ class HomeView extends Component {
                     />
                     <CustomButton style={{flex: 1, backgroundColor: '#fff', marginLeft: pixel1}}
                                   text="用车百科"
-                                  textStyle={{marginTop:10}}
+                                  textStyle={{marginTop:10,marginBottom:5}}
                                   image={require('../../image/icon_index_wiki.png')}
                     />
                 </View>
                 <View style={{flex: 2, flexDirection: 'row', marginTop: pixel1, backgroundColor: '#fff'}}>
                     <CustomButton style={{flex: 1}}
                                   text="保养预约"
+                                  textStyle={{marginTop:5,marginBottom:5}}
                                   image={require('../../image/icon_index_maintain.png')}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="预约驾驶"
+                                  textStyle={{marginTop:5,marginBottom:5}}
                                   image={require('../../image/icon_index_test.png')}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="紧急救援"
+                                  textStyle={{marginTop:5,marginBottom:5}}
                                   image={require('../../image/icon_index_saved.png')}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="我的消息"
+                                  textStyle={{marginTop:5,marginBottom:5}}
                                   image={require('../../image/icon_index_message.png')}
                     />
                 </View>
