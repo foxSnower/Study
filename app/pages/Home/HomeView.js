@@ -17,6 +17,8 @@ import {Screen, pixel1} from '../../utils/CommonUtil'
 import {fetchAction, fetchWeatherInfo} from '../../actions/homeAction'
 import CustomButton from './CustomButton'
 import ActivitieListView from './ActionListView'
+// 用车百科
+import Wiki from './Wiki/IndexView'
 
 class HomeView extends Component {
 
@@ -128,6 +130,11 @@ class HomeView extends Component {
                                   text="用车百科"
                                   textStyle={{marginTop:10}}
                                   image={require('../../image/icon_index_wiki.png')}
+                                  onPress = {() => {
+                                    this.props.navigator.push({
+                                        component: Wiki
+                                    })
+                                  }}
                     />
                 </View>
                 <View style={{flex: 2, flexDirection: 'row', marginTop: pixel1, backgroundColor: '#fff'}}>
