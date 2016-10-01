@@ -16,15 +16,18 @@ import Swiper from 'react-native-swiper'
 import {Screen, pixel1} from '../../utils/CommonUtil'
 import {fetchAction, fetchWeatherInfo} from '../../actions/homeAction'
 import CustomButton from './CustomButton'
-import ActivitieListView from './ActionListView'
-// 用车百科
+import ActivitieListView from './ActionListView'// 用车百科
 import Wiki from './Wiki/IndexView'
-
 import DeviceInfo from 'react-native-device-info'
+import UserDefaults from '../../utils/GlobalStorage'
 
 class HomeView extends Component {
 
     componentDidMount() {
+
+        //本地存储的使用  通过key存下对应的值
+        UserDefaults.setObject('userID','11111');
+
         const {dispatch} = this.props;
         dispatch(fetchAction());
         dispatch(fetchWeatherInfo());
@@ -66,6 +69,14 @@ class HomeView extends Component {
 
     }
 
+    //广告点击事件
+    swiperViewClick = () =>{
+        //本地存储的使用   根据key拿到数据  通过回调方法获取
+        UserDefaults.objectForKey('userID',(data) => {
+            alert(data);
+        })
+    };
+
     render() {
 
         const {home} = this.props;
@@ -93,11 +104,8 @@ class HomeView extends Component {
                 <TouchableOpacity activeOpacity={0.8}
                                   style={styles.slide1}
                                   key={k}
-                                  onPress={
-                                      () => {
-
-                                      }
-                                  }>
+                                  onPress={this.swiperViewClick}
+                >
                     <Image style={{width: Screen.width, flex:1}}
                            resizeMode={"cover"}
                            source={{uri: v.ACT_IMAGE}}
