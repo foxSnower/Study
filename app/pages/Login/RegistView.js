@@ -16,27 +16,84 @@ import LabelInput from '../../components/LabelInput';
 import Button from '../../components/Button';
 import AgreementView from './AgreementView';    //注册协议
 import Toast from 'react-native-root-toast';
-import {updateRegist} from '../../actions/registAction'
+import {updateLogin} from '../../actions/loginAction';
 
 class RegistView extends Component {
-
+    //获取验证码逻辑
     getVailidateCode = ()=> {
-        //这个页面在哪里
         const {dispatch} = this.props;
-        const {mobile} =this.props.regist;
-        if(mobile == undefined || mobile ==""){
+        const {reg_mobile} =this.props.login;
+        if(reg_mobile == undefined || reg_mobile ==""){
             Toast.show("请输入手机号",{
                 duration:2000,
             });
             return;
         }
-        if(!validateMobile(mobile)){
+        if(!validateMobile(reg_mobile)){
+            Toast.show("手机格式不正确",{
+                duration:2000,
+            })
+            return;
+        }else{
+            dispatch(getValidateCode(reg_mobile))
+        }
+
+    }
+    //处理发送验证码按钮
+    reSend = ()=>{
+        return (
+            <Text>发送验证码</Text>
+        )
+    }
+
+    //注册
+    reg =()=>{
+        const {dispatch} = this.props;
+        const {reg_mobile,reg_pwd,reg_repwd,reg_valiCode} =this.props.login;
+        if(reg_mobile == undefined || reg_mobile ==""){
+            Toast.show("请输入手机号",{
+                duration:2000,
+            });
+            return;
+        }
+        if(!validateMobile(reg_mobile)){
             Toast.show("手机格式不正确",{
                 duration:2000,
             })
             return;
         }
-        alert(mobile);
+        if(reg_valiCode == undefined || reg_valiCode == ''){
+            Toast.show("请输入验证码",{
+                duration:2000,
+            })
+            return;
+        }else if(reg_valiCode!=reg_relValiCode){
+
+        }
+        if(reg_pwd==undefined || reg_pwd == '' ){
+            Toast.show("请输入密码",{
+                duration:2000,
+            })
+            return;
+        }else if(reg_pwd.length<8){
+            Toast.show("密码不能小于8位",{
+                duration:2000,
+            })
+        }else if(reg_pwd.length<12){
+            Toast.show("密码不能大于12位",{
+                duration:2000,
+            })
+        }
+        if(reg_repwd==undefined || reg_repwd == '' ){
+            Toast.show("请输入确认密码",{
+                duration:2000,
+            })
+            return;
+        }else if(reg_pwd.length<12){
+            Toast.show("密码不能大于12位",{
+                duration:2000,
+            })
+        }
     }
 
     render() {
@@ -55,7 +112,7 @@ class RegistView extends Component {
                                         max={11}
                                         keyboardType="numeric"
                                         onChangeText={(text)=> {
-                                            dispatch(updateRegist({mobile: text}))
+                                            dispatch(updateLogin({reg_mobile: text}))
                                         }}
                             >
                             </LabelInput>
@@ -65,6 +122,9 @@ class RegistView extends Component {
                                         defaultValue=""
                                         max={6}
                                         keyboardType="numeric"
+                                        onChangeText={(text)=>{
+                                            dispatch(updateLogin({reg_valiCode:text}))
+                                        }}
                             />
 
                             <LabelInput label="密码"
@@ -83,7 +143,7 @@ class RegistView extends Component {
                             />
                             <TouchableOpacity style={styles.validateBtn}
                                               onPress={this.getVailidateCode}>
-                                <Text>发送验证码</Text>
+                                {this.reSend}
                             </TouchableOpacity>
                         </View>
 
@@ -101,9 +161,7 @@ class RegistView extends Component {
                                     alignSelf: "center",
                                     borderRadius: 8
                                 }}
-                                onPress={()=> {
-                                    alert(1)
-                                }}/>
+                                onPress={this.reg}/>
                     </View>
                     <Button text="东风日产车主APP使用协议"
                             textStyle={{color: "#666", fontWeight: "300"}}
@@ -120,9 +178,9 @@ class RegistView extends Component {
 }
 
 export default connect((state) => {
-    const {regist} = state;
+    const {login} = state;
     return {
-        regist
+        login
     }
 })(RegistView);
 

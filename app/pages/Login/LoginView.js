@@ -24,12 +24,11 @@ import UserDefaults from '../../utils/GlobalStorage';
 class LoginView extends Component {
 
     componentDidMount(){
-        //获取缓存中的手机号码 你没存啊 没登陆啊..那个回显 传值都不是很清楚啊  哪个等下
+        //获取缓存中的手机号码
         UserDefaults.objectForKey("userInfo",(data)=> {
             if (data) {
                 alert(data["LOGIN_USER_ID"])
             }
-             //去缓存 是在这操作的吗 那我取多个不就要一直回调了吗 你需要取多个的  通过 字典 或者 数组存啊 这样不好取呀
         });
     }
 
