@@ -10,97 +10,107 @@ import {
 } from 'react-native';
 
 import {connect} from 'react-redux';
-import {BGColor, BTNColor, Screen, pixelRation,GM_CALL, validateMobile} from '../../utils/CommonUtil';
+import {BGColor, BTNColor, Screen, pixelRation,GM_CALL, validateMobile,ly_Toast} from '../../utils/CommonUtil';
 import NavBar from '../../components/DefaultNavBar';
 import LabelInput from '../../components/LabelInput';
 import Button from '../../components/Button';
 import AgreementView from './AgreementView';    //注册协议
-import Toast from 'react-native-root-toast';
-import {updateLogin} from '../../actions/loginAction';
+import LoginView from './LoginView'
+import {updateLogin,getValidateCode,addUser} from '../../actions/loginAction';
+
+import UserDefaults from '../../utils/GlobalStorage'
 
 class RegistView extends Component {
     //获取验证码逻辑
     getVailidateCode = ()=> {
-        const {dispatch} = this.props;
-        const {reg_mobile} =this.props.login;
+        const {dispatch,navigator} = this.props;
+        let {reg_mobile,code,alreadyReg} =this.props.login;
         if(reg_mobile == undefined || reg_mobile ==""){
-            Toast.show("请输入手机号",{
-                duration:2000,
-            });
+            ly_Toast("请输入手机号");
             return;
         }
         if(!validateMobile(reg_mobile)){
-            Toast.show("手机格式不正确",{
-                duration:2000,
-            })
+            ly_Toast("手机格式不正确");
             return;
         }else{
-            dispatch(getValidateCode(reg_mobile))
+            dispatch(getValidateCode(reg_mobile,2,navigator))
+            if(alreadyReg){
+                this.props.navigator.push({
+                    component:LoginView
+                })
+            }
         }
+        let timer = setInterval(function () {
+            if(code>0){
+                dispatch(updateLogin({code:code--,reSendText:`重新发送(${code})`,reSendBtnDisabled:true}))
+            }else{
+                dispatch(updateLogin({code:60,reSendText:'发送验证码',reSendBtnDisabled:false}))
+                clearInterval(timer);
+            }
 
+        },1000)
     }
     //处理发送验证码按钮
-    reSend = ()=>{
-        return (
-            <Text>发送验证码</Text>
-        )
-    }
+
 
     //注册
     reg =()=>{
         const {dispatch} = this.props;
         const {reg_mobile,reg_pwd,reg_repwd,reg_valiCode} =this.props.login;
         if(reg_mobile == undefined || reg_mobile ==""){
-            Toast.show("请输入手机号",{
-                duration:2000,
-            });
+            ly_Toast("请输入手机号");
             return;
         }
         if(!validateMobile(reg_mobile)){
-            Toast.show("手机格式不正确",{
-                duration:2000,
-            })
+            ly_Toast("手机格式不正确");
             return;
         }
         if(reg_valiCode == undefined || reg_valiCode == ''){
-            Toast.show("请输入验证码",{
-                duration:2000,
-            })
+            ly_Toast("请输入验证码");
             return;
-        }else if(reg_valiCode!=reg_relValiCode){
-
         }
         if(reg_pwd==undefined || reg_pwd == '' ){
-            Toast.show("请输入密码",{
-                duration:2000,
-            })
+            ly_Toast("请输入密码");
             return;
         }else if(reg_pwd.length<8){
-            Toast.show("密码不能小于8位",{
-                duration:2000,
-            })
-        }else if(reg_pwd.length<12){
-            Toast.show("密码不能大于12位",{
-                duration:2000,
-            })
+            ly_Toast("密码不能小于8位");
+            return;
+        }else if(reg_pwd.length>12){
+            ly_Toast("密码不能大于12位");
+            return;
         }
         if(reg_repwd==undefined || reg_repwd == '' ){
-            Toast.show("请输入确认密码",{
-                duration:2000,
-            })
+            ly_Toast("请输入确认密码");
             return;
-        }else if(reg_pwd.length<12){
-            Toast.show("密码不能大于12位",{
-                duration:2000,
-            })
+        }else if(reg_repwd.length>12){
+            ly_Toast("密码不能大于12位");
+            return;
+        }else if(reg_pwd!=reg_repwd){
+            ly_Toast("两次密码不一致");
+            return;
         }
+        UserDefaults.objectForKey("deviceInfo",(device)=>{
+            if(device){
+                //alert(`1:${reg_mobile},2:${reg_valiCode},3,${reg_pwd},4${JSON.stringify(device)}`)
+                dispatch(addUser(reg_mobile,reg_valiCode,reg_pwd,device))
+
+            }else {
+                alert("Get DeviceInfo ERROR")
+            }
+        })
+
     }
 
     render() {
+
         const {dispatch} = this.props;
+        const {reSendText,reSendBtnDisabled} = this.props.login;
         return (
             <View style={styles.page}>
                 <NavBar title="注册"
+                        onBack={()=>{
+                            this.props.navigator.pop();
+                        }}
                 />
                 <View style={{justifyContent: 'space-between', flex: 1}}>
                     <View>
@@ -132,6 +142,9 @@ class RegistView extends Component {
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
                                         defaultValue=""
                                         type={true}
+                                        onChangeText={(text)=>{
+                                            dispatch(updateLogin({reg_pwd:text}))
+                                        }}
                                         max={20}
                             />
                             <LabelInput label="确认密码"
@@ -139,11 +152,15 @@ class RegistView extends Component {
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
                                         defaultValue=""
                                         type={true}
+                                        onChangeText={(text)=>{
+                                            dispatch(updateLogin({reg_repwd:text}))
+                                        }}
                                         max={20}
                             />
                             <TouchableOpacity style={styles.validateBtn}
-                                              onPress={this.getVailidateCode}>
-                                {this.reSend}
+                                              onPress={this.getVailidateCode}
+                                              disabled={reSendBtnDisabled}>
+                                <Text>{reSendText}</Text>
                             </TouchableOpacity>
                         </View>
 

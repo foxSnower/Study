@@ -9,14 +9,13 @@ import {
 } from 'react-native';
 
 import {connect} from 'react-redux';
-import {BGColor, BTNColor, Screen, pixelRation,validateMobile} from '../../utils/CommonUtil';
+import {BGColor, BTNColor, Screen, pixelRation,validateMobile,ly_Toast} from '../../utils/CommonUtil';
 import NavBar from '../../components/DefaultNavBar';
 import LabelInput from '../../components/LabelInput';
 import Button from '../../components/Button';
 import AgreementView from './AgreementView';
-//import ForgetView from './ForgetView';
+import ForgetView from './ForgetView';
 import RegistView from './RegistView';   //注册页面
-import Toast from 'react-native-root-toast';
 import {updateLogin, loginSubim} from '../../actions/loginAction'
 
 import UserDefaults from '../../utils/GlobalStorage';
@@ -25,39 +24,32 @@ class LoginView extends Component {
 
     componentDidMount(){
         //获取缓存中的手机号码
-        UserDefaults.objectForKey("userInfo",(data)=> {
-            if (data) {
-                alert(data["LOGIN_USER_ID"])
-            }
-        });
+        const {dispatch}  = this.props;
+        const {reg_mobile}  = this.props.login;
+        dispatch(updateLogin({userID:reg_mobile}))
     }
 
     loginClick = () => {
         const {dispatch} = this.props;
         const {userID, password} = this.props.login;
         if(userID == undefined || userID ==""){
-            Toast.show("请输入手机号",{
-                duration:2000,
-            });
+            ly_Toast("请输入手机号",2000)
             return;
         }
         if(!validateMobile(userID)){
-            Toast.show("手机格式不正确",{
-                duration:2000,
-            })
+            ly_Toast("手机格式不正确",2000);
             return;
         }
         if(password==undefined || password == '' ){
-            Toast.show("请输入密码",{
-                duration:2000,
-            })
+            ly_Toast("请输入密码",2000)
             return;
         }
+        dispatch(updateLogin({'loginBtnText':"登录中...",'loginBtnDisabled': true}));
         dispatch(loginSubim(userID, password));
     }
 
     render() {
-        const {dispatch} = this.props;
+        const {dispatch, login} = this.props;
         //iosMode returnKeyType 确认键的内容 enablesReturnKeyAutomatically 为空时禁用按钮 clearButtonMode 右侧显示删除
         //  const { label,labelStyle,textStyle,placeholder,keyboardType,inputType,max,iosMode}  = this.props;
         return (
@@ -81,7 +73,8 @@ class LoginView extends Component {
                 <View style={{justifyContent: 'space-between', flex: 1}}>
                     <View>
                         <View style={styles.container}>
-                            <LabelInput label="手机号"
+                            <LabelInput ref="phone"
+                                        label="手机号"
                                         labelStyle={{width: 50}}
                                         placeholder="请输入用户名"
                                         defaultValue=""
@@ -107,14 +100,14 @@ class LoginView extends Component {
 
                         <TouchableOpacity style={styles.find}
                                           onPress={()=>{
-                                              {/*this.props.navigator.push({*/}
-                                                  {/*component:ForgetView*/}
-                                              {/*})*/}
+                                              this.props.navigator.push({
+                                                  component:ForgetView
+                                              })
                                           }}>
                             <Text style={{marginTop: 10, paddingRight: 10, marginBottom: 30}}>找回密码</Text>
                         </TouchableOpacity>
 
-                        <Button text="登  录"
+                        <Button text={login.loginBtnText}
                                 style={{
                                     width: Screen.width - 40,
                                     backgroundColor: BTNColor,
@@ -122,6 +115,7 @@ class LoginView extends Component {
                                     borderRadius: 8
                                 }}
                                 onPress={this.loginClick}
+                                disabled={login.loginBtnDisabled}
                         />
                     </View>
                     <Button text="东风日产车主APP使用协议"
