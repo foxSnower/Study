@@ -30,7 +30,7 @@ class LoginView extends Component {
     }
 
     loginClick = () => {
-        const {dispatch} = this.props;
+        const {dispatch,navigator} = this.props;
         const {userID, password} = this.props.login;
         if(userID == undefined || userID ==""){
             ly_Toast("请输入手机号",2000)
@@ -45,7 +45,7 @@ class LoginView extends Component {
             return;
         }
         dispatch(updateLogin({'loginBtnText':"登录中...",'loginBtnDisabled': true}));
-        dispatch(loginSubim(userID, password));
+        dispatch(loginSubim(userID, password,navigator));
     }
 
     render() {
