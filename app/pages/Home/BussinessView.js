@@ -8,6 +8,7 @@ import{
 import NavBar from '../../components/DefaultNavBar';
 import CustomButton from './CustomButton';
 import DLRView from '../Business/DLRView'
+import TestView from '../Business/TestView'
 
 const customerButtonItems = [
     [
@@ -80,7 +81,7 @@ export default class BussinessView extends Component{
                                                               text={item.text}
                                                               onPress={()=>{
                                                                 this.props.navigator.push({
-                                                                    component: DLRView,
+                                                                    component: TestView,
                                                                 })
                                                               }}
                                                               secText={item.secText}
