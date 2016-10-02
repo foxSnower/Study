@@ -6,6 +6,7 @@ import {
     PixelRatio,
     Platform
 } from  'react-native';
+import Toast from 'react-native-root-toast';
 
 export const Debug = true;    //设置开发模式
 export const GM_CALL = "400-830-8899";   //登录异常客服电话
@@ -34,4 +35,15 @@ export function validateMobile(tel) {    //校验手机
         return false;
     var reg = /^0?1[3|4|5|8|7][0-9]\d{8}$/;
     return reg.test(tel);
+}
+
+export function ly_Toast(msg,dur=2000,pos=20,fn=()=>{}) {
+    // 20 : TOP   0 :CENTER -20 BOTTOM
+    Toast.show(msg,{
+        duration:dur,
+        position:pos,
+        onHidden:()=>{
+            fn()
+        }
+    })
 }

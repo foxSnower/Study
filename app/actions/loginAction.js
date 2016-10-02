@@ -5,8 +5,10 @@ import * as types from './actionTypes';
 import {requestPOST} from '../utils/FetchUtil'
 import {HANDLER} from '../utils/RequestURL'
 
-import Toast from 'react-native-root-toast';
+import {ly_Toast} from '../utils/CommonUtil';
 import UserDefaults from '../utils/GlobalStorage';
+
+import RegistView from '../pages/Login/RegistView';
 
 export function updateLogin(value) {
     return {
@@ -14,9 +16,92 @@ export function updateLogin(value) {
         value: value
     }
 }
+//修改密码
+export let modifyUser = (phone,valiCode,pwd) => {
+    return dispatch =>{
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "Forget",
+                "PARAM": {
+                    "MOBILE": phone,
+                    "CUST_PASSWORD": pwd,
+                    "VALIDATE_CODE": valiCode,
+                }
+            },
+            (data)=>{
+                dispatch(updateLogin({reg_mobile: "",reg_pwd:"",reg_repwd:""}))
+                ly_Toast(data.RESULT_DESC)
+                //alert(JSON.stringify(data))
+            }
+        )
+    }
+}
+//注册
+export let addUser = (phone,valiCode,pwd,devices)=>{
+    return dispatch =>{
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "Regist",
+                "PARAM": {
+                    "MOBILE": phone,
+                    "CUST_PASSWORD": pwd,
+                    "USER_TYPE": "1",
+                    "VALIDATE_CODE": valiCode,
+                    "ATTACH_INFO": devices
+                }
+            },
+            (data)=>{
+                dispatch(updateLogin({reg_mobile: "",reg_pwd:"",reg_repwd:""}))
+                //UserDefaults.setObject("userInfo",phone)
+                alert(JSON.stringify(data))
+            }
+        )
+    }
+}
 
+//获取验证码
+export let getValidateCode = (phone,reg,nav)=>{
+    return dispatch => {
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "Send_SMS",
+                "PARAM": {
+                    "LOGIN_USER_ID": "SYS",
+                    "CUST_TEL": phone,
+                    "REG": reg,
+                    "MSG_TYPE": "1",
+                    "ATTACH1": "",
+                    "ATTACH2": "",
+                    "ATTACH3": ""
+                }
+            },
+            (data)=>{
+                let sucessMsg = data.RESULT_DESC;
+                if (data.RESULT_CODE == "0") {
+                    ly_Toast(sucessMsg,3000)
+                    return;
+                } else if(data.RESULT_CODE == "1" && data.DATA == "已注册") {
+                    ly_Toast(sucessMsg,3000,20,()=>{
+                        nav.pop();
+                    })
+                }else if(data.RESULT_CODE == "1" && data.DATA == "未注册") {
+                    ly_Toast(sucessMsg,3000,20,()=>{
+                        nav.push({
+                            component:RegistView
+                        });
+                    })
+                }
 
-export let loginSubim = (mobile, password) =>{
+            }
+        )
+    }
+}
+
+//登录
+export let loginSubim = (mobile, password,nav) =>{
     return dispatch => {
         requestPOST(
             HANDLER,
@@ -28,10 +113,12 @@ export let loginSubim = (mobile, password) =>{
                 }
             },
             (data) => {
-                //alert(JSON.stringify(data))
-                //在这里做你的处理  就是这样  没问题吧
+                dispatch(updateLogin({'loginBtnDisabled': false,'loginBtnText':'登录'}));
                 if(data.RESULT_CODE == 0){
                     //登陆成功将用户信息写入缓存中
+                    ly_Toast("登录成功",3000,20,()=>{
+                        nav.pop();
+                    })
                     UserDefaults.setObject("userInfo",data.DATA[0]);
 
                     // UserDefaults.setObject("LOGIN_USER_ID",data.DATA[0].LOGIN_USER_ID);   //用户ID
@@ -50,13 +137,13 @@ export let loginSubim = (mobile, password) =>{
                     // UserDefaults.setObject("DLR_SHORT_NAME",data.DATA[0].DLR_SHORT_NAME);  //专营店简称
                     // UserDefaults.setObject("DYNAMIC_KEY",data.DATA[0].DYNAMIC_KEY);   //动态参数
                 }else{
-                    Toast.show(data.RESULT_DESC,{
-                        duration:3000
-                    })
+                    ly_Toast(data.RESULT_DESC,3000)
+                    return;
                 }
             },
             (error) => {
-
+                alert('登陆失败');
+                dispatch(updateLogin({'loginBtnDisabled': false,'loginBtnText':'登录'}));
             }
         )
     }
