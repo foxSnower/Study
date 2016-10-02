@@ -16,6 +16,9 @@ import MyView from '../pages/Home/HomeView'
 import PersonalView from '../pages/Home/PersonalView'
 import BussinessView from '../pages/Home/BussinessView'
 
+import UserDefaults from '../utils/GlobalStorage'
+import LoginView from '../pages/Login/LoginView'
+
 const tabBarItems = [
     {
         title: '首页',
@@ -67,9 +70,24 @@ export default class TabBarView extends Component {
                                 renderSelectedIcon={() => <Image style={{height: 24, width: 24}}
                                                                  source={item.renderSelectedIcon}/>}
                                 onPress={() => {
-                                    this.setState({
-                                        selectedTab: item.title
-                                    })
+                                    if(item.title === "我的"){
+                                        UserDefaults.objectForKey("userInfo",(data)=> {
+                                            if (!data || !data["LOGIN_USER_ID"]) {
+                                                this.props.navigator.push({
+                                                    component:LoginView
+                                                })
+                                            }else{
+                                                this.setState({
+                                                    selectedTab: item.title
+                                                })
+                                            }
+                                        });
+                                    }else{
+                                        this.setState({
+                                            selectedTab: item.title
+                                        })
+                                    }
+
                                 }}
                             >
                                 <Component navigator={this.props.navigator} {...this.props}/>
