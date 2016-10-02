@@ -6,7 +6,6 @@ import { combineReducers } from 'redux'
 import fields from './fieldsReducer'
 import home from './homeReducer'
 import login from './loginReducer'
-import regist from './registReducer'
 
 export default rootReducer = combineReducers({
     fields,
