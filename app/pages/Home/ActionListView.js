@@ -14,9 +14,10 @@ import {
 } from 'react-native';
 
 import {connect} from 'react-redux';
-import {Screen, pixel1} from '../../utils/CommonUtil'
+import {Screen, pixel1,ly_Toast} from '../../utils/CommonUtil'
 import {updateHome, fetchActionList} from '../../actions/homeAction'
-import NavBar from '../../components/DefaultNavBar'
+import NavBar from '../../components/DefaultNavBar';
+import ActionDetailView from './ActionDetailView'
 
 let pageIndex = 0;
 
@@ -56,7 +57,8 @@ class ActivitieListView extends Component {
                     dispatch(updateHome({actionList: arr}));
                     this.reloadDataSourec(arr);
                 } else {
-                    alert('没有更多了')
+                    ly_Toast("已经到底啦o_O",3000);
+                    //alert('没有更多了')
                 }
             }));
         }
@@ -69,7 +71,6 @@ class ActivitieListView extends Component {
     };
 
     render() {
-
         return (
             <View style={{flex:1}}>
                 <NavBar title="劲爆活动"
@@ -102,7 +103,18 @@ class ActivitieListView extends Component {
             <View style={styles.cellView}>
                 <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={
                     () => {
-                        Linking.openURL('http://facebook.github.io/react-native/docs/activityindicator.html');
+                        if(rowData.DIRECT_URL.length>5){
+                            Linking.openURL(rowData.DIRECT_URL);
+                        }else{
+                            // 跳转到 活动详情 带着这个参数 ACTION_CODE
+                            this.props.navigator.push({
+                                component:ActionDetailView,
+                                params:{
+                                    ACTION_CODE:rowData.ACTION_CODE
+                                }
+                            })
+                        }
+
                     }
                 }>
                     <View style={styles.cellTitleView}>

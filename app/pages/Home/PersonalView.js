@@ -82,9 +82,7 @@ export default class PersonalView extends Component{
         })
         return aItems;
     }
-    componentDidMount(){
-
-    }
+    
     render(){
         return(
             <View style={{backgroundColor:"#efeff4",flex:1}}>

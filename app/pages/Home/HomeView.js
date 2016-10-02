@@ -8,6 +8,7 @@ import {
     Text,
     TouchableOpacity,
     Image,
+    Linking,
     Geolocation
 } from 'react-native';
 
@@ -20,12 +21,13 @@ import ActivitieListView from './ActionListView'// 用车百科
 import Wiki from './Wiki/IndexView'
 import DeviceInfo from 'react-native-device-info'
 import UserDefaults from '../../utils/GlobalStorage'
+import ActionDetailView from './ActionDetailView'
 
 class HomeView extends Component {
 
     componentDidMount() {
         let deviceInfo = {};
-        //本地存储的使用  通过key存下对应的值
+        //本地存储的使用  通过key存下对应的值 我现在删除 这个userID
         UserDefaults.setObject('userID',{1:1111,2:22222,3:33333,4:44444});
 
         const {dispatch} = this.props;
@@ -34,16 +36,23 @@ class HomeView extends Component {
 
         if(!Debug){
             deviceInfo.DEVICE_TOKEN = DeviceInfo.getUniqueID();
+            deviceInfo.OS_VERSION = DeviceInfo.getDeviceId()
             deviceInfo.MODEL = DeviceInfo.getModel();
-            deviceInfo.BRAND = DeviceInfo.getBrand();
-            deviceInfo.VERSION = DeviceInfo.getVersion();
-
+            deviceInfo.DEVICE_TYPE = DeviceInfo.getBrand();
+            deviceInfo.APP_VERSION = DeviceInfo.getVersion();
+            deviceInfo.IP = "127.0.0.1";
+            deviceInfo.APP_NAME = "车主APP";
+            deviceInfo.MAC = "NA";
             UserDefaults.setObject('deviceInfo',deviceInfo);
         }else{
             deviceInfo.DEVICE_TOKEN = "abcdefghijklmn";
             deviceInfo.MODEL = "Android";
-            deviceInfo.BRAND = "小米";
-            deviceInfo.VERSION = "1.0.0";
+            deviceInfo.OS_VERSION = "Android 4.4";
+            deviceInfo.DEVICE_TYPE = "小米";
+            deviceInfo.APP_VERSION = "1.0.0";
+            deviceInfo.IP = "127.0.0.1";
+            deviceInfo.APP_NAME = "车主APP";
+            deviceInfo.MAC = "NA";
 
             UserDefaults.setObject('deviceInfo',deviceInfo);
         }
@@ -86,10 +95,12 @@ class HomeView extends Component {
 
     //广告点击事件
     swiperViewClick = () =>{
-        //本地存储的使用   根据key拿到数据  通过回调方法获取  我这里都写了啊
+        //本地存储的使用   根据key拿到数据  通过回调方法获取
+        UserDefaults.setObject('userID',{});
         UserDefaults.objectForKey('userID',(data) => {
             alert(data['1']);
         })
+       //
     };
 
     render() {
@@ -119,7 +130,19 @@ class HomeView extends Component {
                 <TouchableOpacity activeOpacity={0.8}
                                   style={styles.slide1}
                                   key={k}
-                                  onPress={this.swiperViewClick}
+                                  onPress={()=>{
+                                      if(v.DIRECT_URL.length>5){
+                                          Linking.openURL(v.DIRECT_URL);
+                                      }else{
+                                          // 跳转到 活动详情 带着这个参数 ACTION_CODE
+                                          this.props.navigator.push({
+                                              component:ActionDetailView,
+                                              params:{
+                                                  ACTION_CODE:v.ACTION_CODE
+                                              }
+                                          })
+                                      }
+                                  }}
                 >
                     <Image style={{width: Screen.width, flex:1}}
                            resizeMode={"cover"}
@@ -180,7 +203,8 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1, backgroundColor: '#fff'}}
                                   text="劲爆活动"
                                   image={require('../../image/icon_index_activity.png')}
-                                  textStyle={{marginTop:15,marginBottom:15}}
+                                  imageStyle={styles.imageStyle}
+                                  textStyle={{marginTop:10,marginBottom:15}}
                                   onPress={() => {
                                       this.props.navigator.push({
                                           component: ActivitieListView,
@@ -189,8 +213,9 @@ class HomeView extends Component {
                     />
                     <CustomButton style={{flex: 1, backgroundColor: '#fff', marginLeft: pixel1}}
                                   text="用车百科"
-                                  textStyle={{marginTop:15,marginBottom:15}}
+                                  textStyle={{marginTop:10,marginBottom:15}}
                                   image={require('../../image/icon_index_wiki.png')}
+                                  imageStyle={styles.imageStyle}
                                   onPress = {() => {
                                     this.props.navigator.push({
                                         component: Wiki
@@ -201,22 +226,22 @@ class HomeView extends Component {
                 <View style={{flex: 2, flexDirection: 'row', marginTop: pixel1, backgroundColor: '#fff'}}>
                     <CustomButton style={{flex: 1}}
                                   text="保养预约"
-                                  textStyle={{marginTop:15,marginBottom:15}}
+                                  textStyle={styles.textStyle}
                                   image={require('../../image/icon_index_maintain.png')}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="预约驾驶"
-                                  textStyle={{marginTop:15,marginBottom:15}}
+                                  textStyle={styles.textStyle}
                                   image={require('../../image/icon_index_test.png')}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="紧急救援"
-                                  textStyle={{marginTop:15,marginBottom:15}}
+                                  textStyle={styles.textStyle}
                                   image={require('../../image/icon_index_saved.png')}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="我的消息"
-                                  textStyle={{marginTop:15,marginBottom:15}}
+                                  textStyle={styles.textStyle}
                                   image={require('../../image/icon_index_message.png')}
                     />
                 </View>
@@ -263,7 +288,15 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        marginTop: 15,
-        marginBottom: 15,
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    imageStyle:{
+        maxWidth:80
+    },
+    textStyle:{
+        marginTop:10,
+        marginBottom:10,
+        fontSize:12
     }
 });

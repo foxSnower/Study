@@ -99,7 +99,7 @@ class LoginView extends Component {
                                                   component:ForgetView
                                               })
                                           }}>
-                            <Text style={{marginTop: 10, paddingRight: 10, marginBottom: 30}}>找回密码</Text>
+                            <Text style={{marginTop: 10, marginRight: 10, marginBottom: 30}}>找回密码</Text>
                         </TouchableOpacity>
 
                         <Button text={login.loginBtnText}

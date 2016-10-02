@@ -6,7 +6,8 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-    actionList: []
+    actionList: [],
+    actionDetail:[],
 };
 
 export default function home(state = initialState, action = {}) {
