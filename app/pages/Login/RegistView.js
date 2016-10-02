@@ -10,105 +10,105 @@ import {
 } from 'react-native';
 
 import {connect} from 'react-redux';
-import {BGColor, BTNColor, Screen, pixelRation,GM_CALL, validateMobile,ly_Toast} from '../../utils/CommonUtil';
+import {BGColor, BTNColor, Screen, pixelRation, GM_CALL, validateMobile, ly_Toast} from '../../utils/CommonUtil';
 import NavBar from '../../components/DefaultNavBar';
 import LabelInput from '../../components/LabelInput';
 import Button from '../../components/Button';
 import AgreementView from './AgreementView';    //注册协议
 import LoginView from './LoginView'
-import {updateLogin,getValidateCode,addUser} from '../../actions/loginAction';
+import {updateLogin, getValidateCode, addUser} from '../../actions/loginAction';
 
 import UserDefaults from '../../utils/GlobalStorage'
 
 class RegistView extends Component {
     //获取验证码逻辑
     getVailidateCode = ()=> {
-        const {dispatch,navigator} = this.props;
-        let {reg_mobile,code,alreadyReg} =this.props.login;
-        if(reg_mobile == undefined || reg_mobile ==""){
+        const {dispatch, navigator} = this.props;
+        let {reg_mobile, code, alreadyReg} =this.props.login;
+        if (reg_mobile == undefined || reg_mobile == "") {
             ly_Toast("请输入手机号");
             return;
         }
-        if(!validateMobile(reg_mobile)){
+        if (!validateMobile(reg_mobile)) {
             ly_Toast("手机格式不正确");
             return;
-        }else{
-            dispatch(getValidateCode(reg_mobile,2,navigator))
-            if(alreadyReg){
+        } else {
+            dispatch(getValidateCode(reg_mobile, 2, navigator))
+            if (alreadyReg) {
                 this.props.navigator.push({
-                    component:LoginView
+                    component: LoginView
                 })
             }
         }
         let timer = setInterval(function () {
-            if(code>0){
-                dispatch(updateLogin({code:code--,reSendText:`重新发送(${code})`,reSendBtnDisabled:true}))
-            }else{
-                dispatch(updateLogin({code:60,reSendText:'发送验证码',reSendBtnDisabled:false}))
+            if (code > 0) {
+                dispatch(updateLogin({code: code--, reSendText: `重新发送(${code})`, reSendBtnDisabled: true}))
+            } else {
+                dispatch(updateLogin({code: 60, reSendText: '发送验证码', reSendBtnDisabled: false}))
                 clearInterval(timer);
             }
 
-        },1000)
-    }
+        }, 1000)
+    };
     //处理发送验证码按钮
 
 
     //注册
-    reg =()=>{
+    reg = ()=> {
         const {dispatch} = this.props;
-        const {reg_mobile,reg_pwd,reg_repwd,reg_valiCode} =this.props.login;
-        if(reg_mobile == undefined || reg_mobile ==""){
+        const {reg_mobile, reg_pwd, reg_repwd, reg_valiCode} =this.props.login;
+        if (reg_mobile == undefined || reg_mobile == "") {
             ly_Toast("请输入手机号");
             return;
         }
-        if(!validateMobile(reg_mobile)){
+        if (!validateMobile(reg_mobile)) {
             ly_Toast("手机格式不正确");
             return;
         }
-        if(reg_valiCode == undefined || reg_valiCode == ''){
+        if (reg_valiCode == undefined || reg_valiCode == '') {
             ly_Toast("请输入验证码");
             return;
         }
-        if(reg_pwd==undefined || reg_pwd == '' ){
+        if (reg_pwd == undefined || reg_pwd == '') {
             ly_Toast("请输入密码");
             return;
-        }else if(reg_pwd.length<8){
+        } else if (reg_pwd.length < 8) {
             ly_Toast("密码不能小于8位");
             return;
-        }else if(reg_pwd.length>12){
+        } else if (reg_pwd.length > 12) {
             ly_Toast("密码不能大于12位");
             return;
         }
-        if(reg_repwd==undefined || reg_repwd == '' ){
+        if (reg_repwd == undefined || reg_repwd == '') {
             ly_Toast("请输入确认密码");
             return;
-        }else if(reg_repwd.length>12){
+        } else if (reg_repwd.length > 12) {
             ly_Toast("密码不能大于12位");
             return;
-        }else if(reg_pwd!=reg_repwd){
+        } else if (reg_pwd != reg_repwd) {
             ly_Toast("两次密码不一致");
             return;
         }
-        UserDefaults.objectForKey("deviceInfo",(device)=>{
-            if(device){
+        UserDefaults.objectForKey("deviceInfo", (device)=> {
+            if (device) {
                 //alert(`1:${reg_mobile},2:${reg_valiCode},3,${reg_pwd},4${JSON.stringify(device)}`)
-                dispatch(addUser(reg_mobile,reg_valiCode,reg_pwd,device))
+                dispatch(addUser(reg_mobile, reg_valiCode, reg_pwd, device))
 
-            }else {
+            } else {
                 alert("Get DeviceInfo ERROR")
             }
         })
 
-    }
+    };
 
     render() {
 
         const {dispatch} = this.props;
-        const {reSendText,reSendBtnDisabled} = this.props.login;
+        const {reSendText, reSendBtnDisabled} = this.props.login;
         return (
             <View style={styles.page}>
                 <NavBar title="注册"
-                        onBack={()=>{
+                        onBack={()=> {
                             this.props.navigator.pop();
                         }}
                 />
@@ -116,9 +116,8 @@ class RegistView extends Component {
                     <View>
                         <View style={styles.container}>
                             <LabelInput label="手机号"
-                                        labelStyle={{width: 60}}
+                                        textStyle={{width: 60}}
                                         placeholder="请输入手机号"
-                                        defaultValue=""
                                         max={11}
                                         keyboardType="numeric"
                                         onChangeText={(text)=> {
@@ -126,48 +125,49 @@ class RegistView extends Component {
                                         }}
                             >
                             </LabelInput>
-                            <LabelInput label="验证码"
-                                        labelStyle={{width: 60}}
-                                        placeholder="请输入验证码"
-                                        defaultValue=""
-                                        max={6}
-                                        keyboardType="numeric"
-                                        onChangeText={(text)=>{
-                                            dispatch(updateLogin({reg_valiCode:text}))
-                                        }}
-                            />
+                            <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+                                <LabelInput label="验证码"
+                                            style={{flex:3}}
+                                            textStyle={{width: 60}}
+                                            placeholder="请输入验证码"
+                                            max={6}
+                                            keyboardType="numeric"
+                                            onChangeText={(text)=> {
+                                                dispatch(updateLogin({reg_valiCode: text}))
+                                            }}
+                                />
+                                <TouchableOpacity style={styles.validateBtn}
+                                                  onPress={this.getVailidateCode}
+                                                  disabled={reSendBtnDisabled}>
+                                    <Text style={{ textAlign: 'center'}}>{reSendText}</Text>
+                                </TouchableOpacity>
+                            </View>
 
                             <LabelInput label="密码"
-                                        labelStyle={{width: 60}}
+                                        textStyle={{width: 60}}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
-                                        defaultValue=""
                                         type={true}
-                                        onChangeText={(text)=>{
-                                            dispatch(updateLogin({reg_pwd:text}))
+                                        onChangeText={(text)=> {
+                                            dispatch(updateLogin({reg_pwd: text}))
                                         }}
                                         max={20}
                             />
                             <LabelInput label="确认密码"
-                                        labelStyle={{width: 60}}
+                                        textStyle={{width: 60}}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
-                                        defaultValue=""
                                         type={true}
-                                        onChangeText={(text)=>{
-                                            dispatch(updateLogin({reg_repwd:text}))
+                                        onChangeText={(text)=> {
+                                            dispatch(updateLogin({reg_repwd: text}))
                                         }}
                                         max={20}
                             />
-                            <TouchableOpacity style={styles.validateBtn}
-                                              onPress={this.getVailidateCode}
-                                              disabled={reSendBtnDisabled}>
-                                <Text>{reSendText}</Text>
-                            </TouchableOpacity>
+
                         </View>
 
                         <TouchableOpacity style={styles.find}
-                                            onPress={()=>{
-                                                Linking.openURL(`tel:${GM_CALL}`);
-                                            }}>
+                                          onPress={()=> {
+                                              Linking.openURL(`tel:${GM_CALL}`);
+                                          }}>
                             <Text style={{marginTop: 10, paddingRight: 10, marginBottom: 30}}>注册遇到问题,联系客服</Text>
                         </TouchableOpacity>
 
@@ -213,15 +213,19 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         flex: 1,
         marginTop: 30,
-        paddingLeft: 30,
+        paddingLeft: 20,
     },
     validateBtn: {
+        flex: 1,
         borderColor: "#b2b2b2",
         borderWidth: 1,
-        padding: 5,
         borderRadius: 10,
-        position: "absolute",
-        top: 60,
-        right: 10
+        justifyContent:'center',
+        height: 35,
+        alignSelf: 'center',
+        marginRight: 15
+        // position: "absolute",
+        // top: 60,
+        // right: 10
     }
 })
