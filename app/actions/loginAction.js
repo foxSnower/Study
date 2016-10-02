@@ -116,7 +116,7 @@ export let loginSubim = (mobile, password,nav) =>{
                 dispatch(updateLogin({'loginBtnDisabled': false,'loginBtnText':'登录'}));
                 if(data.RESULT_CODE == 0){
                     //登陆成功将用户信息写入缓存中
-                    ly_Toast("登录成功",3000,()=>{
+                    ly_Toast("登录成功",3000,20,()=>{
                         nav.pop();
                     })
                     UserDefaults.setObject("userInfo",data.DATA[0]);
