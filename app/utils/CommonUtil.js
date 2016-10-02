@@ -42,7 +42,7 @@ export function ly_Toast(msg,dur=2000,pos=20,fn=()=>{}) {
     Toast.show(msg,{
         duration:dur,
         position:pos,
-        onShow:()=>{
+        onHidden:()=>{
             fn()
         }
     })
