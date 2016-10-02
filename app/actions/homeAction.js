@@ -122,4 +122,3 @@ export let fetchActionList = (pageIndex, listBlock) => {
     }
 
 };
-

@@ -9,7 +9,7 @@ import {
 
 // Component
 import NavBar from '../../../components/DefaultNavBar';
-// Item 
+// Item
 import Item from '../../../components/Item';
 
 import Index from './IndexView.js';
