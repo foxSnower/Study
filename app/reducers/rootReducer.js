@@ -6,9 +6,11 @@ import { combineReducers } from 'redux'
 import fields from './fieldsReducer'
 import home from './homeReducer'
 import login from './loginReducer'
+import testDrive from  './testDriveReducer'
 
 export default rootReducer = combineReducers({
     fields,
     home,
-    login
+    login,
+    testDrive
 })

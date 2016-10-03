@@ -31,7 +31,8 @@ export default class TestDriveListView extends Component {
         super(props);
 
         this._renderSectionHeader = this._renderSectionHeader.bind(this);
-
+        //sourceData = this.props.carData;
+        alert(JSON.stringify(this.props.carData))//这里报错的吗 bu s 是他们组件内部
         this.state = {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
@@ -100,7 +101,7 @@ export default class TestDriveListView extends Component {
                 sourceData[friend.group] = [{hide: false}];
             }
         }
-
+       // alert(JSON.stringify(sourceData));
         this.setState({
             sourceData: sourceData
         });
