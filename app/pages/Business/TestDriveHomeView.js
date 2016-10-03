@@ -21,10 +21,10 @@ class TestDriveHomeView extends Component {
 
     componentDidMount() {
         const {dispatch} = this.props;
+        dispatch(updateDrive({loaded: 0}))
         dispatch(getCarTypes());
 
     }
-
     render() {
 
         const {drive} = this.props;
@@ -36,7 +36,10 @@ class TestDriveHomeView extends Component {
                         title={'预约试驾'}
                 />
 
-                {this.renderContainer(drive.loaded)}
+                {
+                    this.renderContainer(drive.loaded)
+
+                }
 
             </View>
 

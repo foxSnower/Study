@@ -33,11 +33,15 @@ export let getCarTypes = ()=> {
 
                 if (data.DATA.length > 0) {
                     dispatch(updateDrive(dataMetalWork(data.DATA)));
-                    dispatch(updateDrive({loaded: 1}));
+                    setTimeout(function () {
+                        dispatch(updateDrive({loaded: 1}))
+                    },1000)
 
                 } else {
-                    ly_Toast("暂无数据")
-                    dispatch(updateDrive({loaded: 1}));
+                    setTimeout(function () {
+                        dispatch(updateDrive({loaded: 1}))
+                        ly_Toast("暂无数据")
+                    },1000)
                 }
 
             },
@@ -47,8 +51,32 @@ export let getCarTypes = ()=> {
         )
     }
 }
+//获取点评数据
+export let getCommentList = (code,pageIndex,listCallBack)=>{
+    return dispatch =>{
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "TestDriveReviewList",
+                "PARAM": {
+                    CAR_SERIES_CODE: code
+                },
+                "PAGE_SIZE": 5,
+                "PAGE_INDEX": pageIndex,
+                "SORT": " CREATED_DATE DESC"
+            },
+            (data)=>{
+                listCallBack(data);
+            },
+            (err)=>{
+                alert(err.message)
+                ly_Toast(err.message,2000,-20);
+            }
+        )
+    }
+}
 
-
+//拼接数据
 dataMetalWork = (dataArr)=> {
     let qichen = [], richan = [], carGroupName = [];
     dataArr.map((v,k) => {

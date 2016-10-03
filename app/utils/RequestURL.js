@@ -4,3 +4,4 @@
 const server = 'http://14.23.175.49:880';
 
 export const HANDLER = `${server}/Handler.ashx`;   //首页
+export const IMGURL = `${server}/Wap`;
