@@ -12,7 +12,7 @@ import NavBar from '../../components/DefaultNavBar'
 export default class Agreement extends Component{
     render(){
         return(
-            <View>
+            <View style={{flex:1}}>
                 <NavBar title="使用协议"
                         onBack={()=>{
                             this.props.navigator.pop()
@@ -20,10 +20,9 @@ export default class Agreement extends Component{
                 <WebView
                   style={{
                     backgroundColor: BGColor,
-                    height:Screen.height,
                   }}
                   source={require('./Agreement.html')}
-                  scalesPageToFit={true}
+                  //scalesPageToFit={true}
                 />
             </View>
         )

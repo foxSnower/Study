@@ -15,7 +15,7 @@ export default function wiki(state = initialiState, action = {}) {
             return Object.assign({}, state, {
                 title: action.title,
                 img: resource
-            })
+            });
         default:
             return state;
     }

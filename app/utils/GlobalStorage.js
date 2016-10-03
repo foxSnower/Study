@@ -38,4 +38,9 @@ export default class UserDefaults {
             action(null);
         });
     }
+
+    //这里你后面可以写删除方法  我一般是覆盖同一个key
+ //   storage.remove({
+   //     key: 'lastPage'
+    //});
 }

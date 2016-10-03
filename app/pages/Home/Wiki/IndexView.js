@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     StyleSheet,
     View,
@@ -26,7 +26,7 @@ class Cyclopedia extends Component {
         super(props);
         let {dispatch} = props;
         // 获取数据
-        UserDefaults.objectForKey("userInfo",(data)=> {
+        UserDefaults.objectForKey("userInfo", (data)=> {
             if (data) {
                 //alert(data["LOGIN_USER_ID"])
                 // 如果用户id存在，就改变用车百科页面图片
@@ -34,6 +34,7 @@ class Cyclopedia extends Component {
             }
         });
     }
+
     render() {
         let {dispatch, wiki} = this.props;
         //alert(wiki.img)
@@ -42,47 +43,47 @@ class Cyclopedia extends Component {
             <View style={styles.container}>
                 <NavBar
                     title="用车百科"
-                    style = {styles.navbar}
-                    onBack={()=>{
+                    style={styles.navbar}
+                    onBack={()=> {
                         this.props.navigator.pop()
                     }}
                 />
                 <Image
-                  style = {styles.banner}
-                  source = {wiki.img}
+                    style={styles.banner}
+                    source={wiki.img}
                 >
-                  <Text
-                    style= {styles.bannerDescription}
-                  >{wiki.title}</Text>
+                    <Text
+                        style={styles.bannerDescription}
+                    >{wiki.title}</Text>
                 </Image>
                 <View
                     style={styles.content}
                 >
                     <Item
-                        title = {'用车答疑'}
-                        description = {'快速解决用车过程中遇到的疑问'}
-                        image = {require('../../../image/icon_car.png')}
-                        onPress = {()=> {
+                        title={'用车答疑'}
+                        description={'快速解决用车过程中遇到的疑问'}
+                        image={require('../../../image/icon_car.png')}
+                        onPress={()=> {
                             this.props.navigator.push({
                                 component: Answer
                             })
                         }}
                     />
                     <Item
-                        title = {'随车手册'}
-                        description = {'详细查看随车指南'}
-                        image = {require('../../../image/icon_wiki_text.png')}
-                        onPress = {()=> {
+                        title={'随车手册'}
+                        description={'详细查看随车指南'}
+                        image={require('../../../image/icon_wiki_text.png')}
+                        onPress={()=> {
                             this.props.navigator.push({
                                 component: Answer
                             })
                         }}
                     />
                     <Item
-                        title = {'认识纯正备件'}
-                        description = {'学会了这些，再也不用担心被忽悠了'}
-                        image = {require('../../../image/icon_wiki_bank.png')}
-                        onPress = {()=> {
+                        title={'认识纯正备件'}
+                        description={'学会了这些，再也不用担心被忽悠了'}
+                        image={require('../../../image/icon_wiki_bank.png')}
+                        onPress={()=> {
                             this.props.navigator.push({
                                 component: Answer
                             })
@@ -102,9 +103,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         backgroundColor: '#ccc'
     },
-    navbar: {
-
-    },
+    navbar: {},
     banner: {
         width: Screen.width,
         height: 180,
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff'
     }
-})
+});
 
 export default connect((state) => {
     //console.log(state);

@@ -75,9 +75,7 @@ class LoginView extends Component {
                         <View style={styles.container}>
                             <LabelInput ref="phone"
                                         label="手机号"
-                                        labelStyle={{width: 50}}
                                         placeholder="请输入用户名"
-                                        defaultValue=""
                                         max={11}
                                         keyboardType="numeric"
                                         onChangeText={(text) => {
@@ -87,10 +85,7 @@ class LoginView extends Component {
                             />
 
                             <LabelInput label="密码"
-                                        labelStyle={{width: 50}}
-                                        textStyle={{borderBottomWidth: 0}}
                                         placeholder="请输入密码"
-                                        defaultValue=""
                                         type={true}
                                         onChangeText={(text) => {
                                             dispatch(updateLogin({password: text}))
@@ -104,7 +99,7 @@ class LoginView extends Component {
                                                   component:ForgetView
                                               })
                                           }}>
-                            <Text style={{marginTop: 10, paddingRight: 10, marginBottom: 30}}>找回密码</Text>
+                            <Text style={{marginTop: 10, marginRight: 10, marginBottom: 30}}>找回密码</Text>
                         </TouchableOpacity>
 
                         <Button text={login.loginBtnText}
@@ -155,7 +150,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         flex: 1,
         marginTop: 30,
-        paddingLeft: 30,
+        paddingLeft: 20,
     },
     textStyle: {}
 })

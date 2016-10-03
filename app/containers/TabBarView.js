@@ -70,19 +70,19 @@ export default class TabBarView extends Component {
                                 renderSelectedIcon={() => <Image style={{height: 24, width: 24}}
                                                                  source={item.renderSelectedIcon}/>}
                                 onPress={() => {
-                                    if(item.title === "我的"){
-                                        UserDefaults.objectForKey("userInfo",(data)=> {
+                                    if (item.title === "我的") {
+                                        UserDefaults.objectForKey("userInfo", (data)=> {
                                             if (!data || !data["LOGIN_USER_ID"]) {
                                                 this.props.navigator.push({
-                                                    component:LoginView
+                                                    component: LoginView
                                                 })
-                                            }else{
+                                            } else {
                                                 this.setState({
                                                     selectedTab: item.title
                                                 })
                                             }
                                         });
-                                    }else{
+                                    } else {
                                         this.setState({
                                             selectedTab: item.title
                                         })
