@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     StyleSheet,
     ListView,
@@ -9,63 +9,63 @@ import {
     Dimensions
 } from 'react-native';
 
+import {connect} from 'react-redux'
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-let sourceData = [
-    {name: '张三', description: '今天天气不错', group: 'Family'},
-    {name: '张三', description: '今天天气不错', group: 'Family'},
-    {name: '张三', description: '今天天气不错', group: 'Work'},
-    {name: '张三', description: '今天天气不错', group: 'Family'},
-    {name: '张三', description: '今天天气不错', group: 'Work'},
-    {name: '张三', description: '今天天气不错', group: 'Work'},
-    {name: '张三', description: '今天天气不错', group: 'Work'},
-    {name: '张三', description: '今天天气不错', group: 'Family'},
-    {name: '张三', description: '今天天气不错', group: 'Family'},
-    {name: '张三', description: '今天天气不错', group: 'Work'},
-]
+let sourceData = {
+    Family: [
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+    ],
+    Work: [
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
+    ]
+}
 
 export default class TestDriveListView extends Component {
 
     constructor(props) {
         super(props);
 
-        this._renderSectionHeader = this._renderSectionHeader.bind(this);
-        //sourceData = this.props.carData;
-        alert(JSON.stringify(this.props.carData))//这里报错的吗 bu s 是他们组件内部
         this.state = {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
                 sectionHeaderHasChanged: (section1, section2) => section1 !== section2,
-                getRowData: (data, sectionID, rowID) => {
-                    if (data[sectionID][0].hide) {
-                        return undefined;
-                    } else {
-                        return data[sectionID][rowID];
-                    }
-                },
-                getSectionHeaderData: (data, sectionID) => {
-                    return data[sectionID];
-                }
             }),
 
-            sourceData: undefined
         }
     }
 
     componentDidMount() {
-        this._configSourceData(sourceData);
+
     }
 
     _renderFriendRow(friend, sectionID, rowID) {
 
-        if (friend === undefined || (rowID == 0 && !friend.hide)) {
-            return null;
-        }
+        console.log(friend);
+
 
         return (
             <View style={styles.sectionHeader}>
-                <Text>{friend.name}</Text>
+                <Text>{friend.CAR_SERIES_CN}</Text>
             </View>
         )
     }
@@ -73,71 +73,35 @@ export default class TestDriveListView extends Component {
     _renderSectionHeader(friend, sectionID) {
 
         return (
-            <TouchableOpacity
-                style={styles.sectionHeader}
-                onPress={()=>{
-                    let newSourceData = this.state.sourceData;
-
-                    for (let friendGroup in this.state.sourceData) {
-                        if (friendGroup === sectionID) {
-                            newSourceData[sectionID][0].hide = !newSourceData[sectionID][0].hide;
-                        }
-                    }
-
-                    this.setState({sourceData: newSourceData});
-                }}
-            >
-                <Text style={{color: 'black'}}>{sectionID}</Text>
+            <TouchableOpacity style={styles.sectionHeader}>
+                <Text style={{color: 'black'}}>{friend.BODY_STRUCTURAL}</Text>
             </TouchableOpacity>
         )
     }
 
-    _configSourceData(friends) {
-        let sourceData = {};
-        for (let friend of friends) {
-            if (sourceData[friend.group]) {
-                sourceData[friend.group].push(friend);
-            } else {
-                sourceData[friend.group] = [{hide: false}];
-            }
-        }
-       // alert(JSON.stringify(sourceData));
-        this.setState({
-            sourceData: sourceData
-        });
-    }
 
     render() {
-
-        let friendsData = this.state.sourceData;
-        let sectionIDs = [];
-        let rowIDs = [];
-        for (let sectionID in friendsData) {
-            // Work、Family
-            sectionIDs.push(sectionID);
-
-            let row = [];
-            friendsData[sectionID].map((friend, index) => {
-                row.push(index);
-            })
-
-            rowIDs.push(row);
-        }
 
         return (
             <View style={{flex: 1, paddingTop: 20}}>
                 <ListView
-                    dataSource={this.state.dataSource.cloneWithRowsAndSections(friendsData, sectionIDs, rowIDs)}
+                    dataSource={this.state.dataSource.cloneWithRowsAndSections(this.props.sourceData)}
                     renderRow={this._renderFriendRow}
                     renderSectionHeader={this._renderSectionHeader}
-                    style={{width: SCREEN_WIDTH, height: SCREEN_HEIGHT}}
                 >
-
                 </ListView>
             </View>
         )
     }
 }
+
+
+// export default connect((state)=> {
+//     const {testDrive} = state;
+//     return {
+//         testDrive
+//     }
+// })(TestDriveListView)
 
 const styles = StyleSheet.create({
     sectionHeader: {
