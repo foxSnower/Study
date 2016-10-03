@@ -59,8 +59,8 @@ class TestDriveHomeView extends Component {
                                        tabBarUnderlineStyle={{backgroundColor: BTNColor}}
                                        renderTabBar={() => <ScrollableTabBar />}
                     >
-                        <TestDriveListView tabLabel="日产" {...this.props} sourceData={drive.richanArr}/>
-                        <TestDriveListView tabLabel="启辰" {...this.props} sourceData={drive.qichenArr}/>
+                        <TestDriveListView tabLabel="日产" {...this.props} sourceData={drive.richanDic}/>
+                        <TestDriveListView tabLabel="启辰" {...this.props} sourceData={drive.qichenDic}/>
                     </ScrollableTabView>
                 );
 

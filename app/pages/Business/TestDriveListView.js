@@ -32,13 +32,15 @@ let sourceData = {
         {name: '张三', description: '今天天气不错', group: 'Work'},
         {name: '张三', description: '今天天气不错', group: 'Family'},
         {name: '张三', description: '今天天气不错', group: 'Work'},
-        {name: '张三', description: '今天天气不错', group: 'Work'},
-        {name: '张三', description: '今天天气不错', group: 'Work'},
+    ],
+    Haaas: [
         {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Family'},
+        {name: '张三', description: '今天天气不错', group: 'Work'},
         {name: '张三', description: '今天天气不错', group: 'Family'},
         {name: '张三', description: '今天天气不错', group: 'Work'},
     ]
-}
+};
 
 export default class TestDriveListView extends Component {
 
@@ -55,13 +57,10 @@ export default class TestDriveListView extends Component {
     }
 
     componentDidMount() {
-
+        console.log(this.props.sourceData)
     }
 
     _renderFriendRow(friend, sectionID, rowID) {
-
-        console.log(friend);
-
 
         return (
             <View style={styles.sectionHeader}>
@@ -74,13 +73,15 @@ export default class TestDriveListView extends Component {
 
         return (
             <TouchableOpacity style={styles.sectionHeader}>
-                <Text style={{color: 'black'}}>{friend.BODY_STRUCTURAL}</Text>
+                <Text style={{color: 'red'}}>{sectionID}</Text>
             </TouchableOpacity>
         )
     }
 
 
     render() {
+
+        console.log(this.props.sourceData)
 
         return (
             <View style={{flex: 1, paddingTop: 20}}>

@@ -32,7 +32,6 @@ export let getCarTypes = ()=> {
             (data)=> {
 
                 if (data.DATA.length > 0) {
-                    console.log(data.DATA);
                     dispatch(updateDrive(dataMetalWork(data.DATA)));
                     dispatch(updateDrive({loaded: 1}));
 
@@ -63,43 +62,74 @@ dataMetalWork = (dataArr)=> {
         })
     });
 
-    let qichenArr = [];
+    let qichenDic = {};
     carGroupName.map((groupV,groupK) => {
-        let qichenDic = {}, qichenMinArr = [], isGetInto = false;
+        let qicheMinArr = [], isGetInto = false;
         qichen.map((v,k)=>{
             if(v.BODY_STRUCTURAL == groupV){
                 isGetInto = true;
-                qichenDic['BODY_STRUCTURAL'] = groupV;
-                qichenMinArr.push(v);
-                qichenDic['arr'] = qichenMinArr;
+                qicheMinArr.push(v);
             }
         });
         if (isGetInto) {
-            qichenArr.push(qichenDic)
+            qichenDic[groupV] = qicheMinArr;
         }
+
     });
 
-
-    let richanArr = [];
+    let richanDic = {};
     carGroupName.map((groupV,groupK) => {
-        let richanDic = {}, richanMinArr = [], isGetInto = false;
+        let richanMinArr = [], isGetInto = false;
         richan.map((v,k)=>{
             if(v.BODY_STRUCTURAL == groupV){
                 isGetInto = true;
-                richanDic['BODY_STRUCTURAL'] = groupV;
                 richanMinArr.push(v);
-                richanDic['arr'] = richanMinArr;
             }
         });
         if (isGetInto) {
-            richanArr.push(richanDic)
+            richanDic[groupV] = richanMinArr;
         }
 
     });
 
-    return {qichenArr, richanArr};
+    return {qichenDic, richanDic};
 
 };
+
+
+// let qichenArr = [];
+// carGroupName.map((groupV,groupK) => {
+//     let qichenDic = {}, qichenMinArr = [], isGetInto = false;
+//     qichen.map((v,k)=>{
+//         if(v.BODY_STRUCTURAL == groupV){
+//             isGetInto = true;
+//             qichenDic['BODY_STRUCTURAL'] = groupV;
+//             qichenMinArr.push(v);
+//             qichenDic['arr'] = qichenMinArr;
+//         }
+//     });
+//     if (isGetInto) {
+//         qichenArr.push(qichenDic)
+//     }
+// });
+
+
+// let richanArr = [];
+// carGroupName.map((groupV,groupK) => {
+//     let richanDic = {}, richanMinArr = [], isGetInto = false;
+//     richan.map((v,k)=>{
+//         if(v.BODY_STRUCTURAL == groupV){
+//             isGetInto = true;
+//             richanDic['BODY_STRUCTURAL'] = groupV;
+//             richanMinArr.push(v);
+//             richanDic[groupV] = richanMinArr;
+//         }
+//     });
+//     if (isGetInto) {
+//         richanArr.push(richanDic)
+//     }
+//
+// });
 
 // splitByCarBrandCode = (carTypesData)=> {
 //     let qichen = [], richan = [];
