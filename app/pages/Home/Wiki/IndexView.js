@@ -5,11 +5,12 @@ import {
     StyleSheet,
     View,
     Text,
-    Image
+    Image,
+    WebView
 } from 'react-native';
 // third part module
 import {connect} from 'react-redux';
-//import RNFS from 'react-native-fs';
+import RNFS from 'react-native-fs';
 // action
 import {fetchImg} from '../../../actions/wikiAction'
 // utils
@@ -25,7 +26,6 @@ import Manual from './ManualView';
 import LearnReplacement from './LearnReplacementView';
 
 let jobId = -1;
-var downloadUrl = 'http://lorempixel.com/400/200/';
 let url = 'http://obqi5r9i0.bkt.clouddn.com/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89%E4%B8%AD%E6%96%87%20%E9%AB%98%E6%B8%85%20%E5%AE%8C%E6%95%B4.pdf'
 
 class Cyclopedia extends Component {
@@ -42,109 +42,79 @@ class Cyclopedia extends Component {
         });
         //
         this.state = {
-          //output: 'Doc folder: ' + RNFS.DocumentDirectoryPath,
-          imagePath: {
-            uri: ''
-          }
+          output: 'Doc folder: ' + RNFS.DocumentDirectoryPath
         }
+
+        this.downloadFile = this.downloadFile.bind(this)
+
     }
 
-    // downloadFileTest (background, url) {
-    //   if (jobId !== -1) {
-    //     this.setState({ output: 'A download is already in progress' });
-    //   }
-    //
-    //   var progress = data => {
-    //     var percentage = ((100 * data.bytesWritten) / data.contentLength) | 0;
-    //     var text = `Progress ${percentage}%`;
-    //     this.setState({ output: text });
-    //   };
-    //
-    //   var begin = res => {
-    //     this.setState({ output: 'Download has begun' });
-    //   };
-    //
-    //   var progressDivider = 1;
-    //
-    //   this.setState({ imagePath: { uri: '' } });
-    //
-    //   // Random file name needed to force refresh...
-    //   const downloadDest = `${RNFS.DocumentDirectoryPath}/${((Math.random() * 1000) | 0)}.jpg`;
-    //
-    //   const ret = RNFS.downloadFile({
-    //     fromUrl: url,
-    //     toFile: downloadDest,
-    //     begin,
-    //     progress,
-    //     background,
-    //     progressDivider
-    //   });
-    //
-    //   jobId = ret.jobId;
-    //
-    //   ret.promise.then(res => {
-    //     this.setState({ output: JSON.stringify(res) });
-    //     this.setState({ imagePath: { uri: 'file://' + downloadDest } });
-    //
-    //     jobId = -1;
-    //   }).catch(err => {
-    //     this.showError(err)
-    //
-    //     jobId = -1;
-    //   });
-    // }
-    // manualClick(background, url) {
-    //   if(jobId !== -1) {
-    //     // 已经在下载中
-    //     this.setState({
-    //       output: 'A download is already in progress'
+    downloadFile (background, url) {
+      RNFS.readDir(RNFS.DocumentDirectoryPath)
+      .then((result) => {
+        console.log('GOT RESULT', result);
+      })
+      .catch((err) => {
+        console.log(err.message, err.code);
+      });
+      if(RNFS.exists(`${RNFS.DocumentDirectoryPath}/lyManual.pdf`)) {
+        // 如果已经存在，就直接返回
+        console.log('文件已存在')
+        return;
+      }
+      if (jobId !== -1) {
+        this.setState({ output: 'A download is already in progress' });
+      }
+
+      var progress = data => {
+        var percentage = ((100 * data.bytesWritten) / data.contentLength) | 0;
+        var text = `Progress ${percentage}%`;
+        this.setState({ output: text });
+      };
+
+      var begin = res => {
+        this.setState({ output: 'Download has begun' });
+      };
+
+      var progressDivider = 1;
+
+
+      // Random file name needed to force refresh...
+      const downloadDest = `${RNFS.DocumentDirectoryPath}/lyManual.pdf`;
+      const ret = RNFS.downloadFile({
+        fromUrl: url,
+        toFile: downloadDest,
+        begin,
+        progress,
+        background,
+        progressDivider
+      });
+
+      jobId = ret.jobId;
+
+      ret.promise.then(res => {
+        this.setState({ output: JSON.stringify(res)+downloadDest });
+        // 写文件
+        jobId = -1;
+      }).catch(err => {
+        //this.showError(err)
+        //alert(JSON.stringify(err))
+        jobId = -1;
+      });
+    //   let path = RNFS.DocumentDirectoryPath + '/test.txt'
+    //   RNFS.writeFile(path, 'hello wrold', 'utf8')
+    //     .then(success=> {
+    //       alert(path)
     //     })
-    //   }
-    //   // 下载中函数
-    //   let progress = data=> {
-    //     let percentage = ((100*data.bytesWritten)/data.contentLength) | 0;
-    //     let text = `Progress ${percentage}%`
-    //     this.setState({
-    //       output: text
+    //     .catch(err=> {
+    //       alert('error')
     //     })
-    //   }
-    //   // 开始下载函数
-    //   let begin = res=> {
-    //     this.setState({
-    //       output: 'Download has begun'
-    //     })
-    //   }
-    //
-    //   // let progerss
-    //   let progressDivider = 1;
-    //   // 图片名称与路径
-    //   const downloadDest = `${RNFS.DocumentDirectoryPath}/${(Math.random()*1000) | 0}.jpg`
-    //
-    //   const ret = RNFS.downloadFile({
-    //     fromUrl: url,
-    //     toFile: downloadDest,
-    //     begin,
-    //     progress,
-    //     backgrouond,
-    //     progressDivider
-    //   })
-    //
-    //   jobId = ret.jobId;
-    //
-    //   ret.promise.then(res=> {
-    //     this.setState({
-    //       output: JSON.stringify(res)
-    //     })
-    //     jobId = -1
-    //   }).catch(err=> {
-    //     this.showError(err)
-    //     jobId = -1
-    //   })
-    // }
+    }
 
     render() {
         let {dispatch, wiki} = this.props;
-        //alert(wiki.img)
+        //alert(JSON.stringify(this.state.imagePath))
+        console.log(this.state.imagePath)
 
         return (
             <View style={styles.container}>
@@ -184,8 +154,9 @@ class Cyclopedia extends Component {
                         description={'详细查看随车指南'}
                         image={require('../../../image/icon_wiki_text.png')}
                         onPress={()=> {
-                          alert('hello')
+                          //alert('hello')
                           //this.manualClick().bind(this, false, downloadUrl)
+                          this.downloadFile(true, url)
                         }}
                     />
                     <Item
@@ -202,8 +173,21 @@ class Cyclopedia extends Component {
                         }}
                     />
                 </View>
+                <WebView
+                  ref={'webview'}
+                  automaticallyAdjustContentInsets={false}
+                  style={styles.webView}
+                  source={{uri: 'file:///data/data/com.ly.customer/files/lyManual.pdf'}}
+                  //source={{uri: 'http://www.baidu.com'}}
+
+                  javaScriptEnabled={true}
+                  domStorageEnabled={true}
+                  decelerationRate="normal"
+                  startInLoadingState={true}
+                  scalesPageToFit={true}
+                />
+
                 <Text>{this.state.output}</Text>
-                <Image source={this.state.imagePath}></Image>
             </View>
 
         )
