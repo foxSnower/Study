@@ -18,7 +18,7 @@ import {fetchAnswer} from '../../../actions/wikiAction'
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
 // page component
-import Question from './Question';
+import Question from './QuestionView';
 // Page
 
 class Answer extends Component {
@@ -70,7 +70,7 @@ class Answer extends Component {
         const {wiki} = this.props;
         const that = this;
         return (
-            <View>
+            <View style = {styles.container}>
                 <NavBar
                     title="用车百科"
                     onBack={()=>{
@@ -78,13 +78,17 @@ class Answer extends Component {
                     }}
                 />
                 <ListView
+                  style = {styles.content}
                   dataSource = {that.state.dataSource}
                   renderRow = {(obj)=> {
 
                     return <Item
                         onPress = {()=> {
                             this.props.navigator.push({
-                                component: Question
+                                component: Question,
+                                params: {
+                                  code: obj["LOOKUP_VALUE_CODE"]
+                                }
                             })
                         }}
                         title = {obj["LOOKUP_VALUE_NAME"]}
@@ -115,3 +119,14 @@ export default connect((state)=> {
     wiki
   }
 })(Answer)
+
+let styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
+  content: {
+    flex: 1,
+    backgroundColor: '#fff'
+  }
+})

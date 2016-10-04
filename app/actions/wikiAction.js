@@ -36,6 +36,7 @@ export let fetchImg = (value) => {
 
 // 用车答疑
 export let fetchAnswer = (value, cb) => {
+  console.log('action fetchAnswer')
     // 获取数据
     requestPOST(
             HANDLER, {
@@ -49,12 +50,14 @@ export let fetchAnswer = (value, cb) => {
             (data) => {
                 //alert(JSON.stringify(data["DATA"]["SHOW_OTHERCOMMON"]))
                 //cb(data)
+                console.log('fetch success')
                 cb({
                     type: types.FETCH_ANSWER,
                     value: data["DATA"]["SHOW_OTHERCOMMON"]
                 })
             },
             (error) => {
+                console.log('fetch error')
                 //alert(JSON.stringify(error))
                 cb({
                     type: types.FETCH_ANSWER,

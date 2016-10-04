@@ -11,17 +11,16 @@ import {
 import {connect} from 'react-redux';
 // util
 import UserDefaults from '../../../utils/GlobalStorage';
-import imageObj from '../../../utils/imageUtil';
+import imgUrl from '../../../utils/RequestURL';
 // action
 import {fetchQuestion} from '../../../actions/wikiAction'
 // common Component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
 // page component
-import Detail from './QuestionDetailView'
 // Page
 
-class Answer extends Component {
+export default class LearnReplacement extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -32,13 +31,13 @@ class Answer extends Component {
 
     componentDidMount() {
       // 获取数据
-      const {dispatch, wiki, code} = this.props
+      const {dispatch, wiki} = this.props
       const that = this
       UserDefaults.objectForKey("userInfo", (data)=> {
           if (data) {
               //alert(data["LOGIN_USER_ID"])
               //alert(JSON.stringify(fetchAnswer("")))
-              fetchQuestion(code, function (action) {
+              fetchQuestion("10220", function (action) {
                 // dispatch 改变数据后，需要得到改变后的 state
                 dispatch(action)
                 that.setState({
@@ -51,9 +50,9 @@ class Answer extends Component {
 
     renderLoading() {
       return (
-        <View style={styles.container}>
+        <View>
           <NavBar
-              title="常见问题"
+              title="认识纯正备件"
               onBack={()=>{
                   this.props.navigator.pop()
               }}
@@ -65,9 +64,9 @@ class Answer extends Component {
     renderContent() {
         const that = this;
         return (
-            <View>
+            <View style = {styles.container}>
                 <NavBar
-                    title="常见问题"
+                    title="认识纯正备件"
                     onBack={()=>{
                         this.props.navigator.pop()
                     }}
@@ -78,9 +77,6 @@ class Answer extends Component {
 
                     return <Item
                         onPress = {()=> {
-                            this.props.navigator.push({
-                                component: Detail
-                            })
                         }}
                         title = {obj["QUES_TITLE"]}
                         image = {require('../../../image/icon_wiki_a.png')}
@@ -92,27 +88,20 @@ class Answer extends Component {
     }
 
     render() {
-      const {dispatch, wiki} = this.props;
-      //alert(JSON.stringify(wiki))
-
-      if(wiki && wiki.list && wiki.list.length !== 0) {
-        // 如果完成
-        return this.renderContent()
-      }else {
-        return this.renderLoading()
-      }
+      return this.renderContent()
     }
 }
 
-export default connect((state)=> {
-  const {wiki} = state;
-  return {
-    wiki
-  }
-})(Answer)
+// export default connect((state)=> {
+//   const {wiki} = state;
+//   return {
+//     wiki
+//   }
+// })(LearnReplacement)
 
 let styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#fff'
   }
 })
