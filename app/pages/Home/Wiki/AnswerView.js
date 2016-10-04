@@ -18,7 +18,7 @@ import {fetchAnswer} from '../../../actions/wikiAction'
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
 // page component
-import Question from './Question.js';
+import Question from './Question';
 // Page
 
 class Answer extends Component {

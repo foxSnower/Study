@@ -40,10 +40,6 @@ class Answer extends Component {
               //alert(JSON.stringify(fetchAnswer("")))
               fetchQuestion("", function (action) {
                 // dispatch 改变数据后，需要得到改变后的 state
-                // 其实 list 就是 action.value ，直接使用这个？
-                //alert(JSON.stringify(action))
-                //let ary = action.value
-                //alert(JSON.stringify(action))
                 dispatch(action)
                 that.setState({
                     dataSource: that.state.dataSource.cloneWithRows(action.value)
@@ -67,7 +63,6 @@ class Answer extends Component {
       )
     }
     renderContent() {
-        const {wiki} = this.props;
         const that = this;
         return (
             <View>

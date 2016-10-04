@@ -116,10 +116,11 @@ export let loginSubim = (mobile, password,nav) =>{
                 dispatch(updateLogin({'loginBtnDisabled': false,'loginBtnText':'登录'}));
                 if(data.RESULT_CODE == 0){
                     //登陆成功将用户信息写入缓存中
-                    ly_Toast("登录成功",3000,20,()=>{
+                    UserDefaults.setObject("userInfo",data.DATA[0]);
+                    ly_Toast("登录成功",1000,20,()=>{
                         nav.pop();
                     })
-                    UserDefaults.setObject("userInfo",data.DATA[0]);
+
 
                     // UserDefaults.setObject("LOGIN_USER_ID",data.DATA[0].LOGIN_USER_ID);   //用户ID
                     // UserDefaults.setObject("USER_TYPE",data.DATA[0].USER_TYPE);     //用户类型 1 会员 2 潜客

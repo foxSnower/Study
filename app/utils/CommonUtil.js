@@ -15,6 +15,7 @@ export const Screen = Dimensions.get('window');   //获取屏幕
 export const MainColor = '#825897';
 export const BGColor = '#efeff4';      //app背景颜色
 export const BTNColor = '#ef4f4f';     //按钮红色通用
+export const BORDERColor = '#d9d9d9';  //通用border颜色
 
 export const pixelRation = PixelRatio.get();   //1像素的兼容处理
 

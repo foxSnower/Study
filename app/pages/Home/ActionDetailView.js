@@ -94,8 +94,6 @@ class ActionDetailView extends Component {
                 </View>
             </View>
         )
-
-
     }
 }
 
@@ -110,16 +108,6 @@ const styles = StyleSheet.create({
     content:{
         //backgroundColor:"red"
     },
-    // loading:{刚刚什么样式我忘记了刚刚我写的能看明白 嗯俄  这里就过了 我不知道可以在dispatch里面写回调..
-    //     flex:1,
-    //     justifyContent:'center',
-    //     alignItems:'center'
-    // },
-    // container:{
-    //     flex:1,
-    //     backgroundColor:"rgba(0,0,0,0.6)",
-    //     flexDirection:'row'
-    // },
     title:{
         fontSize:17,
         fontWeight:"500",
@@ -129,4 +117,4 @@ const styles = StyleSheet.create({
         fontSize:12,
         marginTop:10,
     }
-})
+});

@@ -5,6 +5,8 @@ import * as types from './actionTypes';
 import {requestPOST} from '../utils/FetchUtil'
 import {HANDLER} from '../utils/RequestURL'
 
+import {ly_Toast} from '../utils/CommonUtil'
+
 export function updateHome(value) {
     return {
         type: types.UPDATE_HOME,
@@ -45,7 +47,6 @@ export let fetchWeatherInfo = () => {
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-
                 requestPOST(
                     HANDLER,
                     {
@@ -64,7 +65,7 @@ export let fetchWeatherInfo = () => {
                     }
                 )
             },
-            (error) => alert(error.message),
+            (error) => {ly_Toast(error.message,1000,-20)},
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
         );
 
@@ -113,6 +114,7 @@ export let fetchActionList = (pageIndex, listBlock) => {
             (data) => {
                // dispatch(updateHome({actionList: data.DATA}));
                 listBlock(data.DATA);
+
                 console.log(111);
             },
             (error) => {

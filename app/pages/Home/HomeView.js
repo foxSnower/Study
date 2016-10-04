@@ -22,6 +22,9 @@ import Wiki from './Wiki/IndexView'
 import DeviceInfo from 'react-native-device-info'
 import UserDefaults from '../../utils/GlobalStorage'
 import ActionDetailView from './ActionDetailView'
+import TestDriveHomeView from '../Business/TestDriveHomeView'
+
+//import TestDriveBook  from '../Business/TestDriveBook'
 
 class HomeView extends Component {
 
@@ -228,11 +231,19 @@ class HomeView extends Component {
                                   text="保养预约"
                                   textStyle={styles.textStyle}
                                   image={require('../../image/icon_index_maintain.png')}
+                                  onPress = {() => {
+
+                                  }}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="预约驾驶"
                                   textStyle={styles.textStyle}
                                   image={require('../../image/icon_index_test.png')}
+                                  onPress = {() => {
+                                      this.props.navigator.push({
+                                          component: TestDriveHomeView
+                                      })
+                                  }}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="紧急救援"
@@ -250,7 +261,9 @@ class HomeView extends Component {
     };
 
 }
-
+//this.props.navigator.push({
+// component: TestDriveBook
+//})
 export default connect((state) => {
     const {home} = state;
     return {
