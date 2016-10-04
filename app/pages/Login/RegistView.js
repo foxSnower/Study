@@ -168,7 +168,7 @@ class RegistView extends Component {
                                           onPress={()=> {
                                               Linking.openURL(`tel:${GM_CALL}`);
                                           }}>
-                            <Text style={{marginTop: 10, paddingRight: 10, marginBottom: 30}}>注册遇到问题,联系客服</Text>
+                            <Text style={{marginTop: 10, marginRight: 10, marginBottom: 30}}>注册遇到问题,联系客服</Text>
                         </TouchableOpacity>
 
                         <Button text="注  册"
