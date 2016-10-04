@@ -25,7 +25,7 @@ const customerButtonItems = [
             targetComponent:"RepairBookView",
             image:require("../../image/icon_bus_maintain.png"),
             secText:"为您提供贴心维修服务",
-            component: TestDriveHomeView
+            component: TestView
         }
     ],
     [
