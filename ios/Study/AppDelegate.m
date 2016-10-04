@@ -16,7 +16,7 @@
 #import "RCTBundleURLProvider.h"
 #import "RCTRootView.h"
 
-static NSString *appKey = @"";     //填写appkey
+static NSString *appKey = @"f13507c108f636d6135a9148";     //填写appkey
 static NSString *channel = @"";    //填写channel   一般为nil
 static BOOL isProduction = false;  //填写isProdurion  平时测试时为false ，生产时填写true
 
@@ -43,8 +43,8 @@ static BOOL isProduction = false;  //填写isProdurion  平时测试时为false 
                                           categories:nil];
   }
   
-  [JPUSHService setupWithOption:launchOptions appKey:@"1b1d81e4469435da518f4733"
-                        channel:nil apsForProduction:nil];
+  [JPUSHService setupWithOption:launchOptions appKey:appKey
+                        channel:nil apsForProduction:isProduction];
   NSURL *jsCodeLocation;
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
