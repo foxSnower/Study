@@ -13,12 +13,12 @@ import {connect} from 'react-redux';
 import UserDefaults from '../../../utils/GlobalStorage';
 import imageObj from '../../../utils/imageUtil';
 // action
-import {fetchAnswer} from '../../../actions/wikiAction'
+import {fetchQuestion} from '../../../actions/wikiAction'
 // common Component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
 // page component
-import Question from './Question.js';
+import Index from './IndexView.js';
 // Page
 
 class Answer extends Component {
@@ -38,7 +38,7 @@ class Answer extends Component {
           if (data) {
               //alert(data["LOGIN_USER_ID"])
               //alert(JSON.stringify(fetchAnswer("")))
-              fetchAnswer("", function (action) {
+              fetchQuestion("", function (action) {
                 // dispatch 改变数据后，需要得到改变后的 state
                 // 其实 list 就是 action.value ，直接使用这个？
                 //alert(JSON.stringify(action))
@@ -57,7 +57,7 @@ class Answer extends Component {
       return (
         <View>
           <NavBar
-              title="用车百科"
+              title="常见问题"
               onBack={()=>{
                   this.props.navigator.pop()
               }}
@@ -72,7 +72,7 @@ class Answer extends Component {
         return (
             <View>
                 <NavBar
-                    title="用车百科"
+                    title="常见问题"
                     onBack={()=>{
                         this.props.navigator.pop()
                     }}
@@ -84,11 +84,11 @@ class Answer extends Component {
                     return <Item
                         onPress = {()=> {
                             this.props.navigator.push({
-                                component: Question
+                                component: Index
                             })
                         }}
-                        title = {obj["LOOKUP_VALUE_NAME"]}
-                        image = {require('../../../image/icon_wiki_q.png')}
+                        title = {obj["QUES_TITLE"]}
+                        image = {require('../../../image/icon_wiki_a.png')}
                     />
                   }}
                 />

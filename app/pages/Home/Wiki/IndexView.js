@@ -27,6 +27,7 @@ class Cyclopedia extends Component {
         let {dispatch} = props;
         // 获取数据
         UserDefaults.objectForKey("userInfo", (data)=> {
+            console.log('hsdf')
             if (data) {
                 //alert(data["LOGIN_USER_ID"])
                 // 如果用户id存在，就改变用车百科页面图片
