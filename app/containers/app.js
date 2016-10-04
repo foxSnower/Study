@@ -6,12 +6,15 @@ import {
     Navigator,
     Text,
     View,
-    StatusBar
+    StatusBar,
+    NativeAppEventEmitter
 } from 'react-native';
 
 import {connect} from 'react-redux';
 import TabBarView from './TabBarView';
 import {updateFields} from '../actions/fieldsAction'
+import {PlatformiOS} from '../utils/CommonUtil'
+import JPushModule from 'jpush-react-native';
 
 class App extends Component {
 
@@ -20,9 +23,40 @@ class App extends Component {
 
         const {dispatch} = this.props;
         dispatch(updateFields({count: 2016}));
-        // dispatch(updateFields({myActionData:[]}))
     }
 
+    componentDidMount() {
+
+        if (PlatformiOS) {
+            let subscription = NativeAppEventEmitter.addListener(
+                'ReceiveNotification',
+                (notification) => console.log(notification)
+            );
+
+            let subscription1 = NativeAppEventEmitter.addListener(
+                'networkDidReceiveMessage',
+                (message) => console.log(message)
+            );
+        } else {
+            JPushModule.addReceiveCustomMsgListener((message) => {
+                this.setState({pushMsg: message});
+            });
+            JPushModule.addReceiveNotificationListener((message) => {
+                console.log("receive notification: " + message);
+            })
+        }
+
+    }
+
+    componentWillUnmount() {
+        if (PlatformiOS) {
+            this.subscription.remove();
+            this.subscription1.remove();
+        } else {
+            JPushModule.removeReceiveCustomMsgListener();
+            JPushModule.removeReceiveNotificationListener();
+        }
+    }
 
     render() {
 

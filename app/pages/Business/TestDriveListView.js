@@ -58,10 +58,6 @@ export default class TestDriveListView extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log(this.props.sourceData)
-    }
-
     _renderFriendRow = (friend, sectionID, rowID) => {
 
         return (
@@ -69,7 +65,7 @@ export default class TestDriveListView extends Component {
 
                 <Image style={{flex:1,width:60,height:50}}
                        source={{uri:`${IMGURL}${friend.CAR_IMAGE}`}}
-                       resizeMode="contain"></Image>
+                       resizeMode="contain"/>
                 <View style={{flex:2}}>
                     <Text style={{color:"#2b2b2b",fontSize:14}}>{friend.CAR_SERIES_CN}</Text>
                     <Text style={{fontSize:12,marginTop:6,marginBottom:6}}>已关注 {friend.ATTENTION_RATE}</Text>
@@ -108,7 +104,7 @@ export default class TestDriveListView extends Component {
 
     render() {
         return (
-            <View style={{flex: 1, paddingTop: 20}}>
+            <View style={{flex: 1}}>
                 <ListView
                     dataSource={this.state.dataSource.cloneWithRowsAndSections(this.props.sourceData)}
                     renderRow={this._renderFriendRow}
@@ -130,7 +126,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 15,
         borderBottomWidth: 0.5,
-        borderColor: '#d9d9d9'
+        borderColor: '#d9d9d9',
+        backgroundColor: '#fff'
     },
     btn:{
         flex:1,
@@ -142,4 +139,4 @@ const styles = StyleSheet.create({
         borderColor:BTNColor,
         justifyContent:"center",
     }
-})
+});

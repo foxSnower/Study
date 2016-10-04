@@ -124,7 +124,7 @@ class ActivitieListView extends Component {
                     <Image
                         source={{uri: rowData.ACT_IMAGE}}
                         style={styles.thumbnail}
-                        resizeMode={"cover"}
+                        resizeMode={"contain"}
                     />
                     <View style={styles.cellBottomView}>
                         <Text numberOfLines={1}>{rowData.SUMMARY}</Text>
