@@ -4,12 +4,11 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-    loaded:false,
-    province_name:"北京",
-    province_id:"1",
-    arr_province:[
-        {name:'北京',id:1},{name:'上海',id:2},{name:'山东',id:3}
-    ]
+    loaded: false,
+    province_name: "北京",
+    province_id: "1",
+    cityArr: [],
+    provinceArr: []
 
 }
 

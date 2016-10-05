@@ -30,16 +30,19 @@ import DLRMapView from './DLRMapView';
 
 let pageIndex =0;
 class DLRView extends Component {
+
     constructor(props) {
         super(props);
-         const {dispatch} = this.props;
-         dispatch(getCityData());
+
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2})
         };
     }
 
     componentDidMount() {
+
+        const {dispatch} = this.props;
+        dispatch(getCityData());
         this.pulldown();
     }
 
@@ -53,7 +56,7 @@ class DLRView extends Component {
         const { dlrName } = this.props.dlr;
         dispatch(searchDlr({DLR_NAME:"风日"},1,(dlrList)=>{
             this.reloadDataSourec(dlrList)
-        }))
+        }));
 
         // UserDefaults.objectForKey("locationInfo",(data)=>{
         //     let params ={};
@@ -85,7 +88,6 @@ class DLRView extends Component {
                     this.reloadDataSourec(arr);
                 } else {
                     ly_Toast("已经到底啦o_O",3000);
-                    //alert('没有更多了')
                 }
             }));
         }
@@ -96,9 +98,12 @@ class DLRView extends Component {
             dataSource: this.state.dataSource.cloneWithRows(arr)
         })
     };
+
     render() {
+
         const { dispatch } = this.props;
-        const { province_id,province_name,arr_province} = this.props.dlr;
+        const { province_id,province_name,arr_province, provinceArr, cityArr} = this.props.dlr;
+
         return (
             <View style={styles.container}>
                 <NavBar title="4S店查询"
@@ -117,7 +122,8 @@ class DLRView extends Component {
 
                                  }
                                     // this.searchDlrList
-                                 }/>
+                                 }
+                    />
                     <View style={{flexDirection:"row",paddingLeft:10,paddingRight:10}}>
                         <TouchableOpacity style={[styles.dropdown,{marginRight:10}]} onPress={()=>{
                             this.selectViewLocale.onShow()
@@ -128,7 +134,7 @@ class DLRView extends Component {
 
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.dropdown} onPress={()=>{
-                            this.selectViewLocale2.onShow()
+                            this.selectViewCity.onShow()
                         }}>
                             <Text style={styles.text}>1242</Text>
                             <Icon style={styles.icon}
@@ -136,27 +142,24 @@ class DLRView extends Component {
 
                         </TouchableOpacity>
                         <SelectPickerView ref={(p)=>this.selectViewLocale =p}
-                                          pickerArr={arr_province}
-                                          defaultValue={2}//这个默认值对应的是 id
+                                          pickerArr={provinceArr}
+                                          defaultValue={province_id}//这个默认值对应的是 id
                                           onChange={(itemValue,itemPosition)=>{
                                              // dispatch(updateDlr({province_name:itemValue}))
+                                              console.log(itemValue,itemPosition);
+                                              dispatch(updateDlr({cityArr:provinceArr[itemPosition].CITIES}))
+
+                                          }}
+                                          type={true}
+                        />
+                        <SelectPickerView ref={(p)=>this.selectViewCity =p}
+                                          pickerArr={cityArr}
+                                          //defaultValue={province_id}//这个默认值对应的是 id
+                                          onChange={(itemValue,itemPosition)=>{
+                                              // dispatch(updateDlr({province_name:itemValue}))
                                               console.log(itemValue,itemPosition)
                                           }}
-                                          pickerItem = {(v,k)=>{
-                                              return (
-                                                  <Picker.Item label={v.PROVINCE_NAME} value={v.PROVINCE_ID} key={k}/>
-                                              )
-                                          }}
-                        />
-                        <SelectPickerView ref={(p)=>this.selectViewLocale2 =p}
-                                          pickerArr={[
-                                              {name:'北京',id:1},{name:'上海',id:2},{name:'山东',id:3}
-                                          ]}
-                                          defaultValue={2}//这个默认值对应的是 id
-                                          onPressConfirm ={(itemValue, itemPosition)=>{
-                                              dispatch(updateDlr({dlrName:text}))
-                                              //alert(itemValue,itemPosition);//你分开打印
-                                          }}
+                                          type={false}
                         />
                     </View>
                         <ListView
@@ -178,13 +181,14 @@ class DLRView extends Component {
             </View>
         )
     }
+
     renderCell = (rowData, sectionID, rowID, highlightRow) => {
-        alert(JSON.stringify(rowData))
+      //  alert(JSON.stringify(rowData))
         let icon = `${IMGURL}/images/icon-shop.png`;
         let pos = `${IMGURL}/images/icon_adrs.png`;
         let map = `${IMGURL}/images/shop_GPS.png`;
         let tel = `${IMGURL}/images/shop_tel.png`;
-        ly_Toast(icon)
+        ly_Toast(icon);
         return (
             <View style={styles.cellView}>
                 <View style={{flexDirection:"row",marginTop:8,paddingBottom:8,borderBottomWidth:pixel1,borderColor:BORDERColor}}>
@@ -237,12 +241,14 @@ class DLRView extends Component {
         );
     }
 }
+
 export default connect ((state) => {
     const { dlr } = state;
     return {
         dlr
     }
 })(DLRView)
+
 const styles = StyleSheet.create({
     cellView:{
         height:110,
@@ -288,4 +294,4 @@ const styles = StyleSheet.create({
         width:20,
         height:20,
     }
-})
+});

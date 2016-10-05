@@ -26,12 +26,15 @@ export default class SelectPickerView extends Component {
         onPressConfirm: PropTypes.func,
         onPressCancel: PropTypes.func,
         style: PropTypes.object,
-        onRequestClose : Platform.OS === 'android' ? PropTypes.func.isRequired : PropTypes.func,
-        pickerItem : PropTypes.func,
+        onRequestClose: Platform.OS === 'android' ? PropTypes.func.isRequired : PropTypes.func,
+        type: PropTypes.bool,
     };
 
     static defaultProps = {
-        onChange: ()=> {}
+        onChange: ()=> {
+        },
+        onPressConfirm: ()=> {
+        }
     };
 
     constructor(props) {
@@ -71,13 +74,15 @@ export default class SelectPickerView extends Component {
 
     render() {
 
-        const {pickerArr, onChange} = this.props;
+        const {pickerArr, onChange, type} = this.props;
 
         return (
 
             <Modal visible={this.state.visible}
                    transparent={true}
-                   onRequestClose = {() => {this.onDismiss()}}
+                   onRequestClose={() => {
+                       this.onDismiss()
+                   }}
             >
                 <TouchableOpacity style={{flex: 1}}
                                   onPress={this.onDismiss.bind(this)}
@@ -103,7 +108,7 @@ export default class SelectPickerView extends Component {
                 {
                     pickerArr.length > 0 &&
                     <Picker
-                        style={{backgroundColor: '#2b2b2b'}}
+                        style={{backgroundColor: '#fff'}}
                         selectedValue={this.state.select}
                         onValueChange={(itemValue, itemPosition) => {
                             this.setState({
@@ -112,7 +117,18 @@ export default class SelectPickerView extends Component {
                             });
                             onChange(itemValue, itemPosition)
                         }}>
-                        {pickerArr.map(this.props.pickerItem)}
+                        {pickerArr.map((v, k)=> {
+                            if (type) {
+                                return (
+                                    <Picker.Item label={v.PROVINCE_NAME} value={v.PROVINCE_ID} key={k}/>
+                                )
+                            } else {
+                                return (
+                                    <Picker.Item label={v.CITY_NAME} value={v.CITY_ID} key={k}/>
+                                )
+                            }
+
+                        })}
                     </Picker>
                 }
 

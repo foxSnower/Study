@@ -83,11 +83,11 @@ const styles = StyleSheet.create({
         color:"#000",
         flex: 1,
         borderWidth: 0,
-        height: 50,
-        fontSize: 15
+        height: 36,
+        fontSize: 15,
+        marginLeft: 10
     },
     icon:{
         marginLeft:10,
-
     }
 })

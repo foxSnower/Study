@@ -23,9 +23,9 @@ export let getCityData = () => {
                 "PARAM": {}
             },
             data => {
-                alert(data.DATA)
+               // alert(data.DATA)
                 if(data.RESULT_CODE == '0'){
-                    dispatch(updateDlr({cityData:data.DATA}))
+                    dispatch(updateDlr({provinceArr:data.DATA}))
                     console.log(data.DATA)
                 }else{
                     console.log("获取省份城市失败")
