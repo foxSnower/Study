@@ -8,3 +8,5 @@ export const UPDATE_LOGIN = 'UPDATE_LOGIN';
 export const FETCH_IMG = 'FETCH_IMG';
 
 export const UPDATE_DRIVE = 'UPDATE_DRIVE';
+
+export const UPDATE_DLR = 'UPDATE_DLR';

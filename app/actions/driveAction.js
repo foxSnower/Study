@@ -15,6 +15,33 @@ export function updateDrive(value) {
     }
 }
 
+//试驾预约
+export let testDrive = (userId,custName,tel,dlrCode,bookTime,carSeriesCode,saCode) => {
+    return dispatch => {
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "TestDriveBook",
+                "PARAM": {
+                    LOGIN_USER_ID: userId,
+                    CUST_NAME: custName,
+                    CUST_TEL: tel,
+                    DLR_CODE: dlrCode,
+                    BOOK_TIME: bookTime,
+                    CAR_SERIES_CODE: carSeriesCode,
+                    SA_CODE: saCode
+                }
+            }     ,
+            data => {
+                console.log(data);
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+}
+
 //获取试驾车型
 export let getCarTypes = ()=> {
 

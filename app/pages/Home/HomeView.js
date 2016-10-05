@@ -39,7 +39,7 @@ class HomeView extends Component {
 
         if(!Debug){
             deviceInfo.DEVICE_TOKEN = DeviceInfo.getUniqueID();
-            deviceInfo.OS_VERSION = DeviceInfo.getDeviceId()
+            deviceInfo.OS_VERSION = DeviceInfo.getSystemName()
             deviceInfo.MODEL = DeviceInfo.getModel();
             deviceInfo.DEVICE_TYPE = DeviceInfo.getBrand();
             deviceInfo.APP_VERSION = DeviceInfo.getVersion();

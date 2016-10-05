@@ -6,6 +6,7 @@ import {requestPOST} from '../utils/FetchUtil'
 import {HANDLER} from '../utils/RequestURL'
 
 import {ly_Toast} from '../utils/CommonUtil'
+import UserDefaults from '../utils/GlobalStorage';
 
 export function updateHome(value) {
     return {
@@ -18,7 +19,6 @@ export function updateHome(value) {
 export let fetchAction = () => {
 
     return dispatch => {
-
         requestPOST(
             HANDLER,
             {
@@ -59,8 +59,20 @@ export let fetchWeatherInfo = () => {
                     (data) => {
                         dispatch(fetchOilInfo(data.DATA.showapi_res_body.cityInfo.c7));
                         dispatch(updateHome({weatherInfo: data.DATA.showapi_res_body.now}))
+                        if(data.DATA.showapi_res_body){
+                            const location = {
+                                "LNG": Math.abs(position.coords.longitude).toString(),
+                                "LAT": Math.abs(position.coords.latitude).toString(),
+                                "CITY": data.DATA.showapi_res_body.cityInfo.c7,
+                                "REGION":data.DATA.showapi_res_body.cityInfo.c5,
+                            }
+                            //缓存地理位置信息
+                            UserDefaults.setObject("locationInfo",location);
+                        }
+
                     },
                     (error) => {
+                        ly_Toast(error.message,1000,-20)
                         console.log(JSON.stringify(error))
                     }
                 )

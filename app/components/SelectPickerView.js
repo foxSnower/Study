@@ -26,7 +26,8 @@ export default class SelectPickerView extends Component {
         onPressConfirm: PropTypes.func,
         onPressCancel: PropTypes.func,
         style: PropTypes.object,
-        onRequestClose : Platform.OS === 'android' ? PropTypes.func.isRequired : PropTypes.func
+        onRequestClose : Platform.OS === 'android' ? PropTypes.func.isRequired : PropTypes.func,
+        pickerItem : PropTypes.func,
     };
 
     static defaultProps = {
@@ -44,26 +45,6 @@ export default class SelectPickerView extends Component {
 
     }
 
-    // componentWillUnmount() {
-    //     if (Platform.OS === 'ios') {
-    //
-    //     } else {
-    //         BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid.bind(this));
-    //     }
-    // }
-    //
-    // componentDidMount() {
-    //     if (Platform.OS === 'ios') {
-    //
-    //     } else {
-    //         BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid.bind(this));
-    //     }
-    // }
-    //
-    // onBackAndroid(){
-    //     this.onDismiss();
-    //     return true;
-    // }
 
     onShow() {
         this.setState({
@@ -131,12 +112,7 @@ export default class SelectPickerView extends Component {
                             });
                             onChange(itemValue, itemPosition)
                         }}>
-                        {pickerArr.map((v, key)=> {
-                                return (
-                                    <Picker.Item label={v.name} value={v.id} key={key}/>
-                                )
-                            }
-                        )}
+                        {pickerArr.map(this.props.pickerItem)}
                     </Picker>
                 }
 
