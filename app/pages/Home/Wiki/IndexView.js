@@ -6,13 +6,13 @@ import {
     View,
     Text,
     Image,
-    WebView
+    ListView
 } from 'react-native';
 // third part module
 import {connect} from 'react-redux';
 import RNFS from 'react-native-fs';
 // action
-import {fetchImg} from '../../../actions/wikiAction'
+import {fetchImg, fetchCarInfo} from '../../../actions/wikiAction'
 // utils
 import {Screen, pixel1} from '../../../utils/CommonUtil';
 import UserDefaults from '../../../utils/GlobalStorage';
@@ -20,6 +20,7 @@ import imageObj from '../../../utils/imageUtil';
 // common component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
+import Loader from '../../../components/LoaderView'
 // page component
 import Answer from './AnswerView';
 import Manual from './ManualView';
@@ -32,90 +33,120 @@ class Cyclopedia extends Component {
     constructor(props) {
         super(props);
         let {dispatch} = props;
+        this.state = {
+          loaded: false
+        }
         // 获取数据
         UserDefaults.objectForKey("userInfo", (data)=> {
             if (data) {
                 //alert(data["LOGIN_USER_ID"])
                 // 如果用户id存在，就改变用车百科页面图片
-                dispatch(fetchImg('启辰D50'))
+                fetchCarInfo(data["LOGIN_USER_ID"], (data)=> {
+                  console.log('fetchcarinfo', data)
+                  // 这个data里面就保存了 name 和 code
+                  //dispatch(fetchImg(data["DATA"]["CAR"][0]["CAR_SERIES_NAME"] + data["DATA"]["CAR"][0]["CAR_SERIES_CODE"]))
+                  fetchImg(data["DATA"]["CARS"][0]["CAR_SERIES_CODE"], (data)=> {
+                    // 这里要做判断
+                    console.log('fetchimg', data)
+                    dispatch(data)
+                    this.setState({
+                      loaded: true
+                    })
+                    // if(data["RESULT_CODE"] === "0") {
+                    //   dispatch(data)
+                    // }
+                  })
+                })
             }
         });
         //
-        this.state = {
-          output: 'Doc folder: ' + RNFS.DocumentDirectoryPath
-        }
+        // this.state = {
+        //   output: 'Doc folder: ' + RNFS.DocumentDirectoryPath
+        // }
 
-        this.downloadFile = this.downloadFile.bind(this)
+        // this.downloadFile = this.downloadFile.bind(this)
 
     }
 
-    downloadFile (background, url) {
-      RNFS.readDir(RNFS.DocumentDirectoryPath)
-      .then((result) => {
-        console.log('GOT RESULT', result);
-      })
-      .catch((err) => {
-        console.log(err.message, err.code);
-      });
-      if(RNFS.exists(`${RNFS.DocumentDirectoryPath}/lyManual.pdf`)) {
-        // 如果已经存在，就直接返回
-        console.log('文件已存在')
-        return;
-      }
-      if (jobId !== -1) {
-        this.setState({ output: 'A download is already in progress' });
-      }
-
-      var progress = data => {
-        var percentage = ((100 * data.bytesWritten) / data.contentLength) | 0;
-        var text = `Progress ${percentage}%`;
-        this.setState({ output: text });
-      };
-
-      var begin = res => {
-        this.setState({ output: 'Download has begun' });
-      };
-
-      var progressDivider = 1;
-
-
-      // Random file name needed to force refresh...
-      const downloadDest = `${RNFS.DocumentDirectoryPath}/lyManual.pdf`;
-      const ret = RNFS.downloadFile({
-        fromUrl: url,
-        toFile: downloadDest,
-        begin,
-        progress,
-        background,
-        progressDivider
-      });
-
-      jobId = ret.jobId;
-
-      ret.promise.then(res => {
-        this.setState({ output: JSON.stringify(res)+downloadDest });
-        // 写文件
-        jobId = -1;
-      }).catch(err => {
-        //this.showError(err)
-        //alert(JSON.stringify(err))
-        jobId = -1;
-      });
-    //   let path = RNFS.DocumentDirectoryPath + '/test.txt'
-    //   RNFS.writeFile(path, 'hello wrold', 'utf8')
-    //     .then(success=> {
-    //       alert(path)
-    //     })
-    //     .catch(err=> {
-    //       alert('error')
-    //     })
-    }
+    // downloadFile (background, url) {
+    //   RNFS.readDir(RNFS.DocumentDirectoryPath)
+    //   .then((result) => {
+    //     console.log('GOT RESULT', result);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.message, err.code);
+    //   });
+    //   if(RNFS.exists(`${RNFS.DocumentDirectoryPath}/lyManual.pdf`)) {
+    //     // 如果已经存在，就直接返回
+    //     console.log('文件已存在')
+    //     return;
+    //   }
+    //   if (jobId !== -1) {
+    //     this.setState({ output: 'A download is already in progress' });
+    //   }
+    //
+    //   var progress = data => {
+    //     var percentage = ((100 * data.bytesWritten) / data.contentLength) | 0;
+    //     var text = `Progress ${percentage}%`;
+    //     this.setState({ output: text });
+    //   };
+    //
+    //   var begin = res => {
+    //     this.setState({ output: 'Download has begun' });
+    //   };
+    //
+    //   var progressDivider = 1;
+    //
+    //
+    //   // Random file name needed to force refresh...
+    //   const downloadDest = `${RNFS.DocumentDirectoryPath}/lyManual.pdf`;
+    //   const ret = RNFS.downloadFile({
+    //     fromUrl: url,
+    //     toFile: downloadDest,
+    //     begin,
+    //     progress,
+    //     background,
+    //     progressDivider
+    //   });
+    //
+    //   jobId = ret.jobId;
+    //
+    //   ret.promise.then(res => {
+    //     this.setState({ output: JSON.stringify(res)+downloadDest });
+    //     // 写文件
+    //     jobId = -1;
+    //   }).catch(err => {
+    //     //this.showError(err)
+    //     //alert(JSON.stringify(err))
+    //     jobId = -1;
+    //   });
+    // //   let path = RNFS.DocumentDirectoryPath + '/test.txt'
+    // //   RNFS.writeFile(path, 'hello wrold', 'utf8')
+    // //     .then(success=> {
+    // //       alert(path)
+    // //     })
+    // //     .catch(err=> {
+    // //       alert('error')
+    // //     })
+    // }
 
     render() {
         let {dispatch, wiki} = this.props;
         //alert(JSON.stringify(this.state.imagePath))
-        console.log(this.state.imagePath)
-
+        console.log(this.state)
+        if(!this.state.loaded) {
+          // 如果还没加载好图片
+          return (<View style = {styles.container}>
+            <NavBar
+              title = "用车百科"
+              style={styles.navbar}
+              onBack={()=> {
+                  this.props.navigator.pop()
+              }}
+            />
+            <Loader />
+          </View>)
+        }
         return (
             <View style={styles.container}>
                 <NavBar
@@ -127,7 +158,7 @@ class Cyclopedia extends Component {
                 />
                 <Image
                     style={styles.banner}
-                    source={wiki.img}
+                    source={{uri: wiki.path}}
                 >
                     <Text
                         style={styles.bannerDescription}
@@ -156,7 +187,7 @@ class Cyclopedia extends Component {
                         onPress={()=> {
                           //alert('hello')
                           //this.manualClick().bind(this, false, downloadUrl)
-                          this.downloadFile(true, url)
+                          //this.downloadFile(true, url)
                         }}
                     />
                     <Item
@@ -173,21 +204,6 @@ class Cyclopedia extends Component {
                         }}
                     />
                 </View>
-                <WebView
-                  ref={'webview'}
-                  automaticallyAdjustContentInsets={false}
-                  style={styles.webView}
-                  source={{uri: 'file:///data/data/com.ly.customer/files/lyManual.pdf'}}
-                  //source={{uri: 'http://www.baidu.com'}}
-
-                  javaScriptEnabled={true}
-                  domStorageEnabled={true}
-                  decelerationRate="normal"
-                  startInLoadingState={true}
-                  scalesPageToFit={true}
-                />
-
-                <Text>{this.state.output}</Text>
             </View>
 
         )

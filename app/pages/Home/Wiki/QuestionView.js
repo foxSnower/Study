@@ -5,7 +5,8 @@ import {
     StyleSheet,
     View,
     Text,
-    ListView
+    ListView,
+    TextInput
 } from 'react-native';
 
 import {connect} from 'react-redux';
@@ -17,6 +18,7 @@ import {fetchQuestion} from '../../../actions/wikiAction'
 // common Component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
+import SearchInput from '../../../components/SearchInput'
 // page component
 import Detail from './QuestionDetailView'
 // Page
@@ -72,6 +74,7 @@ class Answer extends Component {
                         this.props.navigator.pop()
                     }}
                 />
+                <SearchInput />
                 <ListView
                   dataSource = {that.state.dataSource}
                   renderRow = {(obj)=> {

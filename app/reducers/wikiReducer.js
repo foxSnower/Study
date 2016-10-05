@@ -1,11 +1,12 @@
 'use strict';
 
 import * as types from '../actions/actionTypes';
-import imageObj from '../utils/imageUtil';
+// utils
+import {IMGURL} from '../utils/RequestURL';
 
 const initialiState = {
     title: '补缺通用',
-    img: require('../image/car/big/补缺通用.jpg'),
+    path: `${IMGURL}/image/car/big/补缺通用.jpg`,
     list: [],
     questionList: []
 }
@@ -13,10 +14,10 @@ const initialiState = {
 export default function wiki(state = initialiState, action = {}) {
     switch (action.type) {
         case types.FETCH_IMG:
-            let resource = imageObj[action.value]
             return Object.assign({}, state, {
-                title: action.title,
-                img: resource
+                path: action.path,
+                title: action.title
+
             });
         case types.FETCH_ANSWER:
             return Object.assign({}, state, {

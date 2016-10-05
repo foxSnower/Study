@@ -13,10 +13,12 @@ import {connect} from 'react-redux';
 import UserDefaults from '../../../utils/GlobalStorage';
 import imageObj from '../../../utils/imageUtil';
 // action
-import {fetchAnswer} from '../../../actions/wikiAction'
+import {fetchAnswer, fetchCarInfo} from '../../../actions/wikiAction'
 // common Component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
+import Loader from '../../../components/LoaderView'
+import SearchInput from '../../../components/SearchInput'
 // page component
 import Question from './QuestionView';
 // Page
@@ -25,6 +27,7 @@ class Answer extends Component {
     constructor(props) {
         super(props)
         this.state = {
+          loaded: false,
           dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         }
         // this.renderContent = this.renderContent.bind(this)
@@ -36,16 +39,22 @@ class Answer extends Component {
       const that = this
       UserDefaults.objectForKey("userInfo", (data)=> {
           if (data) {
-              //alert(data["LOGIN_USER_ID"])
-              //alert(JSON.stringify(fetchAnswer("")))
-              fetchAnswer("", function (action) {
-                // dispatch 改变数据后，需要得到改变后的 state
-                // 其实 list 就是 action.value ，直接使用这个？
-                //alert(JSON.stringify(action))
-                //let ary = action.value
-                //alert(JSON.stringify(action))
+              // 先根据用户信息拿到 CARSERS_ID 和 CARTYPE_ID
+              // 根据
+              console.log(data)
+              //fetchCarInfo(data.LOGIN_USER_ID)
+
+              fetchAnswer('', function (action) {
+                // 插入一条固定的数据
+                console.log(action)
+                action.value.unshift({
+                  "LOOKUP_VALUE_NAME": "常见",
+                  "LOOKUP_VALUE_CODE": 0,
+                  "REMARK": null
+                })
                 dispatch(action)
                 that.setState({
+                    loaded: true,
                     dataSource: that.state.dataSource.cloneWithRows(action.value)
                 })
               })
@@ -62,13 +71,14 @@ class Answer extends Component {
                   this.props.navigator.pop()
               }}
           />
-          <Text>正在加载数据...</Text>
+          <Loader />
         </View>
       )
     }
     renderContent() {
         const {wiki} = this.props;
         const that = this;
+        // 判断数据是否存在
         return (
             <View style = {styles.container}>
                 <NavBar
@@ -77,6 +87,7 @@ class Answer extends Component {
                         this.props.navigator.pop()
                     }}
                 />
+                <SearchInput />
                 <ListView
                   style = {styles.content}
                   dataSource = {that.state.dataSource}
@@ -91,7 +102,7 @@ class Answer extends Component {
                                 }
                             })
                         }}
-                        title = {obj["LOOKUP_VALUE_NAME"]}
+                        title = {`${obj["LOOKUP_VALUE_NAME"]}问题`}
                         image = {require('../../../image/icon_wiki_q.png')}
                     />
                   }}
@@ -102,9 +113,7 @@ class Answer extends Component {
 
     render() {
       const {dispatch, wiki} = this.props;
-      //alert(JSON.stringify(wiki))
-
-      if(wiki && wiki.list && wiki.list.length !== 0) {
+      if(this.state.loaded) {
         // 如果完成
         return this.renderContent()
       }else {
