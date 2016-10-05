@@ -38,6 +38,7 @@ export let getCityData = () => {
 //查询专营店
 export let searchDlr = (json_param,pageIndex,listBlock) => {
 
+    console.log(pageIndex);
     return dispatch => {
 
         requestPOST(
@@ -51,11 +52,8 @@ export let searchDlr = (json_param,pageIndex,listBlock) => {
             },
             (data) => {
                 if(data.RESULT_CODE =='0'){
-                    if(data.DATA.length<=0){
-                        ly_Toast("没有查询到相关专营店~",2000,0)
-                    }else{
-                        listBlock(data.DATA)
-                    }
+                    console.log(data.DATA);
+                    listBlock(data.DATA)
                 }else{
                     ly_Toast(data.RESULT.DESC,2000,0)
                 }

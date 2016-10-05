@@ -127,6 +127,8 @@ export let fetchOilInfo = (provive) => {
 //获取活动图 我这里有例子啊 没注意看... 对付异步的 我就喜欢这样 回调还有其他方法 在本地存储我也是用的回调方法
 export let fetchActionList = (pageIndex, listBlock) => {
 
+    console.log(pageIndex);
+
     return dispatch => {
 
         requestPOST(
@@ -142,7 +144,7 @@ export let fetchActionList = (pageIndex, listBlock) => {
                // dispatch(updateHome({actionList: data.DATA}));
                 listBlock(data.DATA);
 
-                console.log(111);
+                console.log(data.DATA);
             },
             (error) => {
                 console.log(error)

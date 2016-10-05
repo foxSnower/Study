@@ -48,8 +48,6 @@ class DLRView extends Component {
     }
 
     //查询专营店列表
-
-
     pulldown = () => {
 
         pageIndex = 1;
@@ -65,12 +63,19 @@ class DLRView extends Component {
           //      params.LAT = data["LAT"];
                 params.PROVINCE_ID = province_id;
                 params.CITY_ID = city_id;
-                ly_Toast(JSON.stringify(params))
+                //ly_Toast(JSON.stringify(params))
                 dispatch(searchDlr(params, 1, (dlrList)=> {
+                    if (dlrList.length > 0) {
+                        dispatch(updateDlr({dlrList}));
+                        this.reloadDataSourec(dlrList);
+                        pageIndex = 2;
+                    } else {
+                        ly_Toast("没有查询到相关专营店~",2000,0)
+                    }
                     this.setState({
                         loaded:true
-                    })
-                    this.reloadDataSourec(dlrList)
+                    });
+
                 }));
            // }else{
            //     ly_Toast("无法获取到定位信息",2000,0);
@@ -80,9 +85,10 @@ class DLRView extends Component {
     };
 
     pullup = () => {
+
         if (pageIndex > 1) {
-            pageIndex++;
-            const {dispatch}= this.props;
+
+            const {dispatch, dlr}= this.props;
             const { province_id, city_id,dlrName } =this.props.dlr;
             let params ={};
             if(dlrName && dlrName!=null){
@@ -90,12 +96,20 @@ class DLRView extends Component {
             }
             params.PROVINCE_ID = province_id;
             params.CITY_ID = city_id;
-            ly_Toast(JSON.stringify(params))
-            dispatch(searchDlr(params, 1, (dlrList)=> {
+
+            dispatch(searchDlr(params, pageIndex, (dlrList)=> {
+                if (dlrList.length > 0) {
+                    let arr = dlr.dlrList;
+                    arr.push(...dlrList);
+                    dispatch(updateDlr({dlrList: arr}));
+                    this.reloadDataSourec(arr);
+                    pageIndex++;
+                } else {
+                    ly_Toast("已经到底啦o_O",2000,0)
+                }
                 this.setState({
                     loaded:true
-                })
-                this.reloadDataSourec(dlrList)
+                });
             }));
         }
     };
@@ -176,7 +190,6 @@ class DLRView extends Component {
                                               pickerArr={cityArr}
                                               defaultValue={city_id}
                                               onChange={(itemValue, itemPosition)=> {
-                                                  //dispatch(updateDlr({province_id: provinceArr[itemPosition].PROVINCE_ID}));
                                                   dispatch(updateDlr({city_name: cityArr[itemPosition].CITY_NAME}));
                                                   dispatch(updateDlr({city_id: cityArr[itemPosition].CITY_ID}));
                                               }}
@@ -268,7 +281,7 @@ class DLRView extends Component {
                     marginTop: 8,
                     paddingBottom: 8,
                     borderBottomWidth: pixel1,
-                    borderColor: BORDERColor
+                    borderColor: BORDERColor,
                 }}>
                     <Image style={styles.dlrImg}
                            source={{uri: icon}}

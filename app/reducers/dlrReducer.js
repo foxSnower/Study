@@ -11,7 +11,7 @@ const initialState = {
     provinceArr: [],
     city_name: "北京",
     city_id: "20001",
-
+    dlrList: []
 };
 
 export default function home(state = initialState, action = {}) {
