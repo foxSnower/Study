@@ -268,7 +268,7 @@ let styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         //this is very important
-        backgroundColor: 'red'
+        backgroundColor: '#d9d9d9'
     },
     up: {
         height: 90,
