@@ -37,7 +37,8 @@ export default class DatePicker extends Component {
         defaultDate: PropTypes.string,
         maxDate: PropTypes.object,
         minDate: PropTypes.object,
-        onDateChange: PropTypes.func
+        onDateChange: PropTypes.func,
+        onRequestClose: Platform.OS === 'android' ? PropTypes.func.isRequired : PropTypes.func,
     };
 
     static defaultProps = {
@@ -208,6 +209,9 @@ export default class DatePicker extends Component {
             <Modal
                 transparent={true}
                 visible={this.state.modalVisible}
+                onRequestClose={() => {
+                    this.onPressCancel()
+                }}
             >
                 {
                     Platform.OS === 'ios' ?

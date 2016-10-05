@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 10,
         borderWidth: 0,
-        height: 50,
         fontSize: 15
     },
     container: {
+        height: 50,
         flex: 1,
         flexDirection: "row",
         borderBottomWidth: 1 / pixelRation,

@@ -27,6 +27,7 @@ import {updateDlr, getCityData, searchDlr} from '../../actions/dlrAction'
 import UserDefaults from '../../utils/GlobalStorage';
 import SelectPickerView from '../../components/SelectPickerView';
 import DLRMapView from './DLRMapView';
+import LoaderView from '../../components/LoaderView'
 
 let pageIndex = 0;
 class DLRView extends Component {
@@ -35,12 +36,12 @@ class DLRView extends Component {
         super(props);
 
         this.state = {
+            loaded:false,
             dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2})
         };
     }
 
     componentDidMount() {
-
         const {dispatch} = this.props;
         dispatch(getCityData());
         this.pulldown();
@@ -53,42 +54,48 @@ class DLRView extends Component {
 
         pageIndex = 1;
         const {dispatch}= this.props;
-        const {dlrName} = this.props.dlr;
-        dispatch(searchDlr({DLR_NAME: "风日"}, 1, (dlrList)=> {
-            this.reloadDataSourec(dlrList)
-        }));
-
-        // UserDefaults.objectForKey("locationInfo",(data)=>{
-        //     let params ={};
-        //     if(!data || data["LNG"]){  //没有获取到地理位置
-        //         params.LNG = '113.13';
-        //         params.LAT = '23.23';
-        //         // dispatch(getDlrList(params,1, (data) => {
-        //         //     dispatch(updateDlr({dlrList: data}));
-        //              this.reloadDataSourec(data);
-        //         //     pageIndex = 2;
-        //         // }));
-        //     }else{
-        //         // params.CITY_ID = data["CITY"];
-        //         // params.PROVINCE_ID = '23.23';
-        //     }
-        // })
+        const { province_id, city_id,dlrName } =this.props.dlr;
+        //UserDefaults.objectForKey("locationInfo",(data)=>{
+            let params ={};
+            if(dlrName && dlrName!=null){
+                params.DLR_NAME = dlrName;
+            }
+           // if(data && data != null){  //获取到地理位置
+           //     params.LNG = data["LNG"];
+          //      params.LAT = data["LAT"];
+                params.PROVINCE_ID = province_id;
+                params.CITY_ID = city_id;
+                ly_Toast(JSON.stringify(params))
+                dispatch(searchDlr(params, 1, (dlrList)=> {
+                    this.setState({
+                        loaded:true
+                    })
+                    this.reloadDataSourec(dlrList)
+                }));
+           // }else{
+           //     ly_Toast("无法获取到定位信息",2000,0);
+           // }
+        //})
 
     };
 
     pullup = () => {
         if (pageIndex > 1) {
             pageIndex++;
-            const {dispatch, dlr} = this.props;
-            dispatch(updateDlr(pageIndex, (data) => {
-                if (data.length > 0) {
-                    let arr = dlr.dlrList;
-                    arr.push(...data);
-                    //dispatch(updateDlr({dlrList: arr}));
-                    this.reloadDataSourec(arr);
-                } else {
-                    ly_Toast("已经到底啦o_O", 3000);
-                }
+            const {dispatch}= this.props;
+            const { province_id, city_id,dlrName } =this.props.dlr;
+            let params ={};
+            if(dlrName && dlrName!=null){
+                params.DLR_NAME = dlrName;
+            }
+            params.PROVINCE_ID = province_id;
+            params.CITY_ID = city_id;
+            ly_Toast(JSON.stringify(params))
+            dispatch(searchDlr(params, 1, (dlrList)=> {
+                this.setState({
+                    loaded:true
+                })
+                this.reloadDataSourec(dlrList)
             }));
         }
     };
@@ -100,87 +107,107 @@ class DLRView extends Component {
     };
 
     render() {
-
-        const {dispatch} = this.props;
-        const {province_id, province_name,city_name,city_id, provinceArr, cityArr} = this.props.dlr;
-
-        return (
-            <View style={styles.container}>
-                <NavBar title="4S店查询"
-                        onBack={()=> {
-                            this.props.navigator.pop()
-                        }}
-                />
-                <View style={{backgroundColor: BGColor, flex: 1}}>
-                    <SearchInput placeholder="请输入专营店名称"
-                                 style={{backgroundColor: "#fff"}}
-                                 onChangeText={(text)=> {
-                                     dispatch(updateDlr({dlrName: text}))
-                                 }}
-                                 onSubmit={()=> {
-                                     this.pulldown();
-                                 }}
+        if(!this.state.loaded){
+            return (
+                <View style={styles.container}>
+                    <NavBar title="4S店查询"
+                            onBack={()=> {
+                                this.props.navigator.pop()
+                            }}
                     />
-                    <View style={{flexDirection: "row", paddingLeft: 10, paddingRight: 10}}>
-                        <TouchableOpacity style={[styles.dropdown, {marginRight: 10}]} onPress={()=> {
-                            this.selectViewLocale.onShow()
-                        }}>
-                            <Text style={styles.text}>{province_name}</Text>
-                            <Icon style={styles.icon}
-                                  name="ios-arrow-dropdown" size={28} color='#d9d9d9'/>
+                    <LoaderView/>
+                </View>
+            )
+        }else{
+            const {dispatch} = this.props;
+            const {province_id, province_name,city_name,city_id, provinceArr, cityArr} = this.props.dlr;
 
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.dropdown} onPress={()=> {
-                            this.selectViewCity.onShow()
-                        }}>
-                            <Text style={styles.text}>{city_name}</Text>
-                            <Icon style={styles.icon}
-                                  name="ios-arrow-dropdown" size={28} color='#d9d9d9'/>
+            return (
+                <View style={styles.container}>
+                    <NavBar title="4S店查询"
+                            onBack={()=> {
+                                this.props.navigator.pop()
+                            }}
+                    />
+                    <View style={{backgroundColor: BGColor, flex: 1}}>
+                        <SearchInput placeholder="请输入专营店名称"
+                                     style={{backgroundColor: "#fff"}}
+                                     onChangeText={(text)=> {
+                                         dispatch(updateDlr({dlrName: text}))
+                                     }}
+                                     onSubmit={()=> {
+                                         this.pulldown();
+                                     }}
+                        />
+                        <View style={{flexDirection: "row", paddingLeft: 10, paddingRight: 10,paddingBottom:10}}>
+                            <TouchableOpacity style={[styles.dropdown, {marginRight: 10}]} onPress={()=> {
+                                this.selectViewLocale.onShow()
+                            }}>
+                                <Text style={styles.text}>{province_name}</Text>
+                                <Icon style={styles.icon}
+                                      name="ios-arrow-dropdown" size={28} color='#d9d9d9'/>
 
-                        </TouchableOpacity>
-                        <SelectPickerView ref={(p)=>this.selectViewLocale = p}
-                                          pickerArr={provinceArr}
-                                          defaultValue={province_id}
-                                          onChange={(itemValue, itemPosition)=> {
-                                              console.log(itemValue, itemPosition);
-                                              dispatch(updateDlr({city_name: provinceArr[itemPosition].CITIES[0].CITY_NAME}));
-                                              dispatch(updateDlr({city_id: provinceArr[itemPosition].CITIES[0].CITY_ID}));
-                                              dispatch(updateDlr({cityArr: provinceArr[itemPosition].CITIES}))
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.dropdown} onPress={()=> {
+                                this.selectViewCity.onShow()
+                            }}>
+                                <Text style={styles.text}>{city_name}</Text>
+                                <Icon style={styles.icon}
+                                      name="ios-arrow-dropdown" size={28} color='#d9d9d9'/>
 
-                                          }}
-                                          type={true}
-                        />
-                        <SelectPickerView ref={(p)=>this.selectViewCity = p}
-                                          pickerArr={cityArr}
-                                          defaultValue={city_id}
-                                          onChange={(itemValue, itemPosition)=> {
-                                              dispatch(updateDlr({city_name: cityArr[itemPosition].CITY_NAME}));
-                                              dispatch(updateDlr({city_id: cityArr[itemPosition].CITY_ID}));
-                                              console.log(itemValue, itemPosition)
-                                          }}
-                                          type={false}
-                        />
-                    </View>
-                    <View style={{flex: 1}}>
-                        <ListView
-                            dataSource={this.state.dataSource}
-                            renderRow={this.renderCell}
-                            style={styles.listView}
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={false}
-                                    onRefresh={this.pulldown}
-                                    colors={['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
-                                    progressBackgroundColor="#ffffff"/>
-                            }
-                            onEndReachedThreshold={5}
-                            onEndReached={this.pullup}
-                            enableEmptySections={true}
-                        />
+                            </TouchableOpacity>
+                            <SelectPickerView ref={(p)=>this.selectViewLocale = p}
+                                              pickerArr={provinceArr}
+                                              defaultValue={province_id}
+                                              onChange={(itemValue, itemPosition)=> {
+                                                  dispatch(updateDlr({province_id: provinceArr[itemPosition].PROVINCE_ID}));
+                                                  dispatch(updateDlr({province_name: provinceArr[itemPosition].PROVINCE_NAME}));
+                                                  dispatch(updateDlr({city_name: provinceArr[itemPosition].CITIES[0].CITY_NAME}));
+                                                  dispatch(updateDlr({city_id: provinceArr[itemPosition].CITIES[0].CITY_ID}));
+                                                  dispatch(updateDlr({cityArr: provinceArr[itemPosition].CITIES}))
+
+                                              }}
+                                              onPressConfirm={
+                                                  this.pulldown
+                                              }
+                                              type={true}
+                            />
+                            <SelectPickerView ref={(p)=>this.selectViewCity = p}
+                                              pickerArr={cityArr}
+                                              defaultValue={city_id}
+                                              onChange={(itemValue, itemPosition)=> {
+                                                  //dispatch(updateDlr({province_id: provinceArr[itemPosition].PROVINCE_ID}));
+                                                  dispatch(updateDlr({city_name: cityArr[itemPosition].CITY_NAME}));
+                                                  dispatch(updateDlr({city_id: cityArr[itemPosition].CITY_ID}));
+                                              }}
+                                              type={false}
+                                              onPressConfirm={
+                                                  this.pulldown
+                                              }
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <ListView
+                                dataSource={this.state.dataSource}
+                                renderRow={this.renderCell}
+                                style={styles.listView}
+                                refreshControl={
+                                    <RefreshControl
+                                        refreshing={false}
+                                        onRefresh={this.pulldown}
+                                        colors={['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
+                                        progressBackgroundColor="#ffffff"/>
+                                }
+                                onEndReachedThreshold={5}
+                                onEndReached={this.pullup}
+                                enableEmptySections={true}
+                            />
+                        </View>
                     </View>
                 </View>
-            </View>
-        )
+            )
+        }
+
     }
 
     renderCell = (rowData, sectionID, rowID, highlightRow) => {
@@ -189,11 +216,54 @@ class DLRView extends Component {
         let pos = `${IMGURL}/images/icon_adrs.png`;
         let map = `${IMGURL}/images/shop_GPS.png`;
         let tel = `${IMGURL}/images/shop_tel.png`;
-        //ly_Toast(icon);
-        console.log(rowData);
+        // 1,保养 2,维修 3,代办 4,试驾 5,救援
+        // DLR_SHORT_NAME LINK_ADDR SALE_TEL SERVICE_TEL URG_SOS_TEL INSURANCE_TEL
+        //LNG LAT DLR_CODE
+        //alert(JSON.stringify(rowData));
         return (
             <View style={styles.cellView}>
-                <View style={{
+                <TouchableOpacity onPress={()=>{
+                    const { refDlr } = this.props;
+                    if(refDlr){
+                        let dlrInfo = {DLR_CODE:rowData.DLR_CODE,DLR_SHORT_NAME:rowData.DLR_SHORT_NAME};
+                        let secures = {DLR_SHORT_NAME:rowData.DLR_SHORT_NAME,URG_SOS_TEL:rowData.URG_SOS_TEL,INSURANCE_TEL:rowData.INSURANCE_TEL};
+                        switch(refDlr){
+                            case "1":
+                                this.props.getDlrInfo(dlrInfo);
+                                if(this.props.navigator){
+                                    this.props.navigator.pop();
+                                }
+                                break;
+                            case "2":
+                                this.props.getDlrInfo(dlrInfo);
+                                if(this.props.navigator){
+                                    this.props.navigator.pop();
+                                }
+                                break;
+                            case "3":
+                                this.props.getDlrInfo(dlrInfo);
+                                if(this.props.navigator){
+                                    this.props.navigator.pop();
+                                }
+                                break;
+                            case "4":
+                                this.props.getDlrInfo(dlrInfo);
+                                if(this.props.navigator){
+                                    this.props.navigator.pop();
+                                }
+                                break;
+                            case "5":
+                                this.props.getDlrInfo(secures);
+                                if(this.props.navigator){
+                                    this.props.navigator.pop();
+                                }
+                                break;
+                            default:
+                                return;
+                        }
+
+                    }
+                }} style={{
                     flexDirection: "row",
                     marginTop: 8,
                     paddingBottom: 8,
@@ -212,9 +282,9 @@ class DLRView extends Component {
                             <Text style={{fontSize: 14}}>{rowData.DISTANCE}</Text>
                         </Text>
 
-                        <Text style={{alignItems: "flex-end", height: 25}}>{rowData.LINK_ADDR}</Text>
+                        <Text style={{alignItems: "flex-end"}}>{rowData.LINK_ADDR}</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
                 <View style={{flex: 1, flexDirection: "row"}}>
                     <TouchableOpacity onPress={()=> {
                         this.props.navigator.push({

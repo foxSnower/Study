@@ -60,7 +60,7 @@ export let fetchWeatherInfo = () => {
                         dispatch(fetchOilInfo(data.DATA.showapi_res_body.cityInfo.c7));
                         dispatch(updateHome({weatherInfo: data.DATA.showapi_res_body.now}))
                         if(data.DATA.showapi_res_body){
-                            const location = {
+                            let location = {
                                 "LNG": Math.abs(position.coords.longitude).toString(),
                                 "LAT": Math.abs(position.coords.latitude).toString(),
                                 "CITY": data.DATA.showapi_res_body.cityInfo.c7,
@@ -68,16 +68,31 @@ export let fetchWeatherInfo = () => {
                             }
                             //缓存地理位置信息
                             UserDefaults.setObject("locationInfo",location);
+                        }else{
+                            let location = {
+                                "LNG": "38.65777",
+                                "LAT": "104.08296",
+                            }
+                            //缓存模拟地理位置信息
+                            UserDefaults.setObject("locationInfo",location);
                         }
 
                     },
                     (error) => {
-                        ly_Toast(error.message,1000,-20)
+                        ly_Toast(error.message,1000,-20);
+                        let location = {
+                            "LNG": "38.65777",
+                            "LAT": "104.08296",
+                        }
+                        //缓存模拟地理位置信息
+                        UserDefaults.setObject("locationInfo",location);
                         console.log(JSON.stringify(error))
                     }
                 )
             },
-            (error) => {ly_Toast(error.message,1000,-20)},
+            (error) => {
+                ly_Toast(error.message,1000,-20)
+            },
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
         );
 

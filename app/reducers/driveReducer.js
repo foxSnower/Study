@@ -6,7 +6,6 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-    loaded: 0
 };
 
 export default function drive(state = initialState, action = {}) {
