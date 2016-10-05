@@ -23,10 +23,8 @@ export let getCityData = () => {
                 "PARAM": {}
             },
             data => {
-               // alert(data.DATA)
                 if(data.RESULT_CODE == '0'){
                     dispatch(updateDlr({provinceArr:data.DATA}))
-                    console.log(data.DATA)
                 }else{
                     console.log("获取省份城市失败")
                 }
@@ -39,6 +37,7 @@ export let getCityData = () => {
 }
 //查询专营店
 export let searchDlr = (json_param,pageIndex,listBlock) => {
+
     return dispatch => {
 
         requestPOST(
@@ -56,7 +55,6 @@ export let searchDlr = (json_param,pageIndex,listBlock) => {
                         ly_Toast("没有查询到相关专营店~",2000,0)
                     }else{
                         listBlock(data.DATA)
-                        //dispatch(updateDlr({dlrList:data.DATA}))
                     }
                 }else{
                     ly_Toast(data.RESULT.DESC,2000,0)
@@ -67,4 +65,4 @@ export let searchDlr = (json_param,pageIndex,listBlock) => {
             }
         )
     }
-}
+};

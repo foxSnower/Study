@@ -8,9 +8,11 @@ const initialState = {
     province_name: "北京",
     province_id: "1",
     cityArr: [],
-    provinceArr: []
+    provinceArr: [],
+    city_name: "北京",
+    city_id: "20001",
 
-}
+};
 
 export default function home(state = initialState, action = {}) {
     switch (action.type) {
