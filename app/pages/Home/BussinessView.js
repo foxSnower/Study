@@ -34,7 +34,7 @@ const customerButtonItems = [
             targetComponent:DLRView,
             image:require("../../image/icon_bus_dri.png"),
             secText:"可查询省市或附近专营店",
-            component: TestDriveHomeView
+            component: DLRView
         },
         {
             text:"代办预约",

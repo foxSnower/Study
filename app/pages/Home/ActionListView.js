@@ -39,16 +39,21 @@ class ActivitieListView extends Component {
         pageIndex = 1;
         const {dispatch} = this.props;
         dispatch(fetchActionList(1, (data) => {
-            dispatch(updateHome({actionList: data}));
-            this.reloadDataSourec(data);
-            pageIndex = 2;
+            if (data.length > 0) {
+                dispatch(updateHome({actionList: data}));
+                this.reloadDataSourec(data);
+                pageIndex = 2;
+            } else {
+                ly_Toast("没有活动啦o_O",3000);
+            }
+
         }));
     };
 
     pullup = () => {
 
         if (pageIndex > 1) {
-            pageIndex++;
+
             const {dispatch, home} = this.props;
             dispatch(fetchActionList(pageIndex, (data) => {
                 if (data.length > 0) {
@@ -56,9 +61,9 @@ class ActivitieListView extends Component {
                     arr.push(...data);
                     dispatch(updateHome({actionList: arr}));
                     this.reloadDataSourec(arr);
+                    pageIndex++;
                 } else {
                     ly_Toast("已经到底啦o_O",3000);
-                    //alert('没有更多了')
                 }
             }));
         }

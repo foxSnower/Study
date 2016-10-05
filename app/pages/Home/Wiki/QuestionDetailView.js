@@ -16,15 +16,47 @@ import {fetchQuestionDetail} from '../../../actions/wikiAction'
 // common Component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
+import Loader from '../../../components/LoaderView';
 // page component
 import Index from './IndexView.js';
 
-export default class QuestionDetail extends Component {
+class QuestionDetail extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      loaded: false
+    }
+  }
+
+  componentDidMount() {
+    const {dispatch, answerId} = this.props
+    // 根据 answerId 进行请求
+    fetchQuestionDetail(answerId, (action)=> {
+      // 拿到回答内容后，拼装 html 保存至 reducer
+      console.log(action)
+      dispatch(action)
+      this.setState({
+        loaded: true
+      })
+    })
   }
 
   render() {
+    const {wiki} = this.props
+    if(!this.state.loaded) {
+      return (
+        <View style = {{flex: 1}}>
+          <NavBar
+            title = "答疑详情"
+            onBack={()=>{
+                this.props.navigator.pop()
+            }}
+          />
+          <Loader />
+        </View>
+      )
+    }
     return (
       <View style= {styles.container}>
         <NavBar
@@ -40,18 +72,11 @@ export default class QuestionDetail extends Component {
             />
             <Text style = {styles.quesDescription}>排气管冒烟是什么原因？</Text>
         </View>
-        <View style = {styles.item}>
-            <Image
-              source = {require('../../../image/icon_wiki_a.png')}
-              style = {styles.img}
-            />
-            <Text style = {styles.ansDescription}>首先分享的是大热天如何实现车内快速降温</Text>
-        </View>
         <WebView
           ref={'webview'}
           automaticallyAdjustContentInsets={false}
           style={styles.webView}
-          source={{uri: 'http://www.baidu.com'}}
+          source={{html: wiki.html}}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           decelerationRate="normal"
@@ -62,6 +87,12 @@ export default class QuestionDetail extends Component {
     )
   }
 }
+export default connect((state)=> {
+  const {wiki} = state;
+  return {
+    wiki
+  }
+})(QuestionDetail)
 
 let styles = StyleSheet.create({
   container: {

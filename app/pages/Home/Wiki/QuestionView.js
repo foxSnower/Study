@@ -12,13 +12,13 @@ import {
 import {connect} from 'react-redux';
 // util
 import UserDefaults from '../../../utils/GlobalStorage';
-import imageObj from '../../../utils/imageUtil';
 // action
-import {fetchQuestion} from '../../../actions/wikiAction'
+import {fetchQuestion, searchQuestion} from '../../../actions/wikiAction'
 // common Component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
 import SearchInput from '../../../components/SearchInput'
+import Loader from '../../../components/LoaderView'
 // page component
 import Detail from './QuestionDetailView'
 // Page
@@ -27,83 +27,109 @@ class Answer extends Component {
     constructor(props) {
         super(props)
         this.state = {
+          loaded: false,
           dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         }
         // this.renderContent = this.renderContent.bind(this)
     }
+    // 从数据库查询数据
+    search(keyword) {
+        // 开始搜索时将 loaded 设置为 false
+        this.setState({
+            loaded: false
+        })
+      //alert(keyword)
+      const {dispatch} = this.props
+      searchQuestion(keyword, (action)=> {
+        dispatch(action)
+        this.setState({
+            loaded: true,
+            dataSource: this.state.dataSource.cloneWithRows(action.value)
+        })
+      })
+    }
 
     componentDidMount() {
       // 获取数据
-      const {dispatch, wiki, code} = this.props
-      const that = this
-      UserDefaults.objectForKey("userInfo", (data)=> {
-          if (data) {
-              //alert(data["LOGIN_USER_ID"])
-              //alert(JSON.stringify(fetchAnswer("")))
-              fetchQuestion(code, function (action) {
-                // dispatch 改变数据后，需要得到改变后的 state
-                dispatch(action)
-                that.setState({
-                    dataSource: that.state.dataSource.cloneWithRows(action.value)
-                })
-              })
-          }
-      });
-    }
-
-    renderLoading() {
-      return (
-        <View style={styles.container}>
-          <NavBar
-              title="常见问题"
-              onBack={()=>{
-                  this.props.navigator.pop()
-              }}
-          />
-          <Text>正在加载数据...</Text>
-        </View>
-      )
-    }
-    renderContent() {
-        const that = this;
-        return (
-            <View>
-                <NavBar
-                    title="常见问题"
-                    onBack={()=>{
-                        this.props.navigator.pop()
-                    }}
-                />
-                <SearchInput />
-                <ListView
-                  dataSource = {that.state.dataSource}
-                  renderRow = {(obj)=> {
-
-                    return <Item
-                        onPress = {()=> {
-                            this.props.navigator.push({
-                                component: Detail
-                            })
-                        }}
-                        title = {obj["QUES_TITLE"]}
-                        image = {require('../../../image/icon_wiki_a.png')}
-                    />
-                  }}
-                />
-            </View>
-        )
+      const {dispatch, wiki, quesType, keyword} = this.props
+      if(keyword) {
+        // 如果是从搜索框跳转过来的，使用搜索关键词进行查询
+        this.search(keyword)
+      }else {
+        fetchQuestion(wiki.car["CAR_SERIES_ID"], quesType, (action)=> {
+          // dispatch 改变数据后，需要得到改变后的 state
+          console.log('fetchQuestion action is :', action)
+          dispatch(action)
+          this.setState({
+              loaded: true,
+              dataSource: this.state.dataSource.cloneWithRows(action.value)
+          })
+        })
+      }
     }
 
     render() {
       const {dispatch, wiki} = this.props;
       //alert(JSON.stringify(wiki))
-
-      if(wiki && wiki.list && wiki.list.length !== 0) {
-        // 如果完成
-        return this.renderContent()
-      }else {
-        return this.renderLoading()
+      if(!this.state.loaded) {
+        return (
+          <View style = {{flex: 1}}>
+            <NavBar
+                title="常见问题"
+                onBack={()=>{
+                    this.props.navigator.pop()
+                }}
+            />
+            <Loader />
+          </View>
+        )
       }
+      //
+
+      //渲染内容
+      return (
+          <View>
+              <NavBar
+                  title="常见问题"
+                  onBack={()=>{
+                      this.props.navigator.pop()
+                  }}
+              />
+              <SearchInput
+                onChangeText = {(text)=> {
+                  this.setState({
+                    searchKeyword: text
+                  })
+                }}
+
+                onSubmit = {()=> {
+                  this.search(this.state.searchKeyword)
+                }}
+              />
+              {
+                  wiki.questionList.length !== 0 ?
+                  <ListView
+                    dataSource = {this.state.dataSource}
+                    renderRow = {(obj)=> {
+
+                      return <Item
+                          onPress = {()=> {
+                              this.props.navigator.push({
+                                  component: Detail,
+                                  params: {
+                                    answerId: obj["QUES_AND_CARTYPE_ID"]
+                                  }
+                              })
+                          }}
+                          title = {obj["QUES_TITLE"]}
+                          image = {require('../../../image/icon_wiki_a.png')}
+                      />
+                    }}
+                  />
+                  : <Text>{"数据为空"}</Text>
+              }
+          </View>
+      )
     }
 }
 

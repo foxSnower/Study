@@ -37,7 +37,7 @@ export default class LabelInput extends Component {
 
     render() {
         //iosMode returnKeyType 确认键的内容 enablesReturnKeyAutomatically 为空时禁用按钮 clearButtonMode 右侧显示删除
-        const {label, inputStyle, style, textStyle, placeholder, defaultValue, returnKeyType, keyboardType, type, max, onChangeText}  = this.props;
+        const {label, inputStyle, style, textStyle, placeholder, defaultValue,value, returnKeyType, keyboardType, type, max, onChangeText}  = this.props;
 
         return (
 
@@ -50,6 +50,7 @@ export default class LabelInput extends Component {
                            enablesReturnKeyAutomatically={true}
                            secureTextEntry={type}
                            defaultValue={defaultValue}
+                           value={value}
                            keyboardType={keyboardType}
                            returnKeyType={returnKeyType}
                            underlineColorAndroid="transparent"
@@ -72,10 +73,10 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 10,
         borderWidth: 0,
-        height: 50,
         fontSize: 15
     },
     container: {
+        height: 50,
         flex: 1,
         flexDirection: "row",
         borderBottomWidth: 1 / pixelRation,

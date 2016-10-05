@@ -6,6 +6,7 @@ import {requestPOST} from '../utils/FetchUtil'
 import {HANDLER} from '../utils/RequestURL'
 
 import {ly_Toast} from '../utils/CommonUtil'
+import UserDefaults from '../utils/GlobalStorage';
 
 export function updateHome(value) {
     return {
@@ -18,7 +19,6 @@ export function updateHome(value) {
 export let fetchAction = () => {
 
     return dispatch => {
-
         requestPOST(
             HANDLER,
             {
@@ -59,13 +59,40 @@ export let fetchWeatherInfo = () => {
                     (data) => {
                         dispatch(fetchOilInfo(data.DATA.showapi_res_body.cityInfo.c7));
                         dispatch(updateHome({weatherInfo: data.DATA.showapi_res_body.now}))
+                        if(data.DATA.showapi_res_body){
+                            let location = {
+                                "LNG": Math.abs(position.coords.longitude).toString(),
+                                "LAT": Math.abs(position.coords.latitude).toString(),
+                                "CITY": data.DATA.showapi_res_body.cityInfo.c7,
+                                "REGION":data.DATA.showapi_res_body.cityInfo.c5,
+                            }
+                            //缓存地理位置信息
+                            UserDefaults.setObject("locationInfo",location);
+                        }else{
+                            let location = {
+                                "LNG": "38.65777",
+                                "LAT": "104.08296",
+                            }
+                            //缓存模拟地理位置信息
+                            UserDefaults.setObject("locationInfo",location);
+                        }
+
                     },
                     (error) => {
+                        ly_Toast(error.message,1000,-20);
+                        let location = {
+                            "LNG": "38.65777",
+                            "LAT": "104.08296",
+                        }
+                        //缓存模拟地理位置信息
+                        UserDefaults.setObject("locationInfo",location);
                         console.log(JSON.stringify(error))
                     }
                 )
             },
-            (error) => {ly_Toast(error.message,1000,-20)},
+            (error) => {
+                ly_Toast(error.message,1000,-20)
+            },
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
         );
 
@@ -100,6 +127,8 @@ export let fetchOilInfo = (provive) => {
 //获取活动图 我这里有例子啊 没注意看... 对付异步的 我就喜欢这样 回调还有其他方法 在本地存储我也是用的回调方法
 export let fetchActionList = (pageIndex, listBlock) => {
 
+    console.log(pageIndex);
+
     return dispatch => {
 
         requestPOST(
@@ -115,7 +144,7 @@ export let fetchActionList = (pageIndex, listBlock) => {
                // dispatch(updateHome({actionList: data.DATA}));
                 listBlock(data.DATA);
 
-                console.log(111);
+                console.log(data.DATA);
             },
             (error) => {
                 console.log(error)

@@ -16,7 +16,6 @@ import {fetchImg, fetchCarInfo} from '../../../actions/wikiAction'
 // utils
 import {Screen, pixel1} from '../../../utils/CommonUtil';
 import UserDefaults from '../../../utils/GlobalStorage';
-import imageObj from '../../../utils/imageUtil';
 // common component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
@@ -43,19 +42,18 @@ class Cyclopedia extends Component {
                 // 如果用户id存在，就改变用车百科页面图片
                 fetchCarInfo(data["LOGIN_USER_ID"], (data)=> {
                   console.log('fetchcarinfo', data)
+                  dispatch(data)
                   // 这个data里面就保存了 name 和 code
                   //dispatch(fetchImg(data["DATA"]["CAR"][0]["CAR_SERIES_NAME"] + data["DATA"]["CAR"][0]["CAR_SERIES_CODE"]))
-                  fetchImg(data["DATA"]["CARS"][0]["CAR_SERIES_CODE"], (data)=> {
-                    // 这里要做判断
-                    console.log('fetchimg', data)
-                    dispatch(data)
-                    this.setState({
-                      loaded: true
+                    fetchImg(data.value.car["CAR_SERIES_CODE"], (data)=> {
+                      // 这里要做判断
+                      console.log('fetchimg', data)
+                      // 改变图片的 action
+                      dispatch(data)
+                      this.setState({
+                        loaded: true
+                      })
                     })
-                    // if(data["RESULT_CODE"] === "0") {
-                    //   dispatch(data)
-                    // }
-                  })
                 })
             }
         });

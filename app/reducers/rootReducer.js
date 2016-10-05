@@ -8,11 +8,13 @@ import home from './homeReducer'
 import login from './loginReducer'
 import wiki from './wikiReducer'
 import drive from  './driveReducer'
+import dlr from './dlrReducer'
 
 export default rootReducer = combineReducers({
     fields,
     home,
     login,
     wiki,
-    drive
+    drive,
+    dlr
 })

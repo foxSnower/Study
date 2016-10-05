@@ -55,6 +55,8 @@ export default class LabelRow extends Component {
 }
 const styles = StyleSheet.create({
     rightBtn:{
+        justifyContent:"center",
+        alignItems:"center",
         flex:1,
     },
     row:{

@@ -57,9 +57,7 @@ export default class SearchInput extends Component {
                                onChangeText(text)
                            }}
                            onSubmitEditing={
-                               (text)=>{
-                                   onSubmit(text)
-                               }
+                                   onSubmit
                            }
                 >
                 </TextInput>
@@ -82,14 +80,14 @@ const styles = StyleSheet.create({
         marginBottom:6,
     },
     textInput: {
-        color:"#d9d9d9",
+        color:"#000",
         flex: 1,
         borderWidth: 0,
-        height: 50,
-        fontSize: 15
+        height: 36,
+        fontSize: 15,
+        marginLeft: 10
     },
     icon:{
         marginLeft:10,
-
     }
 })
