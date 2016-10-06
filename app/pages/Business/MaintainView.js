@@ -13,7 +13,7 @@ import {
 import {connect} from 'react-redux'
 import NavBar from '../../components/DefaultNavBar'
 import {IMGURL} from '../../utils/RequestURL'
-import {BGColor,BTNColor,Screen,pixelRation,GetDateStr,ly_Toast,setDefaultTime,validateMobile} from '../../utils/CommonUtil'
+import {BGColor,BTNColor,Screen,pixelRation,GetDateStr,ly_Toast,setDefaultTime,validateMobile,validateDateExpries} from '../../utils/CommonUtil'
 import LabelRow from '../../components/LabelRow'
 import LabelInput from '../../components/LabelInput'
 import Button from '../../components/Button'
@@ -91,6 +91,14 @@ class MaintainView extends Component {
             ly_Toast("预约时间不正确");
             return;
         }
+        if(validateDateExpries(this.state.strBookTime.split(' ')[0])>-1){
+            ly_Toast("请至少提前一天预约");
+            return;
+        }
+        if(validateDateExpries(this.state.strBookTime.split(' ')[0])<-60){
+            ly_Toast("亲，选择的时间太遥远了!");
+            return;
+        }
         if(!this.state.mile){
             ly_Toast("请输入保养里程");
             return;
@@ -105,6 +113,7 @@ class MaintainView extends Component {
                 DLR_SHORT_NAME:this.state.dlrInfo.DLR_SHORT_NAME,
                 DLR_CODE:this.state.dlrInfo.DLR_CODE,
                 MILE:this.state.mile,
+                BOOK_TIME:td_time,
                 CAR_NO:this.state.carInfo.carNo,
                 VIN:this.state.carInfo.vin,
                 CAR_SERIES_CODE:this.state.carInfo.carSeriesCode,

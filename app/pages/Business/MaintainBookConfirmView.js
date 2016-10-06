@@ -49,7 +49,7 @@ class MaintainBookConfirmView extends Component {
         UserDefaults.objectForKey("userInfo",data  => {
             //ly_Toast("1241324"+data,20000)
             if(data){
-                dispatch(handleMaintainBook(data["LOGIN_USER_ID"]),CUST_NAME,CUST_MOBILE,VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,res => {
+                dispatch(handleMaintainBook(data["LOGIN_USER_ID"]),CUST_NAME,CUST_MOBILE,VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME,res => {
                     alert(JSON.stringify(res))
                 })
             }else{

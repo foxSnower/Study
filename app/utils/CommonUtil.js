@@ -48,6 +48,7 @@ export function ly_Toast(msg,dur=2000,pos=20,fn=()=>{}) {
         }
     })
 }
+//设置初始化的时间
 export function setDefaultTime(day = 1,stringBack = true) {
     var dd = new Date();
     dd.setDate(dd.getDate() + day);//获取AddDayCount天后的日期
@@ -57,4 +58,29 @@ export function setDefaultTime(day = 1,stringBack = true) {
     if (m < 10) m = "0" + m;
     if (d < 10) d = "0" + d;
     return  stringBack == true ? (y + '-' + m + '-' + d + ' ' + '10:00') :dd;
+}
+//判断时间范围
+/*验证时间*/
+//日期相减得到天数var now = new Date();var date = new Date('2013/04/08 12:43:45');
+// 调用日期差方法，求得参数日期与系统时间相差的天数var diff = now.diff(date);
+Date.prototype.diff = function (date) {
+    var datediff = Math.ceil((this.getTime() - date.getTime()) / (24 * 60 * 60 * 1000));
+    return datediff;
+}
+export function validateDateExpries(date) {
+    var dateObject = new Date(date);
+    dateObject = dateObject.getFullYear() > 0 ? dateObject : new Date(Date.parse(date.replace(/-/g, "/")));
+    var hour = dateObject.getHours();
+    var min = dateObject.getMinutes();
+    var month = dateObject.getMonth() + 1;
+    var day = dateObject.getDate();
+    if (hour < 10) hour = "0" + hour;
+    if (min < 10) min = "0" + min;
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+    var myDate = new Date();
+    var date_s = new Date(dateObject.getFullYear() + "/" + parseInt(dateObject.getMonth() + 1) + "/" + dateObject.getDate());
+    var date_m = new Date(myDate.getFullYear() + "/" + parseInt(myDate.getMonth() + 1) + "/" + myDate.getDate());
+    var diff = parseInt(date_m.diff(date_s));
+    return diff;
 }

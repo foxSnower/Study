@@ -12,7 +12,7 @@ import {
 
 import {connect} from 'react-redux'
 import NavBar from '../../components/DefaultNavBar'
-import {BGColor,BTNColor,Screen,pixelRation,setDefaultTime,ly_Toast,validateMobile} from '../../utils/CommonUtil'
+import {BGColor,BTNColor,Screen,pixelRation,setDefaultTime,ly_Toast,validateMobile,validateDateExpries} from '../../utils/CommonUtil'
 import LabelRow from '../../components/LabelRow'
 import LabelInput from '../../components/LabelInput'
 import CarInfo from './CarInfo'
@@ -60,6 +60,14 @@ class TestDriveBook extends Component {
         }
         if (!this.state.strBookTime) {
             ly_Toast("预约时间不正确");
+            return;
+        }
+        if(validateDateExpries(this.state.strBookTime.split(' ')[0])>-1){
+            ly_Toast("请至少提前一天预约");
+            return;
+        }
+        if(validateDateExpries(this.state.strBookTime.split(' ')[0])<-60){
+            ly_Toast("亲，选择的时间太遥远了!");
             return;
         }
         let td_time  =this.state.strBookTime.replace(/-/g,'/');

@@ -38,7 +38,7 @@ export let checkCarInfo = (carSeriesCode,dlrCode,mileItem,callback) => {
 }
 
 //保养预约
-export let handleMaintainBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,_card_no,_dlrCode,_maintainMileage,callback) => {
+export let handleMaintainBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,_card_no,_dlrCode,_maintainMileage,_bookTime,callback) => {
     return dispatch =>{
         requestPOST(
             HANDLER,
@@ -54,7 +54,7 @@ export let handleMaintainBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,
                     "CAR_TYPE_CODE": "NA",
                     "DLR_CODE": _dlrCode,
                     "BOOK_TIME": _bookTime,
-                    "CA_CODE": _caCode,
+                    "CA_CODE": "NA",
                     "MILEAGE": _maintainMileage,
                     "PACKAGE_CODE": "NA"
                 }
