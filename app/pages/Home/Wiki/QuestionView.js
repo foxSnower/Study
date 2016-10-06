@@ -113,6 +113,7 @@ class Answer extends Component {
                     renderRow = {(obj)=> {
 
                       return <Item
+                          style = {styles.item}
                           onPress = {()=> {
                               this.props.navigator.push({
                                   component: Detail,
@@ -143,5 +144,8 @@ export default connect((state)=> {
 let styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff'
+  },
+  item: {
+    marginTop: 10
   }
 })

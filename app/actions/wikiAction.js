@@ -1,15 +1,7 @@
 import * as types from './actionTypes';
-
 // utils
-import {
-    requestPOST
-} from '../utils/FetchUtil';
-import {
-    HANDLER
-} from '../utils/RequestURL';
-import {
-    IMGURL
-} from '../utils/RequestURL';
+import {requestPOST} from '../utils/FetchUtil';
+import {HANDLER, IMGURL} from '../utils/RequestURL';
 
 // Carinfo 获取车辆信息
 export let fetchCarInfo = (value, cb) => {
@@ -154,26 +146,64 @@ export let fetchQuestionDetail = (value, cb) => {
                 let html = `<html>
                   <head>
                     <style>
-                      .icon_cont {
-                        width: 35px;
-                        height: 40px;
-                        float: left;
-                        margin-right: 10px;
-                      }
-                      .icon_wiki_a {
-                        background: url('http://14.23.175.49:880/Wap/images/icon_wiki_a.png') no-repeat center;
-                        background-size: contain;
-                      }
+                        img {
+                            width: 100%;
+                        }
                     </style>
                   </head>
                   <body>
-                    <h1 class="icon_cont icon_wiki_a"></h1>
                     ${data["DATA"][0]["ANSWER"]}
                   </body>
                 </html>`
                 cb({
                     type: types.FETCH_QUESTION_DETAIL,
-                    value: html
+                    value: {
+                        html,
+                        quesTitle: data["DATA"][0]["QUES_TITLE"]
+                    }
+                })
+            }
+        },
+        (error) => {
+            //alert(JSON.stringify(error))
+        }
+    )
+}
+
+// 获取纯正备件
+export let fetchReplacement = (value, cb)=> {
+    requestPOST(HANDLER, {
+            "API_CODE":"PureSparePartsList",
+            "PARAM":{
+            }
+        },
+        (data) => {
+            console.log(data)
+            if(data["RESULT_CODE"] === '0') {
+                cb({
+                    type: types.FETCH_REPLACEMENT,
+                    value: data["DATA"]
+                })
+            }
+        },
+        (error) => {
+            //alert(JSON.stringify(error))
+        }
+    )
+}
+// 获取纯正备件详情
+export let fetchReplacementDetail = (value, cb)=> {
+    requestPOST(HANDLER, {
+            "API_CODE":"PureSparePartsInfo",
+            "PARAM":{
+                "PURE_CONFIG_PROP_ID":value
+            }
+        },
+        (data) => {
+            if(data["RESULT_CODE"] === '0') {
+                cb({
+                    type: types.FETCH_REPLACEMENT_DETAIL,
+                    value: data["DATA"][0]
                 })
             }
         },

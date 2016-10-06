@@ -16,11 +16,12 @@ export default class Item extends Component {
         title: PropTypes.string,
         description: PropTypes.string,
         image: PropTypes.object,
-        onPress: PropTypes.fun
+        onPress: PropTypes.fun,
+        imgStyle: PropTypes.object
     };
 
     render() {
-        const {title, description, image, onPress} = this.props;
+        const {title, description, image, onPress, imgStyle} = this.props;
         return (
             <View>
                 <TouchableOpacity
@@ -28,7 +29,7 @@ export default class Item extends Component {
                     onPress = { onPress }
                 >
                     <Image
-                        style = {styles.thumbnail}
+                        style = {[styles.thumbnail, imgStyle]}
                         source = {image}
                     />
                     <View style = {styles.touch}>
