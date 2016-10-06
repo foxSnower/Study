@@ -21,7 +21,7 @@ import Loader from '../../components/LoaderView'
 // sigle component
 import CustomButton from '../Home/CustomButton';
 // page component
-import LoginView from '../../pages/Login/LoginView'
+import OrderDetail from './OrderDetailView';
 
 // 初始化页数
 // 这个值其实也可以放到 state 中，不过 dataSource 也可以触发 render，所以不放 state 也ok
@@ -47,7 +47,7 @@ class Order extends Component {
     refresh() {
         const {dispatch} = this.props
         // 下拉必然是获取第一页数据
-        costQuery(userId, pageSize, 1, sort, (action)=> {
+        fetchOrder(userId, pageSize, 1, sort, (action)=> {
             dispatch(action)
             this.setState({
                 // 这里是将 action.value 这个数组作为了显示的数组
@@ -60,7 +60,7 @@ class Order extends Component {
     loadMore() {
         const {dispatch, personal} = this.props
         // 同样是调用接口获取数据
-        costQuery(userId, pageSize, pageIndex, sort, (action)=> {
+        fetchOrder(userId, pageSize, pageIndex, sort, (action)=> {
             // 返回第 n+1 页数据
             if(action === 'error') {
                 // 获取数据失败
@@ -104,29 +104,31 @@ class Order extends Component {
 
     // 单行样式，会传入数组中的单个元素
     renderCell(row) {
-        let color = {
-            fontSize: 20,
-            width: 60
-        }
-        if(parseInt(row["PV_POINT"], 10) < 0) {
-            color = Object.assign({}, color, {
-                color: '#0d8f44'
-            })
-        }else {
-            color = Object.assign({}, color, {
-                color: '#c90028'
-            })
-        }
         return (
             <View style = {styles.item}>
-                <View style = {styles.dlrInfo}>
-                    <Text style = {styles.dlrName}>{`${row["DLR_SHORT_NAME"]}[${row["TRANS_SENCE"]}]`}</Text>
-                    <Text style = {styles.time}>{row["TRANS_TIME"]}</Text>
-                </View>
-                <View style = {styles.point}>
-                    <Text style = {color}>{row["PV_POINT"]}</Text>
-                    <Text>{"厂家积分"}</Text>
-                </View>    
+                <TouchableOpacity
+                    onPress = {()=> {
+                        this.props.navigator.push({
+                            component: OrderDetail,
+                            params: {
+                                orderId: row["BILL_NO"]
+                            }
+                        })
+                    }}
+                >
+                    <Image
+                        style = {styles.icon}
+                        soruce = {require('../../image/mine/da.png')}
+                    />
+                    <View style = {styles.orderInfo}>
+                        <Text style = {styles.dlrName}>{`${row["BILL_NAME"]}`}</Text>
+                        <Text style = {styles.time}>{`专营店:${row["SHORT_NAME"]}`}</Text>
+                    </View>
+                    <View style = {styles.orderStatus}>
+                        <Text>{row["BILL_STATUS_NAME"]}</Text>
+                        <Text>{row["BILL_TIME"]}</Text>
+                    </View>    
+                </TouchableOpacity>
             </View>
         )
     }
@@ -188,20 +190,19 @@ let styles = StyleSheet.create({
     item: {
         backgroundColor: '#fff',
         flexDirection: 'row',
-        marginBottom: 20,
+        marginTop: 20,
         paddingTop: 20,
         paddingLeft: 20,
         paddingBottom: 20,
         paddingRight: 20
     },
-    dlrInfo: {
+    icon: {
+        height: 30,
+        width: 30
+    },
+    orderInfo: {
         width: Screen.width*0.6
     },
-    dlrName: {
-        fontSize: 16
-    },
-    point: {
-        flexDirection: 'row',
-        justifyContent: 'center'
+    orderStatus: {
     }
 })

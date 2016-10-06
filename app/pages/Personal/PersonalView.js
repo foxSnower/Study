@@ -10,7 +10,10 @@ import CustomButton from '../Home/CustomButton';
 import {Screen, pixel1} from '../../utils/CommonUtil';
 // page component
 import LoginView from '../../pages/Login/LoginView'
+// 消费查询
 import CostQuery from './CostQueryView'
+// 我的预约
+import Order from './OrderView'
 
 
 const imageItems = [
@@ -31,7 +34,7 @@ const imageItems = [
             text:"我的预约",
             targetComponent:"我的预约",
             image:require("../../image/icon_uc_book.png"),
-            component: LoginView
+            component: Order
         },
     ],
     [

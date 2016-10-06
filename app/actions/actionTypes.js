@@ -28,6 +28,10 @@ export const FETCH_REPLACEMENT_DETAIL = 'FETCH_REPLACEMENT_DETAIL'
 ---------------*/
 // 消费查询
 export const COST_QUERY = 'COST_QUERY'
+// 预约查询
+export const FETCH_ORDER = 'FETCH_ORDER'
+// 预约详情查询
+export const FETCH_ORDER_DETAIL = 'FETCH_ORDER_DETAIL'
 
 export const UPDATE_DRIVE = 'UPDATE_DRIVE';
 
