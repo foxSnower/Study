@@ -22,6 +22,7 @@ export default class LabelInput extends Component {
         returnKeyType: PropTypes.numeric,
         defaultValue: PropTypes.string,
         onChangeText: PropTypes.func,
+        hasRightIcon:PropTypes.boolean
     }
 
     static defaultProps = {
@@ -33,11 +34,12 @@ export default class LabelInput extends Component {
         max: 20,
         onChangeText: () => {
         },
+        hasRightIcon:false
     }
 
     render() {
         //iosMode returnKeyType 确认键的内容 enablesReturnKeyAutomatically 为空时禁用按钮 clearButtonMode 右侧显示删除
-        const {label, inputStyle, style, textStyle, placeholder, defaultValue,value, returnKeyType, keyboardType, type, max, onChangeText}  = this.props;
+        const {label, inputStyle, style, textStyle,hasRightIcon, placeholder, defaultValue,value, returnKeyType, keyboardType, type, max, onChangeText}  = this.props;
 
         return (
 
@@ -59,6 +61,14 @@ export default class LabelInput extends Component {
                            }}
                 >
                 </TextInput>
+                {
+                    hasRightIcon ?
+                        <TouchableOpacity style={styles.rightBtn}  >
+
+                        </TouchableOpacity>
+                        :null
+
+                }
             </View>
 
         )
@@ -66,6 +76,11 @@ export default class LabelInput extends Component {
 }
 
 const styles = StyleSheet.create({
+    rightBtn:{
+        justifyContent:"center",
+        alignItems:"center",
+        flex:1,
+    },
     label: {
         width: 50
     },

@@ -23,6 +23,8 @@ import DeviceInfo from 'react-native-device-info'
 import UserDefaults from '../../utils/GlobalStorage'
 import ActionDetailView from './ActionDetailView'
 import TestDriveHomeView from '../Business/TestDriveHomeView'
+import MaintainView from '../Business/MaintainView'
+import LoginView from '../Login/LoginView'
 
 //import TestDriveBook  from '../Business/TestDriveBook'
 
@@ -31,7 +33,7 @@ class HomeView extends Component {
     componentDidMount() {
         let deviceInfo = {};
         //本地存储的使用  通过key存下对应的值 我现在删除 这个userID
-        UserDefaults.setObject('userID',{1:1111,2:22222,3:33333,4:44444});
+        //UserDefaults.setObject('userID',{1:1111,2:22222,3:33333,4:44444});
 
         const {dispatch} = this.props;
         dispatch(fetchAction());
@@ -95,21 +97,9 @@ class HomeView extends Component {
 //         console.log("App Instance ID", DeviceInfo.getInstanceID()); // ANDROID ONLY - see https://developers.google.com/instance-id/
 
     }
-
-    //广告点击事件
-    swiperViewClick = () =>{
-        //本地存储的使用   根据key拿到数据  通过回调方法获取
-        UserDefaults.setObject('userID',{});
-        UserDefaults.objectForKey('userID',(data) => {
-            alert(data['1']);
-        })
-       //
-    };
-
     render() {
 
         const {home} = this.props;
-
         return (
             <View style={styles.container}>
                 <View style={{flex: 1}}>
@@ -121,12 +111,10 @@ class HomeView extends Component {
 
             </View>
         );
-
     }
 
     // Swiper的子视图布局
     addSwiperView = (images) => {
-
         let imageViews = [];
         images && images.map((v, k)=> {
             imageViews.push(
@@ -232,7 +220,24 @@ class HomeView extends Component {
                                   textStyle={styles.textStyle}
                                   image={require('../../image/icon_index_maintain.png')}
                                   onPress = {() => {
-
+                                      UserDefaults.objectForKey("userInfo", (data)=> {
+                                          if (!data || !data["LOGIN_USER_ID"]) {
+                                              this.props.navigator.push({
+                                                  component: LoginView
+                                              })
+                                          } else {
+                                              this.props.navigator.push({
+                                                  component:MaintainView,
+                                                  params:{
+                                                      LOGIN_USER_ID:data["LOGIN_USER_ID"],
+                                                      LOGIN_MOBILE:data["LOGIN_MOBILE"],
+                                                      CUST_NAME:data["CUST_NAME"],
+                                                      DLR_CODE:data["DLR_CODE"],
+                                                      DLR_SHORT_NAME:data["DLR_SHORT_NAME"],
+                                                  }
+                                              })
+                                          }
+                                      });
                                   }}
                     />
                     <CustomButton style={{flex: 1}}

@@ -9,6 +9,7 @@ import login from './loginReducer'
 import wiki from './wikiReducer'
 import drive from  './driveReducer'
 import dlr from './dlrReducer'
+import book from './bookReducer'
 
 export default rootReducer = combineReducers({
     fields,
@@ -16,5 +17,6 @@ export default rootReducer = combineReducers({
     login,
     wiki,
     drive,
-    dlr
+    dlr,
+    book
 })

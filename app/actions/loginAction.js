@@ -117,6 +117,25 @@ export let loginSubim = (mobile, password,nav) =>{
                 if(data.RESULT_CODE == 0){
                     //登陆成功将用户信息写入缓存中
                     UserDefaults.setObject("userInfo",data.DATA[0]);
+                    //根据用户信息查询用户的车辆信息
+                    requestPOST(
+                        HANDLER,
+                        {
+                            "API_CODE": "CarInfo",
+                            "PAGE_SIZE": "20",
+                            "PAGE_INDEX": 1,
+                            "SORT": "BUY_DATE DESC",
+                            "PARAM": {
+                                "LOGIN_USER_ID": data.DATA[0].LOGIN_USER_ID
+                            }
+                        },
+                        carData => {
+                            UserDefaults.setObject("carInfo",carData.DATA);
+                        },
+                        err => {
+                            console.log(err)
+                        }
+                    )
                     ly_Toast("登录成功",1000,20,()=>{
                         nav.pop();
                     })

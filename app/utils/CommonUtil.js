@@ -48,3 +48,13 @@ export function ly_Toast(msg,dur=2000,pos=20,fn=()=>{}) {
         }
     })
 }
+export function setDefaultTime(day = 1,stringBack = true) {
+    var dd = new Date();
+    dd.setDate(dd.getDate() + day);//获取AddDayCount天后的日期
+    var y = dd.getFullYear();
+    var m = dd.getMonth() + 1;//获取当前月份的日期
+    var d = dd.getDate();
+    if (m < 10) m = "0" + m;
+    if (d < 10) d = "0" + d;
+    return  stringBack == true ? (y + '-' + m + '-' + d + ' ' + '10:00') :dd;
+}

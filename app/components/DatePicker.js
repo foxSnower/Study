@@ -25,7 +25,7 @@ const FORMATS = {
     'time': 'HH:mm'
 };
 
-export default class DatePicker extends Component {
+export default class  DatePicker extends Component {
 
     static propTypes = {
         confirmBtnText: PropTypes.string,
@@ -47,6 +47,7 @@ export default class DatePicker extends Component {
         mode: 'datetime',
         height: 259,    // component height: 216(DatePickerIOS) + 1(borderTop) + 42(marginTop), IOS only
         duration: 300,  // slide animation duration time, default to 300ms, IOS only
+        onRequestClose:()=>{}
     };
 
     // 构造
