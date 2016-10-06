@@ -13,7 +13,7 @@ import TabNavigator from 'react-native-tab-navigator';
 import HomeView from '../pages/HomeTestView'
 import FetchTestView from '../pages/FetchTestView'
 import MyView from '../pages/Home/HomeView'
-import PersonalView from '../pages/Home/PersonalView'
+import PersonalView from '../pages/Personal/PersonalView'
 import BussinessView from '../pages/Home/BussinessView'
 
 import UserDefaults from '../utils/GlobalStorage'

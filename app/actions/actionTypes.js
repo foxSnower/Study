@@ -4,7 +4,9 @@ export const UPDATE_FIELDS = 'UPDATE_FIELDS';
 export const UPDATE_HOME = 'UPDATE_HOME';
 
 export const UPDATE_LOGIN = 'UPDATE_LOGIN';
-
+/*---------------
+    用车百科
+---------------*/
 // 获取车辆信息
 export const FETCH_CAR_INFO = 'FETCH_CAR_INFO'
 // 获取车辆图片
@@ -21,6 +23,11 @@ export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL'
 export const FETCH_REPLACEMENT = 'FETCH_REPLACEMENT'
 // 获取纯正备件详情
 export const FETCH_REPLACEMENT_DETAIL = 'FETCH_REPLACEMENT_DETAIL'
+/*---------------
+    我的
+---------------*/
+// 消费查询
+export const COST_QUERY = 'COST_QUERY'
 
 export const UPDATE_DRIVE = 'UPDATE_DRIVE';
 

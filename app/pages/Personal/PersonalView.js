@@ -6,10 +6,11 @@ import{
     Image,
     TouchableOpacity
 }from 'react-native';
-import CustomButton from './CustomButton';
+import CustomButton from '../Home/CustomButton';
 import {Screen, pixel1} from '../../utils/CommonUtil';
-
+// page component
 import LoginView from '../../pages/Login/LoginView'
+import CostQuery from './CostQueryView'
 
 
 const imageItems = [
@@ -17,46 +18,47 @@ const imageItems = [
         {
             text:"车主信息",
             targetComponent:"车主信息",
-            image:require("../../image/icon_uc_info.png")
+            image:require("../../image/icon_uc_info.png"),
+            component: LoginView
         },
         {
             text:"解除绑定",
             targetComponent:"解除绑定",
-            image:require("../../image/icon_uc_unbind.png")
+            image:require("../../image/icon_uc_unbind.png"),
+            component: LoginView
         },
         {
             text:"我的预约",
             targetComponent:"我的预约",
-            image:require("../../image/icon_uc_book.png")
+            image:require("../../image/icon_uc_book.png"),
+            component: LoginView
         },
     ],
     [
         {
             text:"我的活动",
             targetComponent:"我的活动",
-            image:require("../../image/icon_uc_activity.png")
+            image:require("../../image/icon_uc_activity.png"),
+            component: LoginView
         },
         {
             text:"消费查询",
             targetComponent:"消费查询",
-            image:require("../../image/icon_uc_pays.png")
+            image:require("../../image/icon_uc_pays.png"),
+            component: CostQuery
         },
         {
             text:"我的消息",
             targetComponent:"我的消息",
-            image:require("../../image/icon_uc_msg.png")
+            image:require("../../image/icon_uc_msg.png"),
+            component: LoginView
         },
     ]
 ];
 export default class PersonalView extends Component{
     constructor(props){
-     super(props);
-     }
-    onPress = () =>{
-        this.props.navigator.push({
-        component:LoginView
-        })
-    };
+        super(props);
+    }
 
     renderMidItem(items){
         let aItems = [];
@@ -72,7 +74,11 @@ export default class PersonalView extends Component{
                                               key={index2}
                                               textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
                                               text={item.text}
-                                              onPress={this.onPress}
+                                              onPress={()=> {
+                                                this.props.navigator.push({
+                                                    component: item.component
+                                                })
+                                              }}
                                 />
                             )
                         })

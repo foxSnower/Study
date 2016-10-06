@@ -1,15 +1,7 @@
 import * as types from './actionTypes';
-
 // utils
-import {
-    requestPOST
-} from '../utils/FetchUtil';
-import {
-    HANDLER
-} from '../utils/RequestURL';
-import {
-    IMGURL
-} from '../utils/RequestURL';
+import {requestPOST} from '../utils/FetchUtil';
+import {HANDLER, IMGURL} from '../utils/RequestURL';
 
 // Carinfo 获取车辆信息
 export let fetchCarInfo = (value, cb) => {

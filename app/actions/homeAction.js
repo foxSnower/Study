@@ -17,7 +17,6 @@ export function updateHome(value) {
 
 //首页头部活动接口数据
 export let fetchAction = () => {
-
     return dispatch => {
         requestPOST(
             HANDLER,
