@@ -12,15 +12,13 @@ import {connect} from 'react-redux';
 import UserDefaults from '../../../utils/GlobalStorage';
 import {Screen} from '../../../utils/CommonUtil';
 // action
-import {fetchQuestionDetail} from '../../../actions/wikiAction'
+import {fetchReplacementDetail} from '../../../actions/wikiAction'
 // common Component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
 import Loader from '../../../components/LoaderView';
-// page component
-import Index from './IndexView.js';
 
-class QuestionDetail extends Component {
+class ReplacementDetail extends Component {
   constructor(props) {
     super(props)
 
@@ -30,10 +28,9 @@ class QuestionDetail extends Component {
   }
 
   componentDidMount() {
-    const {dispatch, answerId} = this.props
+    const {dispatch, replacementId} = this.props
     // 根据 answerId 进行请求
-    fetchQuestionDetail(answerId, (action)=> {
-      // 拿到回答内容后，拼装 html 保存至 reducer
+    fetchReplacementDetail(replacementId, (action)=> {
       console.log(action)
       dispatch(action)
       this.setState({
@@ -48,7 +45,7 @@ class QuestionDetail extends Component {
       return (
         <View style = {{flex: 1}}>
           <NavBar
-            title = "答疑详情"
+            title = "认识纯正备件"
             onBack={()=>{
                 this.props.navigator.pop()
             }}
@@ -60,18 +57,15 @@ class QuestionDetail extends Component {
     return (
       <View style= {styles.container}>
         <NavBar
-          title = {"答疑详情"}
+          title = {"认识纯正备件"}
           onBack={()=>{
               this.props.navigator.pop()
           }}
         />
-        <View style = {styles.item} >
-            <Image
-              source = {require('../../../image/icon_wiki_q.png')}
-              style = {styles.img}
-            />
-            <Text style = {styles.quesDescription}>{wiki.quesTitle}</Text>
-        </View>
+        <Text style = {styles.title}>{wiki.replacementDetail["TITLE"]}</Text>
+        <Text style = {styles.description}>{wiki.replacementDetail["SUMMARY"]}</Text>
+        <Text style = {styles.content}>{wiki.replacementDetail["URL_CONTENT"]}</Text>
+        {/*
         <WebView
           ref={'webview'}
           automaticallyAdjustContentInsets={false}
@@ -83,6 +77,7 @@ class QuestionDetail extends Component {
           startInLoadingState={true}
           scalesPageToFit={true}
         />
+        */}
     </View>
     )
   }
@@ -92,13 +87,13 @@ export default connect((state)=> {
   return {
     wiki
   }
-})(QuestionDetail)
+})(ReplacementDetail)
 
 let styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   img: {
     maxWidth: 50,
@@ -108,9 +103,7 @@ let styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
-    paddingLeft: 20,
-    marginBottom: 20
+    marginBottom: 10
   },
   quesDescription: {
     fontSize: 16
@@ -120,7 +113,6 @@ let styles = StyleSheet.create({
     width: Screen.width-80
   },
   webView: {
-    paddingLeft: 20,
-    paddingRight: 20
+
   }
 })

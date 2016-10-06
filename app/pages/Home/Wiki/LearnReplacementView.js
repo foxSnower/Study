@@ -13,17 +13,19 @@ import {connect} from 'react-redux';
 import UserDefaults from '../../../utils/GlobalStorage';
 import imgUrl from '../../../utils/RequestURL';
 // action
-import {fetchQuestion} from '../../../actions/wikiAction'
+import {fetchReplacement} from '../../../actions/wikiAction'
 // common Component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
+import Loader from '../../../components/LoaderView'
 // page component
-// Page
+import ReplacementDetail from './ReplacementDetailView'
 
-export default class LearnReplacement extends Component {
+class LearnReplacement extends Component {
     constructor(props) {
         super(props)
         this.state = {
+          loaded: false,
           dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         }
         // this.renderContent = this.renderContent.bind(this)
@@ -32,72 +34,75 @@ export default class LearnReplacement extends Component {
     componentDidMount() {
       // 获取数据
       const {dispatch, wiki} = this.props
-      const that = this
-      UserDefaults.objectForKey("userInfo", (data)=> {
-          if (data) {
-              //alert(data["LOGIN_USER_ID"])
-              //alert(JSON.stringify(fetchAnswer("")))
-              fetchQuestion("10220", function (action) {
-                // dispatch 改变数据后，需要得到改变后的 state
-                dispatch(action)
-                that.setState({
-                    dataSource: that.state.dataSource.cloneWithRows(action.value)
-                })
-              })
-          }
-      });
-    }
 
-    renderLoading() {
-      return (
-        <View>
-          <NavBar
-              title="认识纯正备件"
-              onBack={()=>{
-                  this.props.navigator.pop()
-              }}
-          />
-          <Text>正在加载数据...</Text>
-        </View>
-      )
-    }
-    renderContent() {
-        const that = this;
-        return (
-            <View style = {styles.container}>
-                <NavBar
-                    title="认识纯正备件"
-                    onBack={()=>{
-                        this.props.navigator.pop()
-                    }}
-                />
-                <ListView
-                  dataSource = {that.state.dataSource}
-                  renderRow = {(obj)=> {
+      fetchReplacement("", (action)=> {
+        console.log(action)
+        dispatch(action)
+        this.setState({
+          loaded: true,
+          dataSource: this.state.dataSource.cloneWithRows(action.value)
+        })
+      })
 
-                    return <Item
-                        onPress = {()=> {
-                        }}
-                        title = {obj["QUES_TITLE"]}
-                        image = {require('../../../image/icon_wiki_a.png')}
-                    />
-                  }}
-                />
-            </View>
-        )
     }
 
     render() {
-      return this.renderContent()
+      const {dispatch, wiki} = this.props
+
+      if(!this.state.loaded) {
+        return (
+          <View style = {{flex: 1}}>
+            <NavBar
+                title="认识纯正备件"
+                onBack={()=>{
+                    this.props.navigator.pop()
+                }}
+            />
+            <Loader />
+          </View>
+        )
+      }
+      //渲染内容
+      return (
+          <View style = {styles.container}>
+              <NavBar
+                  title="认识纯正备件"
+                  onBack={()=>{
+                      this.props.navigator.pop()
+                  }}
+              />
+                  <ListView
+                    dataSource = {this.state.dataSource}
+                    renderRow = {(obj)=> {
+
+                      return <Item
+                          style = {styles.item}
+                          onPress = {()=> {
+                              this.props.navigator.push({
+                                  component: ReplacementDetail,
+                                  params: {
+                                    replacementId: obj["PURE_CONFIG_PROP_ID"]
+                                  }
+                              })
+                          }}
+                          title = {obj["TITLE"]}
+                          description = {obj["SUMMARY"]}
+                          image = {{uri: obj["HTTP_URL"]}}
+                          imgStyle = {{marginLeft: 10, marginRight: 10, maxWidth: 120, maxHeight: 80, width: 120, height: 80}}
+                      />
+                    }}
+                  />
+          </View>
+      )
     }
 }
 
-// export default connect((state)=> {
-//   const {wiki} = state;
-//   return {
-//     wiki
-//   }
-// })(LearnReplacement)
+export default connect((state)=> {
+  const {wiki} = state;
+  return {
+    wiki
+  }
+})(LearnReplacement)
 
 let styles = StyleSheet.create({
   container: {
