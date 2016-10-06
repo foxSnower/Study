@@ -39,6 +39,7 @@ export let checkCarInfo = (carSeriesCode,dlrCode,mileItem,callback) => {
 
 //保养预约
 export let handleMaintainBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,_card_no,_dlrCode,_maintainMileage,_bookTime,callback) => {
+
     return dispatch =>{
         requestPOST(
             HANDLER,
@@ -60,7 +61,7 @@ export let handleMaintainBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,
                 }
             },
             (data)=>{
-                alert(data)
+                console.log(data);
                 callback(data);
             },
             (err)=>{
@@ -68,5 +69,13 @@ export let handleMaintainBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,
             }
         )
     }
-}
+};
+
+//排除法测试代码
+export let testBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,callback) => {
+    return dispatch =>{
+        callback(123);
+        console.log(ly_app_user_id,_custName,_custTel,_vin,_car_no)
+    }
+};
 

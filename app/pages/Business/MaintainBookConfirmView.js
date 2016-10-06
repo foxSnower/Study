@@ -22,7 +22,7 @@ import Button from '../../components/Button'
 import DLRView from './DLRView'
 import UserDefaults from '../../utils/GlobalStorage'
 import LoaderView from '../../components/LoaderView'
-import { updateBook, checkCarInfo,handleMaintainBook} from '../../actions/bookAction';
+import { updateBook, checkCarInfo,handleMaintainBook, testBook} from '../../actions/bookAction';
 
 
 class MaintainBookConfirmView extends Component {
@@ -44,23 +44,56 @@ class MaintainBookConfirmView extends Component {
         })
     };
 
+    // forKeyTest = (data) => {
+    //     console.log(data);
+    //
+    //     if (data) {
+    //         const { dispatch,CUST_NAME,CUST_MOBILE,DLR_SHORT_NAME,DLR_CODE,MILE,CAR_NO,VIN,CAR_SERIES_CODE ,BOOK_TIME} = this.props;
+    //         // console.log(data["LOGIN_USER_ID"],data['CARD_NO'],DLR_SHORT_NAME,DLR_CODE,MILE,CAR_NO,VIN,CAR_SERIES_CODE);
+    //         // dispatch(testBook(data["LOGIN_USER_ID"],data['CARD_NO'],333,444,555,(ret) => {
+    //         //     console.log(ret)
+    //         // }));
+    //          dispatch(handleMaintainBook(data["LOGIN_USER_ID"],data["CUST_NAME"],data["CUST_TEL"],VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME, (ret) =>{
+    //              console.log(ret)
+    //          }))
+    //     } else {
+    //         console.log("没有获取到用户信息?")
+    //     }
+    // }
+
+//     data  => {
+//     console.log(1111111);
+//     console.log(data);
+//     //ly_Toast("1241324"+data,20000)
+//     if(data){
+//         //  dispatch(testBook(data["LOGIN_USER_ID"],CUST_NAME,CUST_MOBILE,VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME));
+//         //dispatch(handleMaintainBook(data["LOGIN_USER_ID"]),CUST_NAME,CUST_MOBILE,VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME)
+//     }else{
+//     console.log("没有获取到用户信息?")
+// }
+//
+// }
+
     maintainBook = () => {
         const { dispatch,CUST_NAME,CUST_MOBILE,DLR_SHORT_NAME,DLR_CODE,MILE,CAR_NO,VIN,CAR_SERIES_CODE } = this.props;
-        UserDefaults.objectForKey("userInfo",data  => {
-            //ly_Toast("1241324"+data,20000)
-            if(data){
-                dispatch(handleMaintainBook(data["LOGIN_USER_ID"]),CUST_NAME,CUST_MOBILE,VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME,res => {
-                    alert(JSON.stringify(res))
-                })
-            }else{
+      //  UserDefaults.objectForKey("userInfo", (data) => { this.forKeyTest(data)})
+        UserDefaults.objectForKey("userInfo", (data) => {
+            if (data) {
+                const { dispatch,CUST_NAME,DLR_CODE,MILE,CAR_NO,VIN ,BOOK_TIME} = this.props;
+                dispatch(handleMaintainBook(data["LOGIN_USER_ID"],data["CUST_NAME"],data["CUST_TEL"],VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME, (res) =>{
+                    console.log(res)
+                }))
+            } else {
                 console.log("没有获取到用户信息?")
             }
-
         })
 
+
     };
+
     componentDidMount() {
         const { dispatch, CAR_SERIES_CODE,DLR_CODE,MILE } = this.props;
+
         if (MILE) {
             let mile_int = parseInt(MILE);
             var mile_parameter = '';

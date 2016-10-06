@@ -120,7 +120,7 @@ class MaintainView extends Component {
                 CAR_SERIES_NAME:this.state.carInfo.carSeriesName,
             }
         })
-    }
+    };
 
     render(){
         const {LOGIN_MOBILE, CUST_NAME} = this.props;
