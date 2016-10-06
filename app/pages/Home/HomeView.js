@@ -15,7 +15,7 @@ import {
 import {connect} from 'react-redux';
 import Swiper from 'react-native-swiper'
 import {Screen, pixel1,Debug} from '../../utils/CommonUtil'
-import {fetchAction, fetchWeatherInfo} from '../../actions/homeAction'
+import {fetchAction, fetchWeatherInfo,handleDeviceInfo} from '../../actions/homeAction'
 import CustomButton from './CustomButton'
 import ActivitieListView from './ActionListView'// 用车百科
 import Wiki from './Wiki/IndexView'
@@ -25,8 +25,6 @@ import ActionDetailView from './ActionDetailView'
 import TestDriveHomeView from '../Business/TestDriveHomeView'
 import MaintainView from '../Business/MaintainView'
 import LoginView from '../Login/LoginView'
-
-//import TestDriveBook  from '../Business/TestDriveBook'
 
 class HomeView extends Component {
 
@@ -38,7 +36,7 @@ class HomeView extends Component {
         const {dispatch} = this.props;
         dispatch(fetchAction());
         dispatch(fetchWeatherInfo());
-
+        dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
         if(!Debug){
             deviceInfo.DEVICE_TOKEN = DeviceInfo.getUniqueID();
             deviceInfo.OS_VERSION = DeviceInfo.getSystemName()

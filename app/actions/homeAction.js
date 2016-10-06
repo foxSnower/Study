@@ -175,3 +175,21 @@ export let fetchActionDetail = (actionCode,actionData)=>{
         )
     }
 }
+
+//写入用户设备信息给数据库
+export let handleDeviceInfo = (device_token,version) => {
+    requestPOST(
+        HANDLER,
+        {
+            "API_CODE": "SetDeviceVersion",
+            "PARAM": {
+                "DEVICE_TOKEN": device_token,
+                "VERSION": version
+            }
+        },
+        (data) => {
+        },
+        (error) => {
+        }
+    )
+}
