@@ -14,7 +14,7 @@ import {
 
 import {connect} from 'react-redux';
 import Swiper from 'react-native-swiper'
-import {Screen, pixel1,Debug} from '../../utils/CommonUtil'
+import {Screen, pixel1, Debug} from '../../utils/CommonUtil'
 import {fetchAction, fetchWeatherInfo,handleDeviceInfo} from '../../actions/homeAction'
 import CustomButton from './CustomButton'
 import ActivitieListView from './ActionListView'// 用车百科
@@ -26,6 +26,13 @@ import TestDriveHomeView from '../Business/TestDriveHomeView'
 import MaintainView from '../Business/MaintainView'
 import LoginView from '../Login/LoginView'
 import { IMGURL } from '../../utils/RequestURL'
+
+const icon_index_activity = `${IMGURL}/images/icon_index_activity.png`;
+const icon_index_wiki = `${IMGURL}/images/icon_index_wiki.png`;
+const icon_index_maintain = `${IMGURL}/images/icon_index_maintain.png`;
+const icon_index_test = `${IMGURL}/images/icon_index_test.png`;
+const icon_index_saved = `${IMGURL}/images/icon_index_saved.png`;
+const icon_index_message = `${IMGURL}/images/icon_index_message.png`;
 
 class HomeView extends Component {
 
@@ -60,50 +67,10 @@ class HomeView extends Component {
 
             UserDefaults.setObject('deviceInfo',deviceInfo);
         }
-        dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
-//         console.log("Device Unique ID", DeviceInfo.getUniqueID());  // e.g. FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
-// // * note this is IDFV on iOS so it will change if all apps from the current apps vendor have been previously uninstalled
-//
-//         console.log("Device Manufacturer", DeviceInfo.getManufacturer());  // e.g. Apple
-//
-//         console.log("Device Brand", DeviceInfo.getBrand());  // e.g. Apple / htc / Xiaomi
-//
-//         console.log("Device Model", DeviceInfo.getModel());  // e.g. iPhone 6
-//
-//         console.log("Device ID", DeviceInfo.getDeviceId());  // e.g. iPhone7,2 / or the board on Android e.g. goldfish
-//
-//         console.log("System Name", DeviceInfo.getSystemName());  // e.g. iPhone OS
-//
-//         console.log("System Version", DeviceInfo.getSystemVersion());  // e.g. 9.0
-//
-//         console.log("Bundle ID", DeviceInfo.getBundleId());  // e.g. com.learnium.mobile
-//
-//         console.log("Build Number", DeviceInfo.getBuildNumber());  // e.g. 89
-//
-//         console.log("App Version", DeviceInfo.getVersion());  // e.g. 1.1.0
-//
-//         console.log("App Version (Readable)", DeviceInfo.getReadableVersion());  // e.g. 1.1.0.89
-//
-//         console.log("Device Name", DeviceInfo.getDeviceName());  // e.g. Becca's iPhone 6
-//
-//         console.log("User Agent", DeviceInfo.getUserAgent()); // e.g. Dalvik/2.1.0 (Linux; U; Android 5.1; Google Nexus 4 - 5.1.0 - API 22 - 768x1280 Build/LMY47D)
-//
-//         console.log("Device Locale", DeviceInfo.getDeviceLocale()); // e.g en-US
-//
-//         console.log("Device Country", DeviceInfo.getDeviceCountry()); // e.g US
-//
-//         //console.log("Timezone", DeviceInfo.getTimezone()); // e.g America/Mexico_City
-//
-//         console.log("App Instance ID", DeviceInfo.getInstanceID()); // ANDROID ONLY - see https://developers.google.com/instance-id/
-
+        //dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
     }
     render() {
-        const icon_index_activity = `${IMGURL}/images/icon_index_activity.png`;
-        const icon_index_wiki = `${IMGURL}/images/icon_index_wiki.png`;
-        const icon_index_maintain = `${IMGURL}/images/icon_index_maintain.png`;
-        const icon_index_test = `${IMGURL}/images/icon_index_test.png`;
-        const icon_index_saved = `${IMGURL}/images/icon_index_saved.png`;
-        const icon_index_message = `${IMGURL}/images/icon_index_message.png`;
+
         const {home} = this.props;
         return (
             <View style={styles.container}>
