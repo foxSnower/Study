@@ -7,6 +7,9 @@ import React, {Component} from 'react';
 import {
     Image,
     View,
+    Platform,
+    BackAndroid,
+    ToastAndroid
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
@@ -48,6 +51,38 @@ export default class TabBarView extends Component {
             selectedTab: tabBarItems[0].title,
         };
     }
+
+    componentDidMount() {
+        if (Platform.OS === 'android') {
+            BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid.bind(this));
+        }
+    }
+
+    componentWillUnmount() {
+        if (Platform.OS === 'android') {
+            BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid.bind(this));
+        }
+    }
+
+    //处理安卓物理返回键
+    onBackAndroid() {
+
+        const {navigator} = this.props;
+        const routers = navigator.getCurrentRoutes();
+        if (routers.length > 1) {
+            navigator.pop();
+            return true;
+        } else {
+            if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+                //最近2秒内按过back键，可以退出应用。
+                return false;
+            } else {
+                this.lastBackPressed = Date.now();
+                ToastAndroid.show('再按一次退出应用');
+                return true;
+            }
+        }
+    };
 
     render() {
 

@@ -10,7 +10,16 @@ import CustomButton from './CustomButton';
 import DLRView from '../Business/DLRView'
 import TestView from '../Business/TestView'
 import TestDriveHomeView from '../Business/TestDriveHomeView'
+import CommissionView from '../Business/CommissionView'
+import UserDefaults from '../../utils/GlobalStorage'
+import LoginView from '../Login/LoginView'
+import MaintainView from '../Business/MaintainView'
+import RescueView from '../Business/RescueView'
+import CarBindView from '../Personal/CarBindView'
+import RepairView from '../Business/RepairView'
 
+
+let userInfo = {};
 const customerButtonItems = [
     [
         {
@@ -18,14 +27,14 @@ const customerButtonItems = [
             targetComponent:"MaintainBookView",
             image:require("../../image/icon_bus_protect.png"),
             secText:"为车主解决汽车保养难题",
-            component: TestDriveHomeView //这里理解把 没用到这个啊 为什么这里不明白 不是就用到2个吗
+            component: MaintainView //这里理解把 没用到这个啊 为什么这里不明白 不是就用到2个吗
         },
         {
             text:"维修预约",
             targetComponent:"RepairBookView",
             image:require("../../image/icon_bus_maintain.png"),
             secText:"为您提供贴心维修服务",
-            component: TestView
+            component: RepairView
         }
     ],
     [
@@ -41,7 +50,7 @@ const customerButtonItems = [
             targetComponent:"CommissionView",
             image:require("../../image/icon_bus_do.png"),
             secText:"可代办车险年票等",
-            component: TestDriveHomeView
+            component: CommissionView
         }
     ],
     [
@@ -57,18 +66,107 @@ const customerButtonItems = [
             targetComponent:"Rescue",
             image:require("../../image/icon_bus_help.png"),
             secText:"为您提供及时的救援",
-            component: TestDriveHomeView
+            component: RescueView
         }
     ],
 
 ];
 export default class BussinessView extends Component{
-    mtbook = ()=>{
-        alert('保养预约')
-    };
-    rpbook = ()=>{
-        alert('维修预约')
-    };
+    constructor(props){
+        super(props);
+        UserDefaults.objectForKey("userInfo", (data)=> {
+            userInfo = data;
+        });
+
+    }
+
+    //保养预约
+    handleCustomerClick = (component) => {
+        if(userInfo["USER_TYPE"]){
+            switch (parseInt(userInfo["USER_TYPE"])) {
+                case 0:    //未登录 紧急救援、4S点查询  试驾 不需要登录也可查看
+                    if (component == 1 || component == 2 || component == 4) {
+                        this.props.navigator.push({
+                            component: LoginView
+                        })
+                    }else if (component == 3) {
+                        this.props.navigator.push({
+                            component: DLRView
+                        })
+                    } else if (component == 5) {
+                        this.props.navigator.push({
+                            component: TestDriveHomeView
+                        })
+                    } else if (component == 6) {
+                        this.props.navigator.push({
+                            component: RescueView
+                        })
+                    }
+                    break;
+                case 1:     //登录没有绑定车辆 保养、维修、代办预约
+                    if (component == 1 || component == 2 || component == 4) {
+                        this.props.navigator.push({
+                            component: CarBindView
+                        })
+                    }else if (component == 3) {
+                        this.props.navigator.push({
+                            component: DLRView
+                        })
+                    } else if (component == 5) {
+                        this.props.navigator.push({
+                            component: TestDriveHomeView
+                        })
+                    } else if (component == 6) {
+                        this.props.navigator.push({
+                            component: RescueView
+                        })
+                    }
+                    break;
+                case 2:     //身份验证通过
+                    let params = {
+                        LOGIN_USER_ID: userInfo["LOGIN_USER_ID"],
+                        LOGIN_MOBILE: userInfo["LOGIN_MOBILE"],
+                        CUST_NAME: userInfo["CUST_NAME"],
+                        DLR_CODE: userInfo["DLR_CODE"],
+                        DLR_SHORT_NAME: userInfo["DLR_SHORT_NAME"],
+                    };
+                    if (component == 1) {
+                        this.props.navigator.push({
+                            component: MaintainView,
+                            params
+                        })
+                    } else if (component == 2) {
+                        this.props.navigator.push({
+                            component: RepairView,
+                            params
+                        })
+                    } else if (component == 3) {
+                        this.props.navigator.push({
+                            component: DLRView,
+                            params
+                        })
+                    } else if (component == 4) {
+                        this.props.navigator.push({
+                            component: CommissionView,
+                            params
+                        })
+                    } else if (component == 5) {
+                        this.props.navigator.push({
+                            component: TestDriveHomeView,
+                            params
+                        })
+                    } else if (component == 6) {
+                        this.props.navigator.push({
+                            component: RescueView,
+                            params
+                        })
+                    }
+                default:
+                    return ;
+                }
+            }
+    }
+
     render(){
         return(
             <View style={{flex:1}}>
@@ -82,15 +180,35 @@ export default class BussinessView extends Component{
                                             return (
                                                 <CustomButton style={{flex:1,marginBottom:10}}
                                                               image={item.image}
-                                                              imageStyle={{marginTop:15}}
+                                                              imageStyle={{marginTop:15,maxWidth:80}}
                                                               key={index2}
                                                               textStyle={{marginTop:15,marginBottom:10,fontSize:12}}
                                                               text={item.text}
                                                               onPress={()=>{
-                                                                this.props.navigator.push({
-                                                                    component: item.component,
-                                                                })
-                                                              }}
+                                                                  switch (item.text){
+                                                                      case "保养预约":
+                                                                          this.handleCustomerClick(1)
+                                                                          break;
+                                                                      case "维修预约":
+                                                                          this.handleCustomerClick(2)
+                                                                          break;
+                                                                      case "4S店查询":
+                                                                          this.handleCustomerClick(3)
+                                                                          break;
+                                                                      case "代办预约":
+                                                                          this.handleCustomerClick(4)
+                                                                          break;
+                                                                      case "试驾预约":
+                                                                          this.handleCustomerClick(5)
+                                                                          break;
+                                                                      case "紧急救援":
+                                                                          this.handleCustomerClick(6)
+                                                                          break;
+                                                                      default:
+                                                                          return ;
+                                                                  }
+                                                              }
+                                                              }
                                                               secText={item.secText}
                                                               secTextStyle={{marginBottom:5,fontSize:12}}
                                                 />

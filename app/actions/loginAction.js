@@ -10,6 +10,8 @@ import UserDefaults from '../utils/GlobalStorage';
 
 import RegistView from '../pages/Login/RegistView';
 
+import JPush from 'jpush-react-native'
+
 export function updateLogin(value) {
     return {
         type: types.UPDATE_LOGIN,
@@ -115,6 +117,12 @@ export let loginSubim = (mobile, password,nav) =>{
             (data) => {
                 dispatch(updateLogin({'loginBtnDisabled': false,'loginBtnText':'登录'}));
                 if(data.RESULT_CODE == 0){
+                    JPush.setTags(data.DATA[0]["LOGIN_USER_ID"],()=>{
+                        console.log("设置tag成功")
+                    },()=>{
+                        console.log("设置tag失败")
+                    })
+
                     //登陆成功将用户信息写入缓存中
                     UserDefaults.setObject("userInfo",data.DATA[0]);
                     //根据用户信息查询用户的车辆信息

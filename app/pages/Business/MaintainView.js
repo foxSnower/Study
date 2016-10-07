@@ -108,8 +108,8 @@ class MaintainView extends Component {
         this.props.navigator.push({
             component:MaintainBookConfirmView,
             params:{
-                CUST_NAME:this.state.CUST_NAME,
-                CUST_MOBILE:this.state.CUST_MOBILE,
+                CUST_NAME:this.state.userName,
+                CUST_MOBILE:this.state.mobile,
                 DLR_SHORT_NAME:this.state.dlrInfo.DLR_SHORT_NAME,
                 DLR_CODE:this.state.dlrInfo.DLR_CODE,
                 MILE:this.state.mile,

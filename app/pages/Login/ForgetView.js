@@ -15,6 +15,7 @@ import NavBar from '../../components/DefaultNavBar';
 import LabelInput from '../../components/LabelInput';
 import Button from '../../components/Button';
 import LoginView from './LoginView'
+import Icon from 'react-native-vector-icons/Ionicons'
 import {updateLogin,getValidateCode,modifyUser} from '../../actions/loginAction';
 
 import UserDefaults from '../../utils/GlobalStorage'
@@ -161,7 +162,8 @@ class ForgetView extends Component {
                                           onPress={()=>{
                                               Linking.openURL(`tel:${GM_CALL}`);
                                           }}>
-                            <Text style={{marginTop: 10, marginRight: 10, marginBottom: 30}}>联系客服</Text>
+                            <Text style={{marginTop: 10, marginRight: 10, marginBottom: 30}}>
+                                <Icon name="ios-phone-portrait" size={14} color='#666'/> 联系客服</Text>
                         </TouchableOpacity>
 
                         <Button text="确 认"

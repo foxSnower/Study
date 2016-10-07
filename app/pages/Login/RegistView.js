@@ -16,6 +16,7 @@ import LabelInput from '../../components/LabelInput';
 import Button from '../../components/Button';
 import AgreementView from './AgreementView';    //注册协议
 import LoginView from './LoginView'
+import Icon from 'react-native-vector-icons/Ionicons'
 import {updateLogin, getValidateCode, addUser} from '../../actions/loginAction';
 
 import UserDefaults from '../../utils/GlobalStorage'
@@ -168,7 +169,9 @@ class RegistView extends Component {
                                           onPress={()=> {
                                               Linking.openURL(`tel:${GM_CALL}`);
                                           }}>
-                            <Text style={{marginTop: 10, marginRight: 10, marginBottom: 30}}>注册遇到问题,联系客服</Text>
+
+                            <Text style={{marginTop: 10, marginRight: 10, marginBottom: 30}}>
+                                <Icon name="ios-phone-portrait" size={14} color='#666'/> 注册遇到问题,联系客服</Text>
                         </TouchableOpacity>
 
                         <Button text="注  册"
@@ -180,6 +183,7 @@ class RegistView extends Component {
                                 }}
                                 onPress={this.reg}/>
                     </View>
+
                     <Button text="东风日产车主APP使用协议"
                             textStyle={{color: "#666", fontWeight: "300"}}
                             style={{marginBottom: 10, alignSelf: "center", backgroundColor: BGColor}}

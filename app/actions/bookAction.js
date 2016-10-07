@@ -37,9 +37,51 @@ export let checkCarInfo = (carSeriesCode,dlrCode,mileItem,callback) => {
     }
 }
 
+//代办预约接口
+export let handleCommissionBook = (post_json,callback) => {
+    return dispatch => {
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "AgentBook",
+                "PARAM": post_json
+            },
+            (data)=>{
+                console.log(data);
+                callback(data);
+            },
+            (err)=>{
+                console.log(err);
+            }
+        )
+    }
+}
+
+//根据专营名称和编码获取代办业务信息
+export let getCommissionInfo = ( dlrCode , dlrName , callback) => {
+    return dispatch => {
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "AgentServices",
+                "PARAM": {
+                    "DLR_CODE": dlrCode,
+                    "DLR_NAME": dlrName
+                }
+            },
+            (data)=>{
+                console.log(data);
+                callback(data);
+            },
+            (err)=>{
+                console.log(err);
+            }
+        )
+    }
+}
+
 //保养预约
 export let handleMaintainBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,_card_no,_dlrCode,_maintainMileage,_bookTime,callback) => {
-
     return dispatch =>{
         requestPOST(
             HANDLER,

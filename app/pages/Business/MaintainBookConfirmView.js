@@ -35,6 +35,8 @@ class MaintainBookConfirmView extends Component {
             WORKITEM_MONEY:'',
             COUNT : '',
             PART_FEE : '',
+            btnDisabled:false,
+            btnText:"立即预约"
         }
     }
     reloadDataSourec = (arrChange,arrCheck) => {
@@ -44,44 +46,23 @@ class MaintainBookConfirmView extends Component {
         })
     };
 
-    // forKeyTest = (data) => {
-    //     console.log(data);
-    //
-    //     if (data) {
-    //         const { dispatch,CUST_NAME,CUST_MOBILE,DLR_SHORT_NAME,DLR_CODE,MILE,CAR_NO,VIN,CAR_SERIES_CODE ,BOOK_TIME} = this.props;
-    //         // console.log(data["LOGIN_USER_ID"],data['CARD_NO'],DLR_SHORT_NAME,DLR_CODE,MILE,CAR_NO,VIN,CAR_SERIES_CODE);
-    //         // dispatch(testBook(data["LOGIN_USER_ID"],data['CARD_NO'],333,444,555,(ret) => {
-    //         //     console.log(ret)
-    //         // }));
-    //          dispatch(handleMaintainBook(data["LOGIN_USER_ID"],data["CUST_NAME"],data["CUST_TEL"],VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME, (ret) =>{
-    //              console.log(ret)
-    //          }))
-    //     } else {
-    //         console.log("没有获取到用户信息?")
-    //     }
-    // }
-
-//     data  => {
-//     console.log(1111111);
-//     console.log(data);
-//     //ly_Toast("1241324"+data,20000)
-//     if(data){
-//         //  dispatch(testBook(data["LOGIN_USER_ID"],CUST_NAME,CUST_MOBILE,VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME));
-//         //dispatch(handleMaintainBook(data["LOGIN_USER_ID"]),CUST_NAME,CUST_MOBILE,VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME)
-//     }else{
-//     console.log("没有获取到用户信息?")
-// }
-//
-// }
-
     maintainBook = () => {
+        alert(1)
         const { dispatch,CUST_NAME,CUST_MOBILE,DLR_SHORT_NAME,DLR_CODE,MILE,CAR_NO,VIN,CAR_SERIES_CODE } = this.props;
       //  UserDefaults.objectForKey("userInfo", (data) => { this.forKeyTest(data)})
+        this.setState({
+            btnDisabled:true,
+            btnText:"正在提交..."
+        })
         UserDefaults.objectForKey("userInfo", (data) => {
             if (data) {
                 const { dispatch,CUST_NAME,DLR_CODE,MILE,CAR_NO,VIN ,BOOK_TIME} = this.props;
                 dispatch(handleMaintainBook(data["LOGIN_USER_ID"],data["CUST_NAME"],data["CUST_TEL"],VIN,CAR_NO,data['CARD_NO'],DLR_CODE,MILE,BOOK_TIME, (res) =>{
-                    console.log(res)
+                    this.setState({
+                        btnDisabled:false,
+                        btnText:"立即预约"
+                    })
+                    ly_Toast(JSON.stringify(res))
                 }))
             } else {
                 console.log("没有获取到用户信息?")
@@ -204,7 +185,7 @@ class MaintainBookConfirmView extends Component {
         }else {
             const {CAR_SERIES_NAME} = this.props;
             return (
-                <View style={{flex: 1, backgroundColor: BGColor}}>
+                <View style={{flex: 1, backgroundColor: BGColor,paddingBottom:5}}>
                     <NavBar title="参考价格"
                             onBack={()=> {
                                 this.props.navigator.pop()
@@ -245,17 +226,19 @@ class MaintainBookConfirmView extends Component {
                                 />
                             </View>
                         </View>
-                        <Button text="立即预约"
+
+                    </ScrollView>
+                        <Button text={this.state.btnText}
                                 style={{
-                                    marginTop: 20,
+                                    marginTop: 5,
                                     width: Screen.width - 40,
                                     backgroundColor: BTNColor,
                                     alignSelf: "center",
                                     borderRadius: 8
                                 }}
+                                disabled={this.state.btnDisabled}
                                 onPress={this.maintainBook}
                         />
-                    </ScrollView>
 
                 </View>
             )
