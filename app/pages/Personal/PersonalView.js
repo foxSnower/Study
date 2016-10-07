@@ -1,3 +1,4 @@
+'use strict';
 import React,{Component} from 'react';
 import{
     Text,
@@ -9,11 +10,13 @@ import{
 import CustomButton from '../Home/CustomButton';
 import {Screen, pixel1} from '../../utils/CommonUtil';
 // page component
-import LoginView from '../../pages/Login/LoginView'
+import LoginView from '../../pages/Login/LoginView';
 // 消费查询
-import CostQuery from './CostQueryView'
+import CostQuery from './CostQueryView';
 // 我的预约
-import Order from './OrderView'
+import Order from './OrderView';
+// 我的消息
+import Message from './MessageView';
 
 
 const imageItems = [
@@ -54,7 +57,7 @@ const imageItems = [
             text:"我的消息",
             targetComponent:"我的消息",
             image:require("../../image/icon_uc_msg.png"),
-            component: LoginView
+            component: Message
         },
     ]
 ];
@@ -65,7 +68,7 @@ export default class PersonalView extends Component{
 
     renderMidItem(items){
         let aItems = [];
-        items.map((row,index)=>{
+        items.map((row, index)=>{
             aItems.push(
                 <View style={{flex:1,flexDirection:"row",backgroundColor:"#fff"}} key={index}>
                     {

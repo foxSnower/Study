@@ -1,40 +1,44 @@
-import React, {Component} from 'react'
+'use strict';
+import React, {Component} from 'react';
 
 import {
     StyleSheet,
     View,
     Text,
     Image
-} from 'react-native'
+} from 'react-native';
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 // util
 // action
-import {fetchOrderDetail} from '../../actions/personalAction'
+import {fetchOrderDetail} from '../../actions/personalAction';
 // common component
-import Button from '../../components/Button'
-import NavBar from '../../components/DefaultNavBar'
-import Loader from '../../components/LoaderView'
+import Button from '../../components/Button';
+import NavBar from '../../components/DefaultNavBar';
+import Loader from '../../components/LoaderView';
 
 class OrderView extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             loaded: false
-        }
+        };
     }
 
     componentDidMount() {
-        const {dispatch, personal, orderId} = this.props
+        const {dispatch, orderId} = this.props;
 
         // 
         fetchOrderDetail(orderId, (action)=> {
-            dispatch(action)
-        })
+            dispatch(action);
+            this.setState({
+                loaded: true
+            });
+        });
     }
 
     render() {
-        const {title, personal} = this.props
+        const {title, personal} = this.props;
         if(!this.state.loaded) {
             return (
                 <View style = {styles.container}>
@@ -59,9 +63,8 @@ class OrderView extends Component {
                 />
                 <Image
                     style = {styles.img}
-                    source = {personal.orderDetail.img}
+                    source = {{uri: personal.orderDetail.img}}
                 />
-                <Text>tet</Text>
             </View>
 
         )
