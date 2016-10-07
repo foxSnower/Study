@@ -1,3 +1,4 @@
+'use strict';
 import React, { Component, PropTypes } from 'react';
 import {
     StyleSheet,
@@ -9,7 +10,7 @@ import {
 
 export default class Item extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     static PropTypes = {
@@ -17,11 +18,21 @@ export default class Item extends Component {
         description: PropTypes.string,
         image: PropTypes.object,
         onPress: PropTypes.fun,
-        imgStyle: PropTypes.object
+        imgStyle: PropTypes.object,
+        rightText: PropTypes.string,
+        tip: PropTypes.string
     };
 
     render() {
-        const {title, description, image, onPress, imgStyle} = this.props;
+        const {
+            title, 
+            description, 
+            image, 
+            onPress, 
+            imgStyle, 
+            rightText, 
+            tip
+        } = this.props;
         return (
             <View>
                 <TouchableOpacity
@@ -32,6 +43,11 @@ export default class Item extends Component {
                         style = {[styles.thumbnail, imgStyle]}
                         source = {image}
                     />
+                    {
+                        tip ?
+                        <Text style = {styles.tip}>{tip}</Text> :
+                        null
+                    }
                     <View style = {styles.touch}>
                             <Text 
                                 style = {styles.title}
@@ -42,10 +58,14 @@ export default class Item extends Component {
                             >{description}</Text> : null
                         }
                     </View>
-                    <Image
-                        style = {styles.link}
-                        source = {require('../image/icon_link_go2.png')}
-                    />
+                    {
+                        rightText ? 
+                        <Text>{rightText}</Text> : 
+                        <Image
+                            style = {styles.link}
+                            source = {require('../image/icon_link_go2.png')}
+                        />
+                    }
                 </TouchableOpacity>
             </View>
         )
@@ -70,7 +90,26 @@ const styles = StyleSheet.create({
     thumbnail: {
         flex: 1,
         maxWidth: 50,
-        maxHeight: 50
+        width: 50,
+        maxHeight: 50,
+        height: 50,
+        position: 'relative'
+    },
+    tip: {
+        position: 'absolute',
+        left: 47,
+        top: 14,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 2,
+        paddingRight: 8,
+        paddingBottom: 2,
+        paddingLeft: 8,
+        backgroundColor: '#C90028',
+        borderRadius: 50,
+        color: '#fff',
+        fontSize: 12
     },
     touch: {
         flex: 4,
