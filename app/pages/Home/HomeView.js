@@ -25,6 +25,7 @@ import ActionDetailView from './ActionDetailView'
 import TestDriveHomeView from '../Business/TestDriveHomeView'
 import MaintainView from '../Business/MaintainView'
 import LoginView from '../Login/LoginView'
+import { IMGURL } from '../../utils/RequestURL'
 
 class HomeView extends Component {
 
@@ -36,7 +37,7 @@ class HomeView extends Component {
         const {dispatch} = this.props;
         dispatch(fetchAction());
         dispatch(fetchWeatherInfo());
-        //dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
+
         if(!Debug){
             deviceInfo.DEVICE_TOKEN = DeviceInfo.getUniqueID();
             deviceInfo.OS_VERSION = DeviceInfo.getSystemName()
@@ -59,6 +60,7 @@ class HomeView extends Component {
 
             UserDefaults.setObject('deviceInfo',deviceInfo);
         }
+        dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
 //         console.log("Device Unique ID", DeviceInfo.getUniqueID());  // e.g. FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
 // // * note this is IDFV on iOS so it will change if all apps from the current apps vendor have been previously uninstalled
 //
@@ -96,7 +98,12 @@ class HomeView extends Component {
 
     }
     render() {
-
+        const icon_index_activity = `${IMGURL}/images/icon_index_activity.png`;
+        const icon_index_wiki = `${IMGURL}/images/icon_index_wiki.png`;
+        const icon_index_maintain = `${IMGURL}/images/icon_index_maintain.png`;
+        const icon_index_test = `${IMGURL}/images/icon_index_test.png`;
+        const icon_index_saved = `${IMGURL}/images/icon_index_saved.png`;
+        const icon_index_message = `${IMGURL}/images/icon_index_message.png`;
         const {home} = this.props;
         return (
             <View style={styles.container}>
@@ -191,7 +198,7 @@ class HomeView extends Component {
                 <View style={{flex: 3, flexDirection: 'row', backgroundColor: '#f4f4f4'}}>
                     <CustomButton style={{flex: 1, backgroundColor: '#fff'}}
                                   text="劲爆活动"
-                                  image={require('../../image/icon_index_activity.png')}
+                                  image={{uri:icon_index_activity}}
                                   imageStyle={styles.imageStyle}
                                   textStyle={{marginTop:10,marginBottom:15}}
                                   onPress={() => {
@@ -203,7 +210,7 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1, backgroundColor: '#fff', marginLeft: pixel1}}
                                   text="用车百科"
                                   textStyle={{marginTop:10,marginBottom:15}}
-                                  image={require('../../image/icon_index_wiki.png')}
+                                  image={{uri:icon_index_wiki}}
                                   imageStyle={styles.imageStyle}
                                   onPress = {() => {
                                     this.props.navigator.push({
@@ -216,14 +223,16 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1}}
                                   text="保养预约"
                                   textStyle={styles.textStyle}
-                                  image={require('../../image/icon_index_maintain.png')}
+                                  image={{uri:icon_index_maintain}}
                                   onPress = {() => {
                                       UserDefaults.objectForKey("userInfo", (data)=> {
                                           if (!data || !data["LOGIN_USER_ID"]) {
                                               this.props.navigator.push({
                                                   component: LoginView
                                               })
-                                          } else {
+                                          }else if(parseInt(userInfo["USER_TYPE"]==1)){
+
+                                          } else if(parseInt(userInfo["USER_TYPE"]==2)){
                                               this.props.navigator.push({
                                                   component:MaintainView,
                                                   params:{
@@ -241,7 +250,7 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1}}
                                   text="预约驾驶"
                                   textStyle={styles.textStyle}
-                                  image={require('../../image/icon_index_test.png')}
+                                  image={{uri:icon_index_test}}
                                   onPress = {() => {
                                       this.props.navigator.push({
                                           component: TestDriveHomeView
@@ -251,12 +260,12 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1}}
                                   text="紧急救援"
                                   textStyle={styles.textStyle}
-                                  image={require('../../image/icon_index_saved.png')}
+                                  image={{uri:icon_index_saved}}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="我的消息"
                                   textStyle={styles.textStyle}
-                                  image={require('../../image/icon_index_message.png')}
+                                  image={{uri:icon_index_message}}
                     />
                 </View>
             </View>

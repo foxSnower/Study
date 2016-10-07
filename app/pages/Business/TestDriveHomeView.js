@@ -33,7 +33,7 @@ class TestDriveHomeView extends Component {
 
             <View style={styles.container}>
                 <NavBar onBack={()=> this.props.navigator.pop()}
-                        title={'预约试驾'}
+                        title={'试驾车型'}
                 />
 
                 {

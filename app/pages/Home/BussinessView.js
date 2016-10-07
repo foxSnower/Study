@@ -8,7 +8,6 @@ import{
 import NavBar from '../../components/DefaultNavBar';
 import CustomButton from './CustomButton';
 import DLRView from '../Business/DLRView'
-import TestView from '../Business/TestView'
 import TestDriveHomeView from '../Business/TestDriveHomeView'
 import CommissionView from '../Business/CommissionView'
 import UserDefaults from '../../utils/GlobalStorage'
@@ -17,6 +16,7 @@ import MaintainView from '../Business/MaintainView'
 import RescueView from '../Business/RescueView'
 import CarBindView from '../Personal/CarBindView'
 import RepairView from '../Business/RepairView'
+import {pixel1,BORDERColor} from '../../utils/CommonUtil'
 
 
 let userInfo = {};
@@ -80,9 +80,9 @@ export default class BussinessView extends Component{
 
     }
 
-    //保养预约
+
     handleCustomerClick = (component) => {
-        if(userInfo["USER_TYPE"]){
+        if(userInfo && userInfo["USER_TYPE"]){
             switch (parseInt(userInfo["USER_TYPE"])) {
                 case 0:    //未登录 紧急救援、4S点查询  试驾 不需要登录也可查看
                     if (component == 1 || component == 2 || component == 4) {
@@ -164,7 +164,11 @@ export default class BussinessView extends Component{
                 default:
                     return ;
                 }
-            }
+            }else{
+            this.props.navigator.push({
+                component: LoginView
+            })
+        }
     }
 
     render(){
@@ -174,7 +178,7 @@ export default class BussinessView extends Component{
                 {
                     customerButtonItems.map((row,index)=>{
                         return (
-                            <View style={{flex:1,flexDirection:"row"}} key={index}>
+                            <View style={{flex:1,flexDirection:"row",borderBottomWidth:pixel1,borderColor:BORDERColor}} key={index}>
                                     {
                                         row.map((item,index2)=>{
                                             return (
@@ -182,7 +186,7 @@ export default class BussinessView extends Component{
                                                               image={item.image}
                                                               imageStyle={{marginTop:15,maxWidth:80}}
                                                               key={index2}
-                                                              textStyle={{marginTop:15,marginBottom:10,fontSize:12}}
+                                                              textStyle={{marginBottom:10,fontSize:12}}
                                                               text={item.text}
                                                               onPress={()=>{
                                                                   switch (item.text){

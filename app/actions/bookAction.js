@@ -14,6 +14,42 @@ export function updateBook(val) {
     }
 }
 
+//获取当前地理位置信息
+export let getCurrentLocatiom = (callback) => {
+    return dispatch => {
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                requestPOST(
+                    HANDLER,
+                    {
+                        API_CODE : 'DLR_Info',
+                        PARAM : {
+                            LNG : Math.abs(position.coords.longitude).toString(),
+                            LAT : Math.abs(position.coords.latitude).toString(),
+                        },
+                        PAGE_SIZE : 5,
+                        PAGE_INDEX : 1,
+                        SORT : "DISTANCE2 ASC"
+                    },
+                    (data) => {
+                        //alert(JSON.stringify(data.DATA[0]))
+                        callback({dlrInfo:data.DATA[0],lng:Math.abs(position.coords.longitude).toString(),lat:Math.abs(position.coords.latitude).toString()})
+                    },
+                    (error) => {
+                        ly_Toast(error.message,1000,-20);
+                    }
+                )
+            },
+            (error) => {
+                ly_Toast(error.message,1000,-20)
+            },
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        );
+
+    }
+}
+
 //查询检查更换信息
 export let checkCarInfo = (carSeriesCode,dlrCode,mileItem,callback) => {
     return dispatch =>{
@@ -35,6 +71,28 @@ export let checkCarInfo = (carSeriesCode,dlrCode,mileItem,callback) => {
             }
         )
     }
+}
+
+//维修预约接口
+export let handleRepairBook = (post_json,callback) => {
+    alert(JSON.stringify(post_json))
+    return dispatch => {
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "RepairBook",
+                "PARAM": post_json
+            },
+            (data)=>{
+                console.log(data);
+                callback(data);
+            },
+            (err)=>{
+                console.log(err);
+            }
+        )
+    }
+
 }
 
 //代办预约接口

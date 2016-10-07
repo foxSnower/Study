@@ -239,7 +239,7 @@ class DLRView extends Component {
                     const { refDlr } = this.props;
                     if(refDlr){
                         let dlrInfo = {DLR_CODE:rowData.DLR_CODE,DLR_SHORT_NAME:rowData.DLR_SHORT_NAME};
-                        let secures = {DLR_SHORT_NAME:rowData.DLR_SHORT_NAME,URG_SOS_TEL:rowData.URG_SOS_TEL,INSURANCE_TEL:rowData.INSURANCE_TEL};
+                        let secures = {DLR_SHORT_NAME:rowData.DLR_SHORT_NAME,URG_SOS_TEL:rowData.URG_SOS_TEL,INSURANCE_TEL:rowData.INSURANCE_TEL,LINK_ADDR:rowData.LINK_ADDR};
                         switch(refDlr){
                             case "1":
                                 this.props.getDlrInfo(dlrInfo);

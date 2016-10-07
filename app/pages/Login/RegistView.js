@@ -120,6 +120,7 @@ class RegistView extends Component {
                                         textStyle={{width: 60}}
                                         placeholder="请输入手机号"
                                         max={11}
+                                        hasRightIcon={true}
                                         keyboardType="numeric"
                                         onChangeText={(text)=> {
                                             dispatch(updateLogin({reg_mobile: text}))
@@ -146,6 +147,7 @@ class RegistView extends Component {
 
                             <LabelInput label="密码"
                                         textStyle={{width: 60}}
+                                        hasRightIcon={true}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
                                         type={true}
                                         onChangeText={(text)=> {
@@ -157,6 +159,7 @@ class RegistView extends Component {
                                         textStyle={{width: 60}}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
                                         type={true}
+                                        hasRightIcon={true}
                                         onChangeText={(text)=> {
                                             dispatch(updateLogin({reg_repwd: text}))
                                         }}

@@ -117,7 +117,8 @@ export let loginSubim = (mobile, password,nav) =>{
             (data) => {
                 dispatch(updateLogin({'loginBtnDisabled': false,'loginBtnText':'登录'}));
                 if(data.RESULT_CODE == 0){
-                    JPush.setTags(data.DATA[0]["LOGIN_USER_ID"],()=>{
+                    //设置极光推送的tag标签
+                    JPush.setTags([data.DATA[0]["LOGIN_USER_ID"]],()=>{
                         console.log("设置tag成功")
                     },()=>{
                         console.log("设置tag失败")
@@ -147,7 +148,6 @@ export let loginSubim = (mobile, password,nav) =>{
                     ly_Toast("登录成功",1000,20,()=>{
                         nav.pop();
                     })
-
 
                     // UserDefaults.setObject("LOGIN_USER_ID",data.DATA[0].LOGIN_USER_ID);   //用户ID
                     // UserDefaults.setObject("USER_TYPE",data.DATA[0].USER_TYPE);     //用户类型 1 会员 2 潜客

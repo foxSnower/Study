@@ -14,13 +14,14 @@ import {
 
 import TabNavigator from 'react-native-tab-navigator';
 import HomeView from '../pages/HomeTestView'
-import FetchTestView from '../pages/FetchTestView'
 import MyView from '../pages/Home/HomeView'
 import PersonalView from '../pages/Personal/PersonalView'
 import BussinessView from '../pages/Home/BussinessView'
 
 import UserDefaults from '../utils/GlobalStorage'
 import LoginView from '../pages/Login/LoginView'
+
+import {ly_Toast} from '../utils/CommonUtil'
 
 const tabBarItems = [
     {
@@ -78,7 +79,7 @@ export default class TabBarView extends Component {
                 return false;
             } else {
                 this.lastBackPressed = Date.now();
-                ToastAndroid.show('再按一次退出应用');
+                ly_Toast('再按一次退出应用',1000,-20);
                 return true;
             }
         }

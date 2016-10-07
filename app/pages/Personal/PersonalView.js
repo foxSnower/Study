@@ -18,6 +18,8 @@ import Order from './OrderView';
 // 我的消息
 import Message from './MessageView';
 
+import { IMGURL } from '../../utils/RequestURL'
+
 
 const imageItems = [
     [
@@ -70,7 +72,7 @@ export default class PersonalView extends Component{
         let aItems = [];
         items.map((row, index)=>{
             aItems.push(
-                <View style={{flex:1,flexDirection:"row",backgroundColor:"#fff"}} key={index}>
+                <View style={{flexDirection:"row",backgroundColor:"#fff"}} key={index}>
                     {
                         row.map((item,index2)=>{
                             return(
@@ -96,6 +98,11 @@ export default class PersonalView extends Component{
     }
     
     render(){
+        const icon_go = `${IMGURL}/images/icon_link_go2.png`;
+        const icon_ip = `${IMGURL}/images/icon_uc_opinion.png`;
+        const icon_set = `${IMGURL}/images/icon_uc_set.png`;
+
+
         return(
             <View style={{backgroundColor:"#efeff4",flex:1}}>
                 <Image style={styles.backgroundImage}
@@ -123,17 +130,17 @@ export default class PersonalView extends Component{
                 <View style={styles.bottomItem}>
                     <TouchableOpacity style={styles.li} activeOpacity={0.7}>
                         <Image style={{width:20,height:20}}
-                               source={require("../../image/icon_uc_opinion.png")} />
-                        <Text style={{marginLeft:15}}>意见反馈
+                               source={{uri:icon_ip}} />
+                        <Text style={{marginLeft:15,flex:5}}>意见反馈
                         </Text>
-                        <Image style={styles.arrow} source={require("../../image/icon_link_go2.png")} />
+                        <Image style={styles.arrow} source={{uri:icon_go}} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.li} activeOpacity={0.7}>
                         <Image  style={{width:20,height:20}}
-                                source={require("../../image/icon_uc_set.png")} />
-                        <Text style={{marginLeft:15}}>设置
+                                source={{uri:icon_set}} />
+                        <Text style={{marginLeft:15,flex:5}}>设置
                         </Text>
-                        <Image style={styles.arrow} source={require("../../image/icon_link_go2.png")} />
+                        <Image style={styles.arrow} source={{uri:icon_go}} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -149,7 +156,7 @@ const styles = StyleSheet.create({
     },
     backgroundImage:{
         width:Screen.width,
-        height:200
+        height:Screen.height*0.4
     },
     avator:{
         width:80,
@@ -173,7 +180,7 @@ const styles = StyleSheet.create({
     point:{
         position:"absolute",
         right:-15,
-        top:25,
+        top:50,
         justifyContent:"center",
         height:30,
         backgroundColor:"rgba(0,0,0,0.3)",
@@ -196,15 +203,12 @@ const styles = StyleSheet.create({
         borderBottomWidth:1,
         borderBottomColor:"#eee",
         flexDirection:"row",
-        paddingLeft:15,
-        paddingRight:15,
-        paddingTop:10,
-        paddingBottom:10
+        height:50,
+        paddingLeft:20
     },
     arrow:{
-        position:"absolute",
-        right:15,
-        width:20,
+        right:20,
+        width:10,
         height:20,
     }
 })

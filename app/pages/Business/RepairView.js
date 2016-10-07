@@ -11,7 +11,8 @@ import {
     ListView,
     Alert,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    Platform
 } from 'react-native';
 
 import {connect} from 'react-redux'
@@ -29,7 +30,7 @@ import OrderView from '../../pages/Personal/OrderView'
 import ImagePicker from 'react-native-image-picker';
 
 
-import { handleCommissionBook } from '../../actions/bookAction'
+import { handleRepairBook } from '../../actions/bookAction'
 
 class RepairView extends Component {
     constructor(props) {
@@ -49,10 +50,14 @@ class RepairView extends Component {
             btnText:"立即预约",
             carInfoArr:[],
             carInfo:{},
-            addImage: icon_addImg
+            addImage: [icon_addImg],
+            faultDesc:'',
+            faultDescCount:0,
         }
 
     }
+
+
 
 
     //提交维修预约
@@ -91,8 +96,66 @@ class RepairView extends Component {
             return;
         }
         const { dispatch }  = this.props;
-
-
+        this.setState({
+            btnDisabled:true,
+            btnText:"正在提交..."
+        })
+        UserDefaults.objectForKey("userInfo",data => {
+            if(data){
+                if(data["CARD_NO"]==""){
+                    ly_Toast("您不是会员,不能申请维修");
+                    return;
+                }else{
+                    let post_img = [];
+                    if(this.state.addImage[0].indexOf("http")==-1){
+                        post_img.push(this.state.addImage[0])
+                    }else{
+                        post_img = [];
+                    }
+                    dispatch(handleRepairBook({
+                        ATTACHS: post_img,
+                        BOOK_TIME: this.state.strBookTime,
+                        CARD_NO:data["CARD_NO"],
+                        CAR_NO: this.state.carInfo.carNo,
+                        CA_CODE: "NA",
+                        CUST_NAME: this.state.userName,
+                        CUST_TEL: this.state.mobile,
+                        DLR_CODE: this.state.dlrInfo.DLR_CODE,
+                        LOGIN_USER_ID: data["LOGIN_USER_ID"],
+                        REMARK: this.state.faultDesc,
+                        VIN: this.state.carInfo.vin,
+                        rpDlrShortName: this.state.dlrInfo.DLR_SHORT_NAME,
+                },res => {
+                        this.setState({
+                            btnDisabled:false,
+                            btnText:"立即预约"
+                        })
+                        if(res.RESULT_CODE == 0){
+                            ly_Toast("预约成功",1000,20,()=>{
+                                this.props.navigator.push({
+                                    component:OrderView
+                                })
+                            });
+                        }else{
+                            Alert.alert("温馨提示",res.RESULT_DESC,
+                                [
+                                    {
+                                        text:"确定",
+                                        onPress:()=>{
+                                            this.props.navigator.push({
+                                                component:OrderView
+                                            })
+                                        }
+                                    }
+                                ]
+                            )
+                        }
+                    }))
+                }
+            }else{
+                console.log("没有获取到用户信息")
+            }
+        })
     }
 
     componentDidMount(){
@@ -130,6 +193,11 @@ class RepairView extends Component {
 
     selectPhotoTapped = () => {
         const options = {
+            title: '选择一张照片',
+            cancelButtonTitle: '取消',
+            takePhotoButtonTitle: '拍照',
+            chooseFromLibraryButtonTitle: '从相册选取',
+            allowsEditing: false,
             quality: 1.0,
             maxWidth: 500,
             maxHeight: 500,
@@ -139,7 +207,7 @@ class RepairView extends Component {
         };
 
         ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
+            alert('Response = ', response);
 
             if (response.didCancel) {
                 console.log('User cancelled photo picker');
@@ -170,8 +238,9 @@ class RepairView extends Component {
                 //     avatarSource: source,
                 //     base64Icon: `data:image/png;base64,${response.data}`
                 // });
+                alert(source)
                 this.setState({
-                    addImage: source
+                    addImage: [source]
                 })
             }
         });
@@ -193,9 +262,7 @@ class RepairView extends Component {
                 />
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                     <View style={{marginTop:15}}>
-                        <LabelInput style={{height:40,backgroundColor:"#fff",borderBottomWidth:pixel1,borderBottomColor:"#d9d9d9"}}
-                                    textStyle={{justifyContent:"center",width:60,color:"#2b2b2b",marginLeft:20,marginRight:20}}
-                                    inputStyle={{color:"#2b2b2b",justifyContent:"center"}}
+                        <LabelInput style={{height:40}}
                                     label="车主姓名"
                                     max={11}
                                     hasRightIcon={true}
@@ -207,9 +274,7 @@ class RepairView extends Component {
                                     }}
 
                         />
-                        <LabelInput style={{height:40,backgroundColor:"#fff",borderBottomWidth:1/pixelRation,borderBottomColor:"#d9d9d9"}}
-                                    textStyle={{justifyContent:"center",width:60,color:"#2b2b2b",marginLeft:20,marginRight:20}}
-                                    inputStyle={{color:"#2b2b2b",justifyContent:"center"}}
+                        <LabelInput style={{height:40}}
                                     label="手机号"
                                     max={11}
                                     hasRightIcon={true}
@@ -264,7 +329,7 @@ class RepairView extends Component {
                                 this.props.navigator.push({
                                     component:DLRView,
                                     params:{
-                                        refDlr:"3",
+                                        refDlr:"2",
                                         getDlrInfo:(dlrInfo)=>{
                                             this.setState({
                                                 dlrInfo
@@ -290,49 +355,56 @@ class RepairView extends Component {
                                         this.handleDateChange.bind(this)
                                     } />
                     </View>
-                    <View style={{marginTop:15}}>
-                        <Text style={{paddingLeft:10}}>
+                    <View style={{marginTop:10}}>
+                        <Text style={{marginLeft:10,marginBottom:10}}>
                             上传图片
                         </Text>
-                        <TouchableOpacity onPress={
+                        <TouchableOpacity style={{
+                            backgroundColor:"#fff",
+                            paddingLeft:10,
+                            paddingVertical:10
+                        }} onPress={
                             this.handleAddImg
                         }>
-                            <Image style={{width:50,height:50}} source={{uri:this.state.addImage}} />
+                            <Image style={styles.img} source={{uri:this.state.addImage[0]}} resizeMode={"cover"} />
                         </TouchableOpacity>
                     </View>
-                    <View style={{marginTop:15,paddingHorizontal:10}}>
-                        <Text style={{marginBottom:5}}>
-                            代办备注
+                    <View>
+                        <Text style={{margin:10}}>
+                            故障描述
                         </Text>
-                        <TextInput multiline={true}
-                                   maxLength={200}
-                                   style={[styles.textArea,{height: Math.max(35, this.state.height)}]}
-                                   clearButtonMode="while-editing"
-                                   placeholder="请输入代办备注"
-                                   enablesReturnKeyAutomatically={true}
-                                   keyboardType="default"
-                                   returnKeyType="done"
-                                   underlineColorAndroid="transparent"
-                                   onChange={(event)=>{
-                                       this.setState({
-                                           height: event.nativeEvent.contentSize.height,
-                                       })
-                                   }}
-                                   onChangeText={ (text) => {
+                        <View style={{backgroundColor:"#fff",padding:10}}>
+                            <TextInput multiline={true}
+                                       maxLength={200}
+                                       style={[styles.textArea,{height: Math.max(35, this.state.height)}]}
+                                       clearButtonMode="while-editing"
+                                       placeholder="请输入代办备注"
+                                       enablesReturnKeyAutomatically={true}
+                                       keyboardType="default"
+                                       returnKeyType="done"
+                                       underlineColorAndroid="transparent"
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               height: event.nativeEvent.contentSize.height,
+                                           })
+                                       }}
+                                       onChangeText={ (text) => {
 
-                                       this.setState({
-                                           commissionMark:text,
-                                           commissionMarkCount:text?text.length:0,
+                                           this.setState({
+                                               faultDesc:text,
+                                               faultDescCount:text?text.length:0,
 
-                                       })
-                                   }}
-                        >
+                                           })
+                                       }}
+                            >
 
-                        </TextInput>
-                        <Text style={{alignSelf:"flex-end"}}>{this.state.commissionMarkCount}/200</Text>
+                            </TextInput>
+                            <Text style={{alignSelf:"flex-end"}}>{this.state.faultDescCount}/200</Text>
+                        </View>
                     </View>
                 </ScrollView>
                 <Button text={this.state.btnText}
+                        disabled={this.state.btnDisabled}
                         style={{
                             marginTop:5,
                             marginBottom:6,
@@ -356,6 +428,15 @@ export default connect((state)=>{
 })(RepairView)
 
 const styles = StyleSheet.create({
+    img:{
+        width:50,
+        height:50,
+        borderWidth:2,
+        borderColor:BORDERColor,
+        flex:1,
+        backgroundColor:"#fff",
+        borderRadius:4,
+    },
     textArea:{
         flex:1,
         borderColor:BORDERColor,

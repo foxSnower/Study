@@ -50,8 +50,6 @@ class LoginView extends Component {
 
     render() {
         const {dispatch, login} = this.props;
-        //iosMode returnKeyType 确认键的内容 enablesReturnKeyAutomatically 为空时禁用按钮 clearButtonMode 右侧显示删除
-        //  const { label,labelStyle,textStyle,placeholder,keyboardType,inputType,max,iosMode}  = this.props;
         return (
             <View style={styles.page}>
                 <NavBar title="登录"
@@ -66,9 +64,7 @@ class LoginView extends Component {
                             this.props.navigator.pop();
                         }}
                 />
-                {/* <Image style={{flex:1,width:Screen.width,height:Screen.height}}
-                 source={require('../../image/0.jpg')}
-                 resizeMode="cover"> */}
+
 
                 <View style={{justifyContent: 'space-between', flex: 1}}>
                     <View>
@@ -77,6 +73,7 @@ class LoginView extends Component {
                                         label="手机号"
                                         placeholder="请输入用户名"
                                         max={11}
+                                        hasRightIcon={true}
                                         keyboardType="numeric"
                                         onChangeText={(text) => {
                                             dispatch(updateLogin({userID: text}))
@@ -87,6 +84,7 @@ class LoginView extends Component {
                             <LabelInput label="密码"
                                         placeholder="请输入密码"
                                         type={true}
+                                        hasRightIcon={true}
                                         onChangeText={(text) => {
                                             dispatch(updateLogin({password: text}))
                                         }}

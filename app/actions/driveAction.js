@@ -16,7 +16,7 @@ export function updateDrive(value) {
 }
 
 //试驾预约
-export let handleBook = (userId,custName,tel,dlrCode,bookTime,carSeriesCode,saCode) => {
+export let handleBook = (userId,custName,tel,dlrCode,bookTime,carSeriesCode,saCode,callback) => {
     return dispatch => {
         requestPOST(
             HANDLER,
@@ -33,13 +33,8 @@ export let handleBook = (userId,custName,tel,dlrCode,bookTime,carSeriesCode,saCo
                 }
             }     ,
             data => {
-                if(data.RESULT_CODE == '0'){
-                    ly_Toast(JSON.stringify(data.DATA))
-                    console.log(data);
-                }else{
-                    ly_Toast(data.RESULT_DESC)
-                }
-
+                callback(data);
+                console.log(data);
             },
             err => {
                 console.log(err);

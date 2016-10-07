@@ -113,6 +113,7 @@ class ForgetView extends Component {
                                         labelStyle={{width: 60}}
                                         placeholder="请输入手机号"
                                         defaultValue=""
+                                        hasRightIcon={true}
                                         max={11}
                                         keyboardType="numeric"
                                         onChangeText={(text)=> {
@@ -124,6 +125,7 @@ class ForgetView extends Component {
                                         labelStyle={{width: 60}}
                                         placeholder="请输入验证码"
                                         defaultValue=""
+                                        hasRightIcon={true}
                                         max={6}
                                         keyboardType="numeric"
                                         onChangeText={(text)=>{
@@ -135,6 +137,7 @@ class ForgetView extends Component {
                                         labelStyle={{width: 60}}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
                                         defaultValue=""
+                                        hasRightIcon={true}
                                         type={true}
                                         onChangeText={(text)=>{
                                             dispatch(updateLogin({find_pwd:text}))
@@ -145,6 +148,7 @@ class ForgetView extends Component {
                                         labelStyle={{width: 60}}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
                                         defaultValue=""
+                                        hasRightIcon={true}
                                         type={true}
                                         onChangeText={(text)=>{
                                             dispatch(updateLogin({find_repwd:text}))

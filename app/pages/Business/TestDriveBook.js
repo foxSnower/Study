@@ -21,6 +21,7 @@ import {IMGURL} from '../../utils/RequestURL'
 import DatePicker from '../../components/DatePicker'
 import { updateDrive ,handleBook} from '../../actions/driveAction';
 import DLRView from './DLRView'
+import OrderView from '../../pages/Personal/OrderView'
 
 class TestDriveBook extends Component {
     constructor(props){
@@ -33,7 +34,9 @@ class TestDriveBook extends Component {
             maxTime:setDefaultTime(60,false),
             minTime:setDefaultTime(2,false),
             userName:CUST_NAME,
-            mobile:LOGIN_MOBILE
+            mobile:LOGIN_MOBILE,
+            btnText:"提交预约",
+            btnDisabled:false
         }
     }
     componentDidMount(){
@@ -79,8 +82,26 @@ class TestDriveBook extends Component {
             DLR_CODE:this.state.dlrInfo.DLR_CODE,
             CAR_SERIES_CODE
         }
-        alert(JSON.stringify(obj))
-        dispatch(handleBook(LOGIN_USER_ID,this.state.userName,this.state.mobile,td_time,this.state.dlrInfo.DLR_CODE,CAR_SERIES_CODE,"NA"))
+        this.setState({
+            btnText:"正在提交...",
+            btnDisabled:true
+        })
+        dispatch(handleBook(LOGIN_USER_ID,this.state.userName,this.state.mobile,td_time,this.state.dlrInfo.DLR_CODE,CAR_SERIES_CODE,"NA",res =>{
+            this.setState({
+                btnText:"提交预约",
+                btnDisabled:false
+            })
+            if(res.RESULT_CODE == '0'){
+                ly_Toast("预约成功",2000,20,()=>{
+                    this.props.navigator.push({
+                        component:OrderView
+                    })
+                })
+
+            }else{
+                ly_Toast(data.RESULT_DESC)
+            }
+        }))
     }
 
     //监听时间控件值更新
@@ -107,9 +128,7 @@ class TestDriveBook extends Component {
                          minprice={MIN_GRUID_PRICE}
                          maxprice={MAX_GRUID_PRICE}></CarInfo>
                 <View style={{marginTop:15}}>
-                    <LabelInput style={{height:40,backgroundColor:"#fff",borderBottomWidth:1/pixelRation,borderBottomColor:"#d9d9d9"}}
-                                textStyle={{justifyContent:"center",width:60,color:"#2b2b2b",marginLeft:20,marginRight:20}}
-                                inputStyle={{color:"#2b2b2b",justifyContent:"center"}}
+                    <LabelInput style={{height:40}}
                                 label="车主姓名"
                                 max={11}
                                 hasRightIcon={true}
@@ -122,9 +141,7 @@ class TestDriveBook extends Component {
                                 }}
 
                     />
-                    <LabelInput style={{height:40,backgroundColor:"#fff",borderBottomWidth:1/pixelRation,borderBottomColor:"#d9d9d9"}}
-                                textStyle={{justifyContent:"center",width:60,color:"#2b2b2b",marginLeft:20,marginRight:20}}
-                                inputStyle={{color:"#2b2b2b",justifyContent:"center"}}
+                    <LabelInput style={{height:40}}
                                 label="手机号"
                                 hasRightIcon={true}
                                 max={11}
@@ -178,7 +195,8 @@ class TestDriveBook extends Component {
                                 } />
                 </View>
                 <Text style={{marginLeft:20,marginTop:15}}>温馨提示:预约时间需要提前一天预约</Text>
-                <Button text="提交预约"
+                <Button text={this.state.btnText}
+                        disabled={this.state.btnDisabled}
                         style={{
                             marginTop:20,
                             width: Screen.width - 40,

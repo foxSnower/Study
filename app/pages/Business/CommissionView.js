@@ -316,6 +316,7 @@ class CommissionView extends Component {
                 </View>
                 </ScrollView>
                 <Button text={this.state.btnText}
+                        disabled={this.state.btnDisabled}
                         style={{
                             marginTop:5,
                             marginBottom:6,
