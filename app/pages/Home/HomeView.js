@@ -36,7 +36,7 @@ class HomeView extends Component {
         const {dispatch} = this.props;
         dispatch(fetchAction());
         dispatch(fetchWeatherInfo());
-        dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
+        //dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
         if(!Debug){
             deviceInfo.DEVICE_TOKEN = DeviceInfo.getUniqueID();
             deviceInfo.OS_VERSION = DeviceInfo.getSystemName()

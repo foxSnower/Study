@@ -1,3 +1,4 @@
+'use strict'
 import * as types from '../actions/actionTypes'
 
 const initialiState = {
@@ -12,15 +13,15 @@ const initialiState = {
 export default function personal(state = initialiState, action = {}) {
     switch(action.type) {
         case types.COST_QUERY:
-            return Object({}, state, {
+            return Object.assign({}, state, {
                 costList: action.value
             })
         case types.FETCH_ORDER:
-            return Object({}, state, {
+            return Object.assign({}, state, {
                 orderList: action.value
             })
         case types.FETCH_ORDER_DETAIL:
-            return Object({}, state, {
+            return Object.assign({}, state, {
                 orderDetail: action.value
             })
         default:

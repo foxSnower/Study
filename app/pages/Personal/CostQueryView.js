@@ -36,6 +36,7 @@ class CostQuery extends Component {
         // 初始化组件内state，固定写法
         this.state = {
             loaded: false,
+            pageIndex: 1,
             dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2})
         };
         this.renderCell = this.renderCell.bind(this)
@@ -43,47 +44,6 @@ class CostQuery extends Component {
         this.refresh = this.refresh.bind(this)
         this.loadMore = this.loadMore.bind(this)
     }
-    // 下拉刷新
-    refresh() {
-        const {dispatch} = this.props
-        // 下拉必然是获取第一页数据
-        costQuery(userId, pageSize, 1, sort, (action)=> {
-            dispatch(action)
-            this.setState({
-                // 这里是将 action.value 这个数组作为了显示的数组
-                dataSource: this.state.dataSource.cloneWithRows(action.value)
-            })
-            pageIndex = 1;
-        })
-    }
-    // 上拉加载更多
-    loadMore() {
-        const {dispatch, personal} = this.props
-        // 同样是调用接口获取数据
-        costQuery(userId, pageSize, pageIndex, sort, (action)=> {
-            // 返回第 n+1 页数据
-            if(action === 'error') {
-                // 获取数据失败
-                ly_Toast('获取数据失败', 1000)
-            }else {
-                if(action.value.length === 0) {
-                    ly_Toast('没有更多数据了', 1000)
-                }else {
-                    // action.value 是新数据
-                    let ary = personal.costList
-                    action.value = action.value.concat(...ary)
-                    dispatch(action)
-                    this.setState({
-                        // 这里是将 action.value 这个数组作为了显示的数组
-                        dataSource: this.state.dataSource.cloneWithRows(action.value)
-                    })
-
-                    pageIndex += 1;
-                }
-            }
-        })
-    }
-
     componentDidMount() {
         const {dispatch} = this.props
         // refresh 就是加载第一页数据，所以直接调用就可以
@@ -93,14 +53,56 @@ class CostQuery extends Component {
                 // 加载第一页数据
                 this.refresh()
                 this.setState({
-                    loaded: true
+                    loaded: true,
+                    pageIndex: this.state.pageIndex+1
                 })
-                pageIndex += 1;
             }else {
+                // 应该提示，并可以跳转
                 ly_Toast('请登录后再来', 1000)
             }
         });
     }
+    // 下拉刷新
+    refresh() {
+        const {dispatch} = this.props
+        // 下拉必然是获取第一页数据
+        costQuery(userId, pageSize, 1, sort, (action)=> {
+            dispatch(action)
+            this.setState({
+                pageIndex: 2,
+                // 这里是将 action.value 这个数组作为了显示的数组
+                dataSource: this.state.dataSource.cloneWithRows(action.value)
+            })
+            //pageIndex = 1;
+        })
+    }
+    // 上拉加载更多
+    loadMore() {
+        const {dispatch, personal} = this.props
+        console.log(this.state.pageIndex)
+        // 同样是调用接口获取数据
+        costQuery(userId, pageSize, this.state.pageIndex, sort, (action)=> {
+            // 返回第 n+1 页数据
+            if(action === 'error') {
+                // 获取数据失败
+                ly_Toast('暂无数据', 1000)
+            }else {
+                // action.value 是新数据
+                let ary = personal.costList
+                //action.value = action.value.concat(...ary)
+                action.value.push(...ary)
+                dispatch(action)
+                this.setState({
+                    pageIndex: this.state.pageIndex + 1,
+                    // 这里是将 action.value 这个数组作为了显示的数组
+                    dataSource: this.state.dataSource.cloneWithRows(action.value)
+                })
+
+                //pageIndex += 1;
+            }
+        })
+    }
+
 
     // 单行样式，会传入数组中的单个元素
     renderCell(row) {
@@ -132,6 +134,7 @@ class CostQuery extends Component {
     }
 
     render() {
+        const {personal} = this.props
         if(!this.state.loaded) {
             return (
                 <View style = {styles.container}>
@@ -153,21 +156,24 @@ class CostQuery extends Component {
                         this.props.navigator.pop()
                     }}
                 />
-                <ListView
-                    dataSource = {this.state.dataSource}
-                    renderRow = {this.renderCell}
-                    refreshControl = {
-                        <RefreshControl
-                            refreshing = {false}
-                            onRefresh = {this.refresh}
-                            colors = {['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
-                            progressBackgroundColor = "#ffffff"
-                        />
-                    }
-                    onEndReachedThreshold = {5}
-                    onEndReached = {this.loadMore}
-                    enableEmptySections = {true}
-                />
+                {
+                    personal.costList.length !== 0 ?
+                    <ListView
+                        dataSource = {this.state.dataSource}
+                        renderRow = {this.renderCell}
+                        refreshControl = {
+                            <RefreshControl
+                                refreshing = {false}
+                                onRefresh = {this.refresh}
+                                colors = {['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
+                                progressBackgroundColor = "#ffffff"
+                            />
+                        }
+                        onEndReachedThreshold = {5}
+                        onEndReached = {this.loadMore}
+                        enableEmptySections = {true}
+                    /> : <Text> 数据为空 </Text>
+                }
             </View>
         )
     }
