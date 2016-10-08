@@ -4,6 +4,29 @@ import * as types from './actionTypes';
 import {requestPOST} from '../utils/FetchUtil';
 import {HANDLER, IMGURL} from '../utils/RequestURL';
 
+// 获取积分
+export let fetchScores = (userId, cb)=> {
+     requestPOST(HANDLER, {
+        "API_CODE":"MyScores",
+        "PARAM":{
+            "LOGIN_USER_ID": userId
+        }
+    }, (data) => {
+        console.log(data);
+        if(data["RESULT_CODE"] === '0') {
+            cb({
+                type: types.FETCH_SCORES,
+                value: data.DATA[0]
+            });
+        }else {
+            cb('error');
+        }
+    }, (err) => {
+        console.log(err);
+        cb('error');
+    });
+}
+
 // 消费查询，传入用户id，分为多少页，当前查询第几页，排序规则，回调
 export let costQuery = (userId, pageSize, index, cb)=> {
     console.log('这次请求的 index 是', index);
@@ -95,10 +118,10 @@ export let fetchMessage = (userId, cb)=> {
                 value: data.DATA
             });
         }else {
-            cb(data);
+            cb('error');
         }
     }, (err) => {
-        cb(err);
+        cb('error');
     });
 };
 

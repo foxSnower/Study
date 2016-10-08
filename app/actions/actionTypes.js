@@ -22,6 +22,8 @@ export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
 /*------------------
     我的
 ------------------*/
+// 获取首页积分
+export const FETCH_SCORES = "FETCH_SCORES";
 // 消费查询
 export const COST_QUERY = 'COST_QUERY';
 // 上拉加载更多

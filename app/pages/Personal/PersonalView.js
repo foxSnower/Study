@@ -6,10 +6,17 @@ import{
     StyleSheet,
     Image,
     TouchableOpacity,
-ScrollView
+    ScrollView
 }from 'react-native';
-import CustomButton from '../Home/CustomButton';
+import {connect} from 'react-redux';
+// utils
 import {Screen, pixel1} from '../../utils/CommonUtil';
+import UserDefaults from  '../../utils/GlobalStorage';
+import { IMGURL } from '../../utils/RequestURL';
+// action
+import {fetchScores} from '../../actions/personalAction';
+// sigle component
+import CustomButton from '../Home/CustomButton';
 // page component
 import LoginView from '../../pages/Login/LoginView';
 // 消费查询
@@ -18,10 +25,10 @@ import CostQuery from './CostQueryView';
 import Order from './OrderView';
 // 我的消息
 import Message from './MessageView';
-import CarBindView from './CarBindView'
-import UserDefaults from  '../../utils/GlobalStorage'
-
-import { IMGURL } from '../../utils/RequestURL'
+// 车辆绑定
+import CarBindView from './CarBindView';
+// 积分明细
+import Point from './PointView';
 
 const userType1 = [
     [
@@ -104,7 +111,8 @@ const userType2 = [
         },
     ]
 ];
-export default class PersonalView extends Component{
+
+class PersonalView extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -112,21 +120,31 @@ export default class PersonalView extends Component{
             userName:"",
             userPhone:'',
             userCardNo:'',
-        }
+        };
     }
 
     componentDidMount(){
+        const {dispatch} = this.props;
         UserDefaults.objectForKey("userInfo",userInfo => {
-            alert(JSON.stringify(userInfo))
+            //alert(JSON.stringify(userInfo))
             if(userInfo){
                 this.setState({
                     userType : userInfo["USER_TYPE"],
                     userName:userInfo["CUST_NAME"],
                     userPhone:userInfo["LOGIN_MOBILE"],
                     userCardNo:userInfo["CARD_NO"],
-                })
+                });
+
+                // 使用用户id 去查询积分
+                fetchScores(userInfo.LOGIN_USER_ID, (action)=> {
+                    if(action !== 'error') {
+                        dispatch(action);
+                    }else {
+                        alert('获取积分失败');
+                    }
+                });
             }
-        })
+        });
     }
 
     renderMidItem(){
@@ -164,20 +182,20 @@ export default class PersonalView extends Component{
                                 row.map((item,index2)=>{
                                     return(
                                         <CustomButton style={{flex:1}}
-                                                      imageStyle={styles.imageItems}
-                                                      image={item.image?item.image:null}
-                                                      key={index2}
-                                                      textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
-                                                      text={item.text}
-                                                      onPress={()=> {
-                                                          if(item.component){
-                                                              this.props.navigator.push({
-                                                                  component: item.component
-                                                              })
-                                                          }else{
-                                                              return
-                                                          }
-                                                      }}
+                                            imageStyle={styles.imageItems}
+                                            image={item.image?item.image:null}
+                                            key={index2}
+                                            textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
+                                            text={item.text}
+                                            onPress={()=> {
+                                                if(item.component){
+                                                    this.props.navigator.push({
+                                                        component: item.component
+                                                    })
+                                                }else{
+                                                    return
+                                                }
+                                            }}
                                         />
                                     )
                                 })
@@ -191,6 +209,9 @@ export default class PersonalView extends Component{
     }
     
     render(){
+        // 
+        const {personal} = this.props;
+
         const icon_go = `${IMGURL}/images/icon_link_go2.png`;
         const icon_ip = `${IMGURL}/images/icon_uc_opinion.png`;
         const icon_set = `${IMGURL}/images/icon_uc_set.png`;
@@ -198,53 +219,71 @@ export default class PersonalView extends Component{
 
         return(
             <ScrollView>
-            <View style={{backgroundColor:"#efeff4"}}>
-                <Image style={styles.backgroundImage}
-                       resizeMode="cover"
-                       source={require("../../image/uc_bg.jpg")} >
-                       <View style={styles.container}>
-                           <Image style={styles.avator}
-                                  source={require("../../image/uc_img.jpg")} />
-                           <Text style={styles.name}>
-                               {this.state.userType == 2 ? this.state.userName : `未入会`}
-                           </Text>
-                           <Text style={styles.type}>
-                               {this.state.userType == 2 ? `会员卡号: ${this.state.userCardNo}`:
-                                 `手机号: ${this.state.userPhone}`
-                               }
-
-                           </Text>
-                       </View>
-                       <View style={styles.point}>
-                            <Text style={styles.pointText}>
-                            积分:286 >
+                <View style={{backgroundColor:"#efeff4"}}>
+                    <Image style={styles.backgroundImage}
+                        resizeMode="cover"
+                        source={require("../../image/uc_bg.jpg")} >
+                        <View style={styles.container}>
+                            <Image style={styles.avator}
+                                source={require("../../image/uc_img.jpg")} 
+                            />
+                            <Text style={styles.name}>
+                                {this.state.userType == 2 ? this.state.userName : `未入会`}
                             </Text>
-                       </View>
-                </Image>
-                {
-                    this.renderMidItem()
-                }
-                <View style={styles.bottomItem}>
-                    <TouchableOpacity style={styles.li} activeOpacity={0.7}>
-                        <Image style={{width:20,height:20}}
-                               source={{uri:icon_ip}} />
-                        <Text style={{marginLeft:15,flex:5}}>意见反馈
-                        </Text>
-                        <Image style={styles.arrow} source={{uri:icon_go}} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.li} activeOpacity={0.7}>
-                        <Image  style={{width:20,height:20}}
-                                source={{uri:icon_set}} />
-                        <Text style={{marginLeft:15,flex:5}}>设置
-                        </Text>
-                        <Image style={styles.arrow} source={{uri:icon_go}} />
-                    </TouchableOpacity>
+                            <Text style={styles.type}>
+                                {this.state.userType == 2 ? `会员卡号: ${this.state.userCardNo}`:
+                                 `手机号: ${this.state.userPhone}`
+                                }
+                            </Text>
+                        </View>
+                        <TouchableOpacity 
+                            style={styles.point}
+                            onPress = {()=> {
+                                this.props.navigator.push({
+                                    component: Point
+                                })
+                            }}
+                        >
+                            <Image
+                                style = {{width: 14, height: 16}}
+                                source = {require('../../image/icon_core.png')}
+                            />
+                            <Text style={styles.pointText}>
+                                {`${personal.scores.TOTAL_POINT}  >`}
+                            </Text>
+                        </TouchableOpacity>
+                    </Image>
+                    {
+                        this.renderMidItem()
+                    }
+                    <View style={styles.bottomItem}>
+                        <TouchableOpacity style={styles.li} activeOpacity={0.7}>
+                            <Image style={{width:20,height:20}}
+                                   source={{uri:icon_ip}} />
+                            <Text style={{marginLeft:15,flex:5}}>意见反馈
+                            </Text>
+                            <Image style={styles.arrow} source={{uri:icon_go}} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.li} activeOpacity={0.7}>
+                            <Image  style={{width:20,height:20}}
+                                    source={{uri:icon_set}} />
+                            <Text style={{marginLeft:15,flex:5}}>设置
+                            </Text>
+                            <Image style={styles.arrow} source={{uri:icon_go}} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
             </ScrollView>
         )
     }
 }
+
+export default connect((state)=> {
+    const {personal} = state;
+    return {
+        personal
+    };
+})(PersonalView)
 
 const styles = StyleSheet.create({
     container:{
@@ -270,19 +309,22 @@ const styles = StyleSheet.create({
     type:{
         color:"#fff"
     },
-    pointText:{
-        color:"#fff",
-        paddingLeft:15,
-        paddingRight:15,
-    },
     point:{
+        flexDirection: "row",
         position:"absolute",
         right:-15,
         top:50,
+        paddingHorizontal: 10,
         justifyContent:"center",
+        alignItems: "center",
         height:30,
         backgroundColor:"rgba(0,0,0,0.4)",
         borderRadius:30
+    },
+    pointText:{
+        color:"#fff",
+        paddingLeft:10,
+        paddingRight:10
     },
     imageItems:{
         width:50,

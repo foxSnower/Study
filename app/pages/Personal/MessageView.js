@@ -46,6 +46,8 @@ class Message extends Component {
                     loaded: true,
                     dataSource: this.state.dataSource.cloneWithRows(action.value.MESSAGES)
                 });
+            }else {
+                alert('请求数据失败');
             }
         });
     }
