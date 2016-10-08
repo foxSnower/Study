@@ -46,7 +46,9 @@ export const FETCH_MESSAGE_LIST = 'FETCH_MESSAGE_LIST';
 export const ADD_IMAGE = 'ADD_IMAGE';
 // 意见反馈删除图片
 export const DELETE_IMAGE = 'DELETE_IMAGE';
-
+//试驾
 export const UPDATE_DRIVE = 'UPDATE_DRIVE';
-
+//4s专营店
 export const UPDATE_DLR = 'UPDATE_DLR';
+//车辆绑定
+export const UPDATE_CARBIND = 'UPDATE_CARBIND';

@@ -94,7 +94,10 @@ export let getValidateCode = (phone,reg,nav)=>{
                 }else if(data.RESULT_CODE == "1" && data.DATA == "未注册") {
                     ly_Toast(sucessMsg,3000,20,()=>{
                         nav.push({
-                            component:RegistView
+                            component:RegistView,
+                            params:{
+                                regPhone:phone
+                            }
                         });
                     })
                 }

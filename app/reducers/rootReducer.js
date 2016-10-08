@@ -10,6 +10,7 @@ import wiki from './wikiReducer'
 import drive from  './driveReducer'
 import dlr from './dlrReducer'
 import personal from './personalReducer'
+import carBind from './carBindReducer'
 
 export default rootReducer = combineReducers({
     fields,
@@ -18,5 +19,6 @@ export default rootReducer = combineReducers({
     wiki,
     drive,
     dlr,
-    personal
+    personal,
+    carBind
 })

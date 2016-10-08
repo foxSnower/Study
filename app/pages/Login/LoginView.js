@@ -26,17 +26,17 @@ class LoginView extends Component {
         //获取缓存中的手机号码
         const {dispatch}  = this.props;
         const {reg_mobile}  = this.props.login;
-        dispatch(updateLogin({userID:reg_mobile}))
+        dispatch(updateLogin({reg_mobile:reg_mobile}))
     }
 
     loginClick = () => {
         const {dispatch,navigator} = this.props;
-        const {userID, password} = this.props.login;
-        if(userID == undefined || userID ==""){
+        const {reg_mobile, password} = this.props.login;
+        if(reg_mobile == undefined || reg_mobile ==""){
             ly_Toast("请输入手机号",2000)
             return;
         }
-        if(!validateMobile(userID)){
+        if(!validateMobile(reg_mobile)){
             ly_Toast("手机格式不正确",2000);
             return;
         }
@@ -45,7 +45,7 @@ class LoginView extends Component {
             return;
         }
         dispatch(updateLogin({'loginBtnText':"登录中...",'loginBtnDisabled': true}));
-        dispatch(loginSubim(userID, password,navigator));
+        dispatch(loginSubim(reg_mobile, password,navigator));
     }
 
     render() {
@@ -71,18 +71,22 @@ class LoginView extends Component {
                         <View style={styles.container}>
                             <LabelInput ref="phone"
                                         label="手机号"
+                                        textStyle={{flex:1}}
+                                        inputStyle={{flex:3}}
                                         placeholder="请输入用户名"
                                         max={11}
                                         hasRightIcon={true}
                                         keyboardType="numeric"
                                         onChangeText={(text) => {
-                                            dispatch(updateLogin({userID: text}))
+                                            dispatch(updateLogin({reg_mobile: text}))
                                         }}
 
                             />
 
                             <LabelInput label="密码"
                                         placeholder="请输入密码"
+                                        textStyle={{flex:1}}
+                                        inputStyle={{flex:3}}
                                         type={true}
                                         hasRightIcon={true}
                                         onChangeText={(text) => {
@@ -148,7 +152,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         flex: 1,
         marginTop: 30,
-        paddingLeft: 20,
     },
     textStyle: {}
 })

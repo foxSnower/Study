@@ -6,6 +6,7 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
+    commentsList:[]
 };
 
 export default function drive(state = initialState, action = {}) {
