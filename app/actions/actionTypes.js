@@ -36,7 +36,9 @@ export const FETCH_ORDER_DETAIL = 'FETCH_ORDER_DETAIL';
 export const FETCH_MESSAGE = 'FETCH_MESSAGE';
 // 消息详情
 export const FETCH_MESSAGE_LIST = 'FETCH_MESSAGE_LIST';
-
+//试驾
 export const UPDATE_DRIVE = 'UPDATE_DRIVE';
-
+//4s专营店
 export const UPDATE_DLR = 'UPDATE_DLR';
+//车辆绑定
+export const UPDATE_CARBIND = 'UPDATE_CARBIND';

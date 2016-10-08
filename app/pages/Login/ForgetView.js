@@ -33,7 +33,7 @@ class ForgetView extends Component {
             ly_Toast("手机格式不正确");
             return;
         }else{
-            dispatch(getValidateCode(find_mobile,1))
+            dispatch(getValidateCode(find_mobile,1,this.props.navigator))
             // if(alreadyReg){
             //     this.props.navigator.push({
             //         component:LoginView
@@ -98,7 +98,7 @@ class ForgetView extends Component {
     render() {
 
         const {dispatch} = this.props;
-        const {findSendText,findSendBtnDisabled} = this.props.login;
+        const {findSendText,findSendBtnDisabled,reg_mobile} = this.props.login;
         return (
             <View style={styles.page}>
                 <NavBar title="找回密码"
@@ -110,10 +110,10 @@ class ForgetView extends Component {
                     <View>
                         <View style={styles.container}>
                             <LabelInput label="手机号"
-                                        labelStyle={{width: 60}}
+                                        textStyle={{flex:1}}
+                                        inputStyle={{flex:3}}
+                                        defaultValue={reg_mobile}
                                         placeholder="请输入手机号"
-                                        defaultValue=""
-                                        hasRightIcon={true}
                                         max={11}
                                         keyboardType="numeric"
                                         onChangeText={(text)=> {
@@ -121,45 +121,46 @@ class ForgetView extends Component {
                                         }}
                             >
                             </LabelInput>
-                            <LabelInput label="验证码"
-                                        labelStyle={{width: 60}}
-                                        placeholder="请输入验证码"
-                                        defaultValue=""
-                                        hasRightIcon={true}
-                                        max={6}
-                                        keyboardType="numeric"
-                                        onChangeText={(text)=>{
-                                            dispatch(updateLogin({find_valiCode:text}))
-                                        }}
-                            />
+                            <View style={{flexDirection:'row'}}>
+                                <LabelInput label="验证码"
+                                            style={{flex:1}}
+                                            placeholder="请输入验证码"
+                                            textStyle={{flex:1}}
+                                            inputStyle={{flex:3}}
+                                            max={6}
+                                            keyboardType="numeric"
+                                            onChangeText={(text)=> {
+                                                dispatch(updateLogin({find_valiCode:text}))
+                                            }}
+                                />
+                                <TouchableOpacity style={styles.validateBtn}
+                                                  onPress={this.getVailidateCode}
+                                                  disabled={findSendBtnDisabled}>
+                                    <Text style={{ textAlign: 'center'}}>{findSendText}</Text>
+                                </TouchableOpacity>
+                            </View>
 
                             <LabelInput label="新密码"
-                                        labelStyle={{width: 60}}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
-                                        defaultValue=""
-                                        hasRightIcon={true}
                                         type={true}
-                                        onChangeText={(text)=>{
-                                            dispatch(updateLogin({find_pwd:text}))
+                                        textStyle={{flex:1}}
+                                        inputStyle={{flex:3}}
+                                        onChangeText={(text)=> {
+                                            dispatch(updateLogin({find_pwd: text}))
                                         }}
                                         max={20}
                             />
                             <LabelInput label="确认密码"
-                                        labelStyle={{width: 60}}
+                                        textStyle={{flex:1}}
+                                        inputStyle={{flex:3}}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
-                                        defaultValue=""
-                                        hasRightIcon={true}
                                         type={true}
-                                        onChangeText={(text)=>{
+                                        onChangeText={(text)=> {
                                             dispatch(updateLogin({find_repwd:text}))
                                         }}
                                         max={20}
                             />
-                            <TouchableOpacity style={styles.validateBtn}
-                                              onPress={this.getVailidateCode}
-                                              disabled={findSendBtnDisabled}>
-                                <Text>{findSendText}</Text>
-                            </TouchableOpacity>
+
                         </View>
 
                         <TouchableOpacity style={styles.find}
@@ -204,15 +205,18 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         flex: 1,
         marginTop: 30,
-        paddingLeft: 30,
     },
     validateBtn: {
+        flex: 2,
         borderColor: "#b2b2b2",
         borderWidth: 1,
-        padding: 5,
         borderRadius: 10,
+        justifyContent:'center',
+        height: 35,
+        alignSelf: 'center',
+        marginRight: 15,
         position: "absolute",
-        top: 60,
+        top: 4,
         right: 10
     }
 })

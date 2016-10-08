@@ -48,7 +48,6 @@ class TestDriveBook extends Component {
             ly_Toast("请输入车主姓名");
             return;
         }
-        ly_Toast()
         if (this.state.mobile == null || this.state.mobile == '') {
             ly_Toast("请输入手机号");
             return;
@@ -97,7 +96,6 @@ class TestDriveBook extends Component {
                         component:OrderView
                     })
                 })
-
             }else{
                 ly_Toast(data.RESULT_DESC)
             }

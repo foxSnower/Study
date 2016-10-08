@@ -80,10 +80,14 @@ class RescueView extends Component {
                             this.props.navigator.pop()
                         }}
                 />
-                <WebView javaScriptEnabled={true}
+                <WebView ref={'webview'}
+                         automaticallyAdjustContentInsets={false}
+                         javaScriptEnabled={true}
                          domStorageEnabled={true}
-                    style={{height:Screen.height*0.4}} source={{html:html}}>
-                </WebView>
+                         decelerationRate="normal"
+                         startInLoadingState={true}
+                         scalesPageToFit={true}
+                         style={{height:Screen.height*0.4}} source={{html:html}} />
                 <View style={{marginTop:15}}>
                     <LabelRow title="当前位置"
                               hasRightIcon={true}

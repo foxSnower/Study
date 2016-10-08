@@ -22,6 +22,9 @@ import {updateLogin, getValidateCode, addUser} from '../../actions/loginAction';
 import UserDefaults from '../../utils/GlobalStorage'
 
 class RegistView extends Component {
+    constructor(props){
+        super(props);
+    }
     //获取验证码逻辑
     getVailidateCode = ()=> {
         const {dispatch, navigator} = this.props;
@@ -52,6 +55,12 @@ class RegistView extends Component {
         }, 1000)
     };
     //处理发送验证码按钮
+    componentDidMount(){
+        const {dispatch, regPhone } = this.props;
+        if(regPhone){
+            dispatch(updateLogin({reg_mobile: regPhone}))
+        }
+    }
 
 
     //注册
@@ -105,7 +114,7 @@ class RegistView extends Component {
     render() {
 
         const {dispatch} = this.props;
-        const {reSendText, reSendBtnDisabled} = this.props.login;
+        const {reSendText, reSendBtnDisabled,reg_mobile} = this.props.login;
         return (
             <View style={styles.page}>
                 <NavBar title="注册"
@@ -117,21 +126,23 @@ class RegistView extends Component {
                     <View>
                         <View style={styles.container}>
                             <LabelInput label="手机号"
-                                        textStyle={{width: 60}}
+                                        textStyle={{flex:1}}
+                                        inputStyle={{flex:3}}
+                                        defaultValue={reg_mobile}
                                         placeholder="请输入手机号"
                                         max={11}
-                                        hasRightIcon={true}
                                         keyboardType="numeric"
                                         onChangeText={(text)=> {
                                             dispatch(updateLogin({reg_mobile: text}))
                                         }}
                             >
                             </LabelInput>
-                            <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+                            <View style={{flexDirection:'row'}}>
                                 <LabelInput label="验证码"
-                                            style={{flex:3}}
-                                            textStyle={{width: 60}}
+                                            style={{flex:1}}
                                             placeholder="请输入验证码"
+                                            textStyle={{flex:1}}
+                                            inputStyle={{flex:3}}
                                             max={6}
                                             keyboardType="numeric"
                                             onChangeText={(text)=> {
@@ -146,20 +157,20 @@ class RegistView extends Component {
                             </View>
 
                             <LabelInput label="密码"
-                                        textStyle={{width: 60}}
-                                        hasRightIcon={true}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
                                         type={true}
+                                        textStyle={{flex:1}}
+                                        inputStyle={{flex:3}}
                                         onChangeText={(text)=> {
                                             dispatch(updateLogin({reg_pwd: text}))
                                         }}
                                         max={20}
                             />
                             <LabelInput label="确认密码"
-                                        textStyle={{width: 60}}
+                                        textStyle={{flex:1}}
+                                        inputStyle={{flex:3}}
                                         placeholder="请输入8-12位密码,可以包括数字和字母"
                                         type={true}
-                                        hasRightIcon={true}
                                         onChangeText={(text)=> {
                                             dispatch(updateLogin({reg_repwd: text}))
                                         }}
@@ -220,19 +231,18 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         flex: 1,
         marginTop: 30,
-        paddingLeft: 20,
     },
     validateBtn: {
-        flex: 1,
+        flex: 2,
         borderColor: "#b2b2b2",
         borderWidth: 1,
         borderRadius: 10,
         justifyContent:'center',
         height: 35,
         alignSelf: 'center',
-        marginRight: 15
-        // position: "absolute",
-        // top: 60,
-        // right: 10
+        marginRight: 15,
+        position: "absolute",
+        top: 4,
+        right: 10
     }
 })
