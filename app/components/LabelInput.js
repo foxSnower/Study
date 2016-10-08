@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
         flex:3
     },
     textInput: {
+        color:"#2b2b2b",
         flex: 5,
         marginLeft: 10,
         borderWidth: 0,

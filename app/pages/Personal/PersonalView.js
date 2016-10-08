@@ -5,7 +5,8 @@ import{
     View,
     StyleSheet,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+ScrollView
 }from 'react-native';
 import CustomButton from '../Home/CustomButton';
 import {Screen, pixel1} from '../../utils/CommonUtil';
@@ -17,11 +18,51 @@ import CostQuery from './CostQueryView';
 import Order from './OrderView';
 // 我的消息
 import Message from './MessageView';
+import CarBindView from './CarBindView'
+import UserDefaults from  '../../utils/GlobalStorage'
 
 import { IMGURL } from '../../utils/RequestURL'
 
+const userType1 = [
+    [
+        {
+            text:"车主绑定",
+            targetComponent:"车主绑定",
+            image:require("../../image/icon_uc_bind.png"),
+            component: CarBindView
+        },
+        {
+            text:"我的预约",
+            targetComponent:"我的预约",
+            image:require("../../image/icon_uc_book.png"),
+            component: Order
+        },
+        {
+            text:"我的活动",
+            targetComponent:"我的活动",
+            image:require("../../image/icon_uc_activity.png"),
+            component: LoginView
+        }
+    ],
+    [
+        {
+            text:"我的消息",
+            targetComponent:"我的消息",
+            image:require("../../image/icon_uc_msg.png"),
+            component: Message
+        },
+        {
+            text:"",
+            targetComponent:"我的消息",
+        },
+        {
+            text:"",
+            targetComponent:"我的消息",
+        }
+    ]
+];
 
-const imageItems = [
+const userType2 = [
     [
         {
             text:"车主信息",
@@ -66,35 +107,87 @@ const imageItems = [
 export default class PersonalView extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            userType : "",
+            userName:"",
+            userPhone:'',
+            userCardNo:'',
+        }
     }
 
-    renderMidItem(items){
-        let aItems = [];
-        items.map((row, index)=>{
-            aItems.push(
-                <View style={{flexDirection:"row",backgroundColor:"#fff"}} key={index}>
-                    {
-                        row.map((item,index2)=>{
-                            return(
-                                <CustomButton style={{flex:1}}
-                                              imageStyle={styles.imageItems}
-                                              image={item.image}
-                                              key={index2}
-                                              textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
-                                              text={item.text}
-                                              onPress={()=> {
-                                                this.props.navigator.push({
-                                                    component: item.component
-                                                })
-                                              }}
-                                />
-                            )
-                        })
-                    }
-                </View>
-            )
+    componentDidMount(){
+        UserDefaults.objectForKey("userInfo",userInfo => {
+            alert(JSON.stringify(userInfo))
+            if(userInfo){
+                this.setState({
+                    userType : userInfo["USER_TYPE"],
+                    userName:userInfo["CUST_NAME"],
+                    userPhone:userInfo["LOGIN_MOBILE"],
+                    userCardNo:userInfo["CARD_NO"],
+                })
+            }
         })
-        return aItems;
+    }
+
+    renderMidItem(){
+        let aItems = [];
+            if(this.state.userType == 2){
+                userType2.map((row, index)=>{
+                    aItems.push(
+                        <View style={{flexDirection:"row",backgroundColor:"#fff"}} key={index}>
+                            {
+                                row.map((item,index2)=>{
+                                    return(
+                                        <CustomButton style={{flex:1}}
+                                                      imageStyle={styles.imageItems}
+                                                      image={item.image}
+                                                      key={index2}
+                                                      textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
+                                                      text={item.text}
+                                                      onPress={()=> {
+                                                          this.props.navigator.push({
+                                                              component: item.component
+                                                          })
+                                                      }}
+                                        />
+                                    )
+                                })
+                            }
+                        </View>
+                    )
+                })
+            }else{
+                userType1.map((row, index)=>{
+                    aItems.push(
+                        <View style={{flexDirection:"row",backgroundColor:"#fff"}} key={index}>
+                            {
+                                row.map((item,index2)=>{
+                                    return(
+                                        <CustomButton style={{flex:1}}
+                                                      imageStyle={styles.imageItems}
+                                                      image={item.image?item.image:null}
+                                                      key={index2}
+                                                      textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
+                                                      text={item.text}
+                                                      onPress={()=> {
+                                                          if(item.component){
+                                                              this.props.navigator.push({
+                                                                  component: item.component
+                                                              })
+                                                          }else{
+                                                              return
+                                                          }
+                                                      }}
+                                        />
+                                    )
+                                })
+                            }
+                        </View>
+                    )
+                })
+            }
+            return aItems;
+
     }
     
     render(){
@@ -104,7 +197,8 @@ export default class PersonalView extends Component{
 
 
         return(
-            <View style={{backgroundColor:"#efeff4",flex:1}}>
+            <ScrollView>
+            <View style={{backgroundColor:"#efeff4"}}>
                 <Image style={styles.backgroundImage}
                        resizeMode="cover"
                        source={require("../../image/uc_bg.jpg")} >
@@ -112,10 +206,13 @@ export default class PersonalView extends Component{
                            <Image style={styles.avator}
                                   source={require("../../image/uc_img.jpg")} />
                            <Text style={styles.name}>
-                                李良
+                               {this.state.userType == 2 ? this.state.userName : `未入会`}
                            </Text>
                            <Text style={styles.type}>
-                               会员卡号:123524354325234
+                               {this.state.userType == 2 ? `会员卡号: ${this.state.userCardNo}`:
+                                 `手机号: ${this.state.userPhone}`
+                               }
+
                            </Text>
                        </View>
                        <View style={styles.point}>
@@ -125,7 +222,7 @@ export default class PersonalView extends Component{
                        </View>
                 </Image>
                 {
-                    this.renderMidItem(imageItems)
+                    this.renderMidItem()
                 }
                 <View style={styles.bottomItem}>
                     <TouchableOpacity style={styles.li} activeOpacity={0.7}>
@@ -144,6 +241,7 @@ export default class PersonalView extends Component{
                     </TouchableOpacity>
                 </View>
             </View>
+            </ScrollView>
         )
     }
 }
@@ -183,7 +281,7 @@ const styles = StyleSheet.create({
         top:50,
         justifyContent:"center",
         height:30,
-        backgroundColor:"rgba(0,0,0,0.3)",
+        backgroundColor:"rgba(0,0,0,0.4)",
         borderRadius:30
     },
     imageItems:{

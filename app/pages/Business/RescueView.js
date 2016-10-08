@@ -54,13 +54,13 @@ class RescueView extends Component {
                         <meta charset="utf-8">
                         <title></title>
                     </head>
-                    <body id="map" style="width:200px;height:200px;background:none">
+                    <body id="map" style="width:200px;height:200px;background:none;z-index:8888">
 					<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=IfMMDZYerUgh6yfc7MtKqOpCv0e4hMLd"></script>
                     <script>
                         initialize("113.156634", "23.385141")
                          /*初始化地图*/
                         var mp = null; //百度地图对象
-                        function initialize(lng, lat}) {
+                        function initialize(lng, lat) {
                             mp = new BMap.Map('map');
                             var point = new BMap.Point(lng, lat);
                             mp.centerAndZoom(point, 18);
@@ -72,7 +72,7 @@ class RescueView extends Component {
                     </body>
                     </html>
                     `
-        // alert(html)
+        alert(html)
         return(
             <View style={{backgroundColor:"#fff"}}>
                 <NavBar title="紧急救援"

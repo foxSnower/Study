@@ -25,6 +25,8 @@ import ActionDetailView from './ActionDetailView'
 import TestDriveHomeView from '../Business/TestDriveHomeView'
 import MaintainView from '../Business/MaintainView'
 import LoginView from '../Login/LoginView'
+import RescueView from '../Business/RescueView'
+import MessageListView from '../Personal/MessageListView'
 import { IMGURL } from '../../utils/RequestURL'
 
 class HomeView extends Component {
@@ -60,7 +62,7 @@ class HomeView extends Component {
 
             UserDefaults.setObject('deviceInfo',deviceInfo);
         }
-        dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
+       // dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
 //         console.log("Device Unique ID", DeviceInfo.getUniqueID());  // e.g. FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
 // // * note this is IDFV on iOS so it will change if all apps from the current apps vendor have been previously uninstalled
 //
@@ -98,12 +100,7 @@ class HomeView extends Component {
 
     }
     render() {
-        const icon_index_activity = `${IMGURL}/images/icon_index_activity.png`;
-        const icon_index_wiki = `${IMGURL}/images/icon_index_wiki.png`;
-        const icon_index_maintain = `${IMGURL}/images/icon_index_maintain.png`;
-        const icon_index_test = `${IMGURL}/images/icon_index_test.png`;
-        const icon_index_saved = `${IMGURL}/images/icon_index_saved.png`;
-        const icon_index_message = `${IMGURL}/images/icon_index_message.png`;
+
         const {home} = this.props;
         return (
             <View style={styles.container}>
@@ -193,12 +190,18 @@ class HomeView extends Component {
 
     //底部按钮
     addBottomView = () => {
+        // let icon_index_activity = `${IMGURL}/images/icon_index_activity.png`;
+        // let icon_index_wiki = `${IMGURL}/images/icon_index_wiki.png`;
+        // let icon_index_maintain = `${IMGURL}/images/icon_index_maintain.png`;
+        // let icon_index_test = `${IMGURL}/images/icon_index_test.png`;
+        // let icon_index_saved = `${IMGURL}/images/icon_index_saved.png`;
+        // let icon_index_message = `${IMGURL}/images/icon_index_message.png`;
         return (
             <View style={{flex: 1, backgroundColor: '#f4f4f4', marginTop: pixel1}}>
                 <View style={{flex: 3, flexDirection: 'row', backgroundColor: '#f4f4f4'}}>
                     <CustomButton style={{flex: 1, backgroundColor: '#fff'}}
                                   text="劲爆活动"
-                                  image={{uri:icon_index_activity}}
+                                  image={require("../../image/icon_index_activity.png")}
                                   imageStyle={styles.imageStyle}
                                   textStyle={{marginTop:10,marginBottom:15}}
                                   onPress={() => {
@@ -210,7 +213,7 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1, backgroundColor: '#fff', marginLeft: pixel1}}
                                   text="用车百科"
                                   textStyle={{marginTop:10,marginBottom:15}}
-                                  image={{uri:icon_index_wiki}}
+                                  image={require("../../image/icon_index_wiki.png")}
                                   imageStyle={styles.imageStyle}
                                   onPress = {() => {
                                     this.props.navigator.push({
@@ -223,16 +226,15 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1}}
                                   text="保养预约"
                                   textStyle={styles.textStyle}
-                                  image={{uri:icon_index_maintain}}
+                                  image={require("../../image/icon_index_maintain.png")}
                                   onPress = {() => {
                                       UserDefaults.objectForKey("userInfo", (data)=> {
+                                          alert(data)
                                           if (!data || !data["LOGIN_USER_ID"]) {
                                               this.props.navigator.push({
                                                   component: LoginView
                                               })
-                                          }else if(parseInt(userInfo["USER_TYPE"]==1)){
-
-                                          } else if(parseInt(userInfo["USER_TYPE"]==2)){
+                                          }else{
                                               this.props.navigator.push({
                                                   component:MaintainView,
                                                   params:{
@@ -250,7 +252,7 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1}}
                                   text="预约驾驶"
                                   textStyle={styles.textStyle}
-                                  image={{uri:icon_index_test}}
+                                  image={require("../../image/icon_index_test.png")}
                                   onPress = {() => {
                                       this.props.navigator.push({
                                           component: TestDriveHomeView
@@ -260,12 +262,30 @@ class HomeView extends Component {
                     <CustomButton style={{flex: 1}}
                                   text="紧急救援"
                                   textStyle={styles.textStyle}
-                                  image={{uri:icon_index_saved}}
+                                  image={require("../../image/icon_index_saved.png")}
+                                  onPress={()=>{
+                                      this.props.navigator.push({
+                                          component: RescueView
+                                      })
+                                  }}
                     />
                     <CustomButton style={{flex: 1}}
                                   text="我的消息"
                                   textStyle={styles.textStyle}
-                                  image={{uri:icon_index_message}}
+                                  image={require("../../image/icon_index_message.png")}
+                                  onPress = {() => {
+                                      UserDefaults.objectForKey("userInfo", (data)=> {
+                                          if (!data || !data["LOGIN_USER_ID"]) {
+                                              this.props.navigator.push({
+                                                  component: LoginView
+                                              })
+                                          }else{
+                                              this.props.navigator.push({
+                                                  component:MessageListView
+                                              })
+                                          }
+                                      });
+                                  }}
                     />
                 </View>
             </View>
@@ -302,7 +322,6 @@ const styles = StyleSheet.create({
         marginRight: 2,
         marginTop: 2
     },
-
     customActiveDot: {
         backgroundColor: '#fc4806',
         height: 1.5,

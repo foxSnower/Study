@@ -35,16 +35,15 @@ class CarBindView extends Component {
         const icon_car = `${IMGURL}/images/icon_wiki_question.png`;
         return(
             <View style={{flex:1,backgroundColor:BGColor}}>
-                <NavBar title="车辆绑定"
+                <NavBar title="车主绑定"
                         onBack={()=>{
                             this.props.navigator.pop()
                         }}
                 />
                 <View style={{marginTop:15}}>
-                    <LabelInput style={{height:40,backgroundColor:"#fff",borderBottomWidth:1/pixelRation,borderBottomColor:"#d9d9d9"}}
-                                textStyle={{justifyContent:"center",width:60,color:"#2b2b2b",marginLeft:20,marginRight:20}}
-                                inputStyle={{color:"#2b2b2b",justifyContent:"center"}}
+                    <LabelInput style={{height:40}}
                                 label="车主姓名"
+                                placeholder="请输入车主姓名"
                                 max={11}
                                 hasRightIcon={true}
                                 defaultValue={CUST_NAME}

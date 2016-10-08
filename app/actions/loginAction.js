@@ -9,7 +9,9 @@ import {ly_Toast} from '../utils/CommonUtil';
 import UserDefaults from '../utils/GlobalStorage';
 
 import RegistView from '../pages/Login/RegistView';
+import CarBindView from '../pages/Personal/CarBindView'
 
+import {Alert} from 'react-native'
 import JPush from 'jpush-react-native'
 
 export function updateLogin(value) {
@@ -144,9 +146,35 @@ export let loginSubim = (mobile, password,nav) =>{
                         err => {
                             console.log(err)
                         }
-                    )
+                    );
+
                     ly_Toast("登录成功",1000,20,()=>{
-                        nav.pop();
+                        //如果是没有绑定车辆的用户  给一个引导
+                        if(data.DATA[0]["USER_TYPE"]==1){
+                            Alert.alert("温馨提示","尊敬的客户您好，为了让您正常使用本系统，建议绑定车辆，绑定后可享受以下服务: \n" +
+                                "1、享受在线预约服务; \n"+
+                                "2、享受会员折扣及积分; \n"+
+                                "3、享受消息提醒服务; \n",
+                                [
+                                    {
+                                        text:"立即绑定",
+                                        onPress:()=>{
+                                            nav.push({
+                                                component:CarBindView
+                                            })
+                                        }
+                                    },
+                                    {
+                                        text:"暂不绑定",
+                                        onPress:()=>{
+                                            nav.pop();
+                                        }
+                                    }
+                                ]
+                            )
+                        }else{
+                            nav.pop();
+                        }
                     })
 
                     // UserDefaults.setObject("LOGIN_USER_ID",data.DATA[0].LOGIN_USER_ID);   //用户ID

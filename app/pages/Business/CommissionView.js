@@ -360,8 +360,8 @@ const styles = StyleSheet.create({
         borderWidth:pixel1,
         borderRadius:10,
         backgroundColor:"#fff",
-        paddingVertical:5,
-        paddingHorizontal:5
+        paddingVertical:15,
+        paddingHorizontal:15
 
     }
 })
