@@ -6,15 +6,18 @@ import{
     StyleSheet,
     Image,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Platform
 }from 'react-native';
+// third modules
 import {connect} from 'react-redux';
+import ImagePicker from 'react-native-image-picker';
 // utils
 import {Screen, pixel1} from '../../utils/CommonUtil';
 import UserDefaults from  '../../utils/GlobalStorage';
 import { IMGURL } from '../../utils/RequestURL';
 // action
-import {fetchScores} from '../../actions/personalAction';
+import {fetchScores, fetchAvatar, changeAvatar} from '../../actions/personalAction';
 // sigle component
 import CustomButton from '../Home/CustomButton';
 // page component
@@ -119,8 +122,10 @@ class PersonalView extends Component{
             userType : "",
             userName:"",
             userPhone:'',
-            userCardNo:'',
+            userCardNo:''
         };
+
+        this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
     }
 
     componentDidMount(){
@@ -132,7 +137,7 @@ class PersonalView extends Component{
                     userType : userInfo["USER_TYPE"],
                     userName:userInfo["CUST_NAME"],
                     userPhone:userInfo["LOGIN_MOBILE"],
-                    userCardNo:userInfo["CARD_NO"],
+                    userCardNo:userInfo["CARD_NO"]
                 });
 
                 // 使用用户id 去查询积分
@@ -143,6 +148,12 @@ class PersonalView extends Component{
                         alert('获取积分失败');
                     }
                 });
+            }
+        });
+
+        UserDefaults.objectForKey("avatar", source => {
+            if(source){
+                dispatch(fetchAvatar(source));
             }
         });
     }
@@ -157,16 +168,16 @@ class PersonalView extends Component{
                                 row.map((item,index2)=>{
                                     return(
                                         <CustomButton style={{flex:1}}
-                                                      imageStyle={styles.imageItems}
-                                                      image={item.image}
-                                                      key={index2}
-                                                      textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
-                                                      text={item.text}
-                                                      onPress={()=> {
-                                                          this.props.navigator.push({
-                                                              component: item.component
-                                                          })
-                                                      }}
+                                            imageStyle={styles.imageItems}
+                                            image={item.image}
+                                            key={index2}
+                                            textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
+                                            text={item.text}
+                                            onPress={()=> {
+                                                this.props.navigator.push({
+                                                    component: item.component
+                                                })
+                                            }}
                                         />
                                     )
                                 })
@@ -205,8 +216,52 @@ class PersonalView extends Component{
                 })
             }
             return aItems;
-
     }
+
+    // 选择照片
+    selectPhotoTapped() {
+        const {dispatch} = this.props;
+        const options = {
+            title: '选择一张照片',
+            cancelButtonTitle: '取消',
+            takePhotoButtonTitle: '拍照',
+            chooseFromLibraryButtonTitle: '从相册选取',
+            allowsEditing: false,
+            quality: 1.0,
+            maxWidth: 500,
+            maxHeight: 500,
+            storageOptions: {
+                skipBackup: true
+            }
+        };
+        // showImagePicker 显示模态框方法，接收一个参数配置显示的文本
+        ImagePicker.showImagePicker(options, (response) => {
+
+            if (response.didCancel) {
+                console.log('User cancelled photo picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                //
+                var source;
+
+                if (Platform.OS === 'android') {
+                    source = {uri: response.uri, isStatic: true};
+                } else {
+                    source = {uri: response.uri.replace('file://', ''), isStatic: true};
+                }
+
+                dispatch(changeAvatar(source))
+                // 写入本地存储
+                UserDefaults.setObject('avatar', source);
+            }
+        });
+    };
     
     render(){
         // 
@@ -224,9 +279,13 @@ class PersonalView extends Component{
                         resizeMode="cover"
                         source={require("../../image/uc_bg.jpg")} >
                         <View style={styles.container}>
-                            <Image style={styles.avator}
-                                source={require("../../image/uc_img.jpg")} 
-                            />
+                            <TouchableOpacity
+                                onPress = {this.selectPhotoTapped}
+                            >
+                                <Image style={styles.avator}
+                                    source={personal.avatar} 
+                                />
+                            </TouchableOpacity>
                             <Text style={styles.name}>
                                 {this.state.userType == 2 ? this.state.userName : `未入会`}
                             </Text>

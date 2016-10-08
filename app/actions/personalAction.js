@@ -4,6 +4,20 @@ import * as types from './actionTypes';
 import {requestPOST} from '../utils/FetchUtil';
 import {HANDLER, IMGURL} from '../utils/RequestURL';
 
+// 获取用户头像
+export let fetchAvatar = (source)=> {
+    return {
+        type: types.FETCH_AVATAR,
+        value: source
+    };
+};
+// 修改头像 
+export let changeAvatar = (source)=> {
+    return {
+        type: types.CHANGE_AVATAR,
+        value: source
+    };
+};
 // 获取积分
 export let fetchScores = (userId, cb)=> {
      requestPOST(HANDLER, {
