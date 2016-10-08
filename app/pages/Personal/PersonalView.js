@@ -32,6 +32,8 @@ import Message from './MessageView';
 import CarBindView from './CarBindView';
 // 积分明细
 import Point from './PointView';
+// 意见反馈
+import Suggest from './SuggestView';
 
 const userType1 = [
     [
@@ -316,7 +318,15 @@ class PersonalView extends Component{
                         this.renderMidItem()
                     }
                     <View style={styles.bottomItem}>
-                        <TouchableOpacity style={styles.li} activeOpacity={0.7}>
+                        <TouchableOpacity 
+                            style={styles.li} 
+                            activeOpacity={0.7}
+                            onPress = {()=> {
+                                this.props.navigator.push({
+                                    component: Suggest
+                                })
+                            }}
+                        >
                             <Image style={{width:20,height:20}}
                                    source={{uri:icon_ip}} />
                             <Text style={{marginLeft:15,flex:5}}>意见反馈

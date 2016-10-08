@@ -166,3 +166,18 @@ export let fetchMessageList = (type, userId, cb)=> {
         cb('error');
     });
 };
+
+// 意见反馈上传图片
+export let addImage = (obj)=> {
+    return {
+        type: types.ADD_IMAGE,
+        value: obj
+    };
+};
+// 意见反馈删除图片
+export let deleteImage = (index)=> {
+    return {
+        type: types.DELETE_IMAGE,
+        value: index
+    };
+};

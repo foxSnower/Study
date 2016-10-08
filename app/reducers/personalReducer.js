@@ -17,7 +17,14 @@ const initialiState = {
     // 消息
     messageType: [],
     // 消息详情列表
-    messageList: []
+    messageList: [],
+    // 上传图片
+    img: {
+        // 显示用数组
+        showAry: [],
+        // 上传用数组
+        uploadAry: []
+    }
 };
 
 export default function personal(state = initialiState, action = {}) {
@@ -60,6 +67,32 @@ export default function personal(state = initialiState, action = {}) {
         case types.FETCH_MESSAGE_LIST:
             return Object.assign({}, state, {
                 messageList: action.value
+            });
+        // 上传图片
+        case types.ADD_IMAGE:
+            return Object.assign({}, state, {
+                img: {
+                    showAry: action.value.showAry,
+                    uploadAry: action.value.uploadAry
+                }
+            });
+        // 删除图片
+        case types.DELETE_IMAGE:
+            // 这里如果要删除元素，也不能直接删除，而是需要截取两端的
+            let showAry = [
+                ...state.img.showAry.slice(0, action.value),
+                ...state.img.showAry.slice(action.value+1)
+            ];
+            let uploadAry = [
+                ...state.img.uploadAry.slice(0, action.value),
+                ...state.img.uploadAry.slice(action.value+1)
+            ];
+            let img = {
+                showAry,
+                uploadAry
+            };
+            return Object.assign({}, state, {
+                img
             });
         default:
             return state;

@@ -42,6 +42,10 @@ export const FETCH_ORDER_DETAIL = 'FETCH_ORDER_DETAIL';
 export const FETCH_MESSAGE = 'FETCH_MESSAGE';
 // 消息详情
 export const FETCH_MESSAGE_LIST = 'FETCH_MESSAGE_LIST';
+// 意见反馈上传图片
+export const ADD_IMAGE = 'ADD_IMAGE';
+// 意见反馈删除图片
+export const DELETE_IMAGE = 'DELETE_IMAGE';
 
 export const UPDATE_DRIVE = 'UPDATE_DRIVE';
 
