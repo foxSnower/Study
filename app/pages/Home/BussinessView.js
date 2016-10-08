@@ -157,12 +157,30 @@ export default class BussinessView extends Component{
                         })
                     } else if (component == 6) {
                         this.props.navigator.push({
-                            component: BaiduMapDemo,
+                            component: RescueView,
                             params
                         })
                     }
+                    break;
                 default:
-                    return ;
+                    if (component == 1 || component == 2 || component == 4) {
+                        this.props.navigator.push({
+                            component: LoginView
+                        })
+                    }else if (component == 3) {
+                        this.props.navigator.push({
+                            component: DLRView
+                        })
+                    } else if (component == 5) {
+                        this.props.navigator.push({
+                            component: TestDriveHomeView
+                        })
+                    } else if (component == 6) {
+                        this.props.navigator.push({
+                            component: RescueView
+                        })
+                    }
+                    break;
                 }
             }else{
             this.props.navigator.push({

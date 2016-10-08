@@ -33,8 +33,11 @@ export let handleBook = (userId,custName,tel,dlrCode,bookTime,carSeriesCode,saCo
                 }
             }     ,
             data => {
-                callback(data);
-                console.log(data);
+                if(data.RESULT_CODE == "0"){
+                    callback(data);
+                }else{
+                    ly_Toast(data.RESULT_DESC)
+                }
             },
             err => {
                 console.log(err);
@@ -58,18 +61,21 @@ export let getCarTypes = ()=> {
                 }
             },
             (data)=> {
+                if(data.RESULT_CODE == "0"){
+                    if (data.DATA.length > 0) {
+                        dispatch(updateDrive(dataMetalWork(data.DATA)));
+                        setTimeout(function () {
+                            dispatch(updateDrive({loaded: 1}))
+                        },1000)
 
-                if (data.DATA.length > 0) {
-                    dispatch(updateDrive(dataMetalWork(data.DATA)));
-                    setTimeout(function () {
-                        dispatch(updateDrive({loaded: 1}))
-                    },1000)
-
-                } else {
-                    setTimeout(function () {
-                        dispatch(updateDrive({loaded: 1}))
-                        ly_Toast("暂无数据")
-                    },1000)
+                    } else {
+                        setTimeout(function () {
+                            dispatch(updateDrive({loaded: 1}))
+                            ly_Toast("暂无数据")
+                        },1000)
+                    }
+                }else{
+                    ly_Toast(data.RESULT_DESC)
                 }
 
             },
@@ -89,12 +95,16 @@ export let getCommentList = (code,pageIndex,listCallBack)=>{
                 "PARAM": {
                     CAR_SERIES_CODE: code
                 },
-                "PAGE_SIZE": 5,
+                "PAGE_SIZE": 10,
                 "PAGE_INDEX": pageIndex,
                 "SORT": " CREATED_DATE DESC"
             },
             (data)=>{
-                listCallBack(data);
+                if(data.RESULT_CODE == "0"){
+                    listCallBack(data);
+                }else{
+                    ly_Toast(data.RESULT_DESC)
+                }
             },
             (err)=>{
                 alert(err.message)

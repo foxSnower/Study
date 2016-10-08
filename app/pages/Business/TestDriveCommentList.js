@@ -86,12 +86,12 @@ class TestDriveCommentList extends Component {
         }
         return (
             <View style={styles.cellView}>
-                <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                    <Text style={{color:BTNColor}}>{rowData.CUST_NAME}</Text>
+                <View style={{flexDirection:"row",justifyContent:"space-between",paddingVertical:6}}>
+                    <Text style={{color:BTNColor}}>{`${rowData.CUST_NAME.charAt(0)}**`}</Text>
                     <Text style={{marginLeft:20,color:"green"}}>{rowData.COMMENT_TIME}</Text>
                     <View style={{flexDirection:"row",alignSelf:"center"}}>{starImage}</View>
                 </View>
-                <Text>{rowData.COMMENTS}</Text>
+                <Text style={{paddingVertical:6}}>{rowData.COMMENTS}</Text>
             </View>
         );
     }
@@ -110,7 +110,7 @@ class TestDriveCommentList extends Component {
                          level={LEVEL}
                          minprice={MIN_GRUID_PRICE}
                          maxprice={MAX_GRUID_PRICE} />
-                <Text style={{paddingLeft:10,paddingTop:5}}>点评数: ( {COMMENT_COUNT} )</Text>
+                <Text style={{paddingLeft:15,paddingVertical:5}}>点评数: </Text>
                 <ListView
                     dataSource={this.state.dataSource}
                     renderRow={this.renderCell}
@@ -129,8 +129,8 @@ class TestDriveCommentList extends Component {
 
                 <Button text="试驾该车"
                         style={{
-                            marginTop:5,
-                            marginBottom:5,
+                            marginTop:10,
+                            marginBottom:10,
                             width: Screen.width - 40,
                             backgroundColor: BTNColor,
                             alignSelf: "center",
@@ -178,7 +178,7 @@ export default connect((state)=>{
 const styles = StyleSheet.create({
     cellView:{
         paddingVertical:5,
-        paddingHorizontal:10,
+        paddingHorizontal:15,
         borderBottomWidth:pixel1,
         borderBottomColor:BORDERColor,
     }

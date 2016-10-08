@@ -204,7 +204,7 @@ class CommissionView extends Component {
                 />
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={{marginTop:15}}>
-                    <LabelInput style={{height:40}}
+                    <LabelInput
                                 label="车主姓名"
                                 max={11}
                                 hasRightIcon={true}
@@ -216,7 +216,7 @@ class CommissionView extends Component {
                                 }}
 
                     />
-                    <LabelInput style={{height:40}}
+                    <LabelInput
                                 label="手机号"
                                 max={11}
                                 hasRightIcon={true}

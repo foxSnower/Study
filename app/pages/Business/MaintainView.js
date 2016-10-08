@@ -136,7 +136,7 @@ class MaintainView extends Component {
                         }}
                 />
                 <View style={{marginTop:15}}>
-                    <LabelInput style={{height:40}}
+                    <LabelInput style={{height:50}}
                                 label="车主姓名"
                                 max={11}
                                 hasRightIcon={true}
@@ -148,7 +148,7 @@ class MaintainView extends Component {
                                 }}
 
                     />
-                    <LabelInput style={{height:40}}
+                    <LabelInput style={{height:50}}
                                 label="手机号"
                                 max={11}
                                 hasRightIcon={true}
@@ -229,11 +229,11 @@ class MaintainView extends Component {
                                 } />
                 </View>
                 <View style={{marginTop:15}}>
-                    <LabelInput style={{height:40,backgroundColor:"#fff",borderBottomWidth:1/pixelRation,borderBottomColor:"#d9d9d9"}}
-                                textStyle={{justifyContent:"center",width:60,color:"#2b2b2b",marginLeft:20,marginRight:20}}
-                                inputStyle={{color:"#2b2b2b",justifyContent:"center"}}
+                    <LabelInput style={{height:50}}
+                                inputStyle={{color:"#2b2b2b"}}
                                 label="保养里程"
                                 max={6}
+                                hasRightIcon={true}
                                 placeholder="请输入保养里程      公里"
                                 keyboardType="numeric"
                                 onChangeText={(text) => {

@@ -27,6 +27,7 @@ import MaintainView from '../Business/MaintainView'
 import LoginView from '../Login/LoginView'
 import RescueView from '../Business/RescueView'
 import MessageListView from '../Personal/MessageListView'
+import CarBindView from '../Personal/CarBindView'
 import { IMGURL } from '../../utils/RequestURL'
 
 class HomeView extends Component {
@@ -229,12 +230,16 @@ class HomeView extends Component {
                                   image={require("../../image/icon_index_maintain.png")}
                                   onPress = {() => {
                                       UserDefaults.objectForKey("userInfo", (data)=> {
-                                          alert(data)
                                           if (!data || !data["LOGIN_USER_ID"]) {
                                               this.props.navigator.push({
                                                   component: LoginView
                                               })
-                                          }else{
+                                          }else if(data["USER_TYPE"]!= "2"){
+                                              this.props.navigator.push({
+                                                  component: CarBindView
+
+                                              })
+                                          } else{
                                               this.props.navigator.push({
                                                   component:MaintainView,
                                                   params:{

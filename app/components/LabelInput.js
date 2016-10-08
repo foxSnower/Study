@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
         flex:3
     },
     textInput: {
-        color:"#2b2b2b",
         flex: 5,
         marginLeft: 10,
         borderWidth: 0,
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         paddingLeft:10,
         paddingRight:10,
-        height:45,
+        height:50,
         backgroundColor:"#fff"
     }
 })

@@ -75,7 +75,6 @@ export let checkCarInfo = (carSeriesCode,dlrCode,mileItem,callback) => {
 
 //维修预约接口
 export let handleRepairBook = (post_json,callback) => {
-    alert(JSON.stringify(post_json))
     return dispatch => {
         requestPOST(
             HANDLER,
@@ -161,8 +160,7 @@ export let handleMaintainBook = (ly_app_user_id,_custName,_custTel,_vin,_car_no,
                 }
             },
             (data)=>{
-                console.log(data);
-                callback(data);
+                    callback(data);
             },
             (err)=>{
                 console.log(err);

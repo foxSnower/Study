@@ -113,7 +113,19 @@ class CarBindView extends Component {
                                 {
                                     text:"确定",
                                     onPress:()=>{
-                                        this.props.navigator.pop();
+                                        const { navigator } = this.props;
+
+                                        if(this.props.getUserInfo) {
+                                            let user = {
+                                                userName:userInfo["CUST_NAME"],
+                                                userPhone:userInfo["LOGIN_MOBILE"]
+                                            };
+                                            this.props.getUser(user);
+                                        }
+
+                                        if(navigator) {
+                                            navigator.pop();
+                                        }
                                     }
                                 }
                             ]

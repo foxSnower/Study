@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Text,
     Image,
+    Alert,
     View,
     ListView,
     ScrollView,
@@ -23,7 +24,7 @@ import DLRView from './DLRView'
 import UserDefaults from '../../utils/GlobalStorage'
 import LoaderView from '../../components/LoaderView'
 import { updateBook, checkCarInfo,handleMaintainBook, testBook} from '../../actions/bookAction';
-
+import OrderView from '../../pages/Personal/OrderView'
 
 class MaintainBookConfirmView extends Component {
     constructor(props) {
@@ -62,7 +63,26 @@ class MaintainBookConfirmView extends Component {
                         btnDisabled:false,
                         btnText:"立即预约"
                     })
-                    ly_Toast(JSON.stringify(res))
+                    if(res.RESULT_CODE == 0){
+                        ly_Toast("预约成功",1000,20,()=>{
+                            this.props.navigator.push({
+                                component:OrderView
+                            })
+                        });
+                    }else{
+                        Alert.alert("温馨提示",res.RESULT_DESC,
+                            [
+                                {
+                                    text:"确定",
+                                    onPress:()=>{
+                                        this.props.navigator.push({
+                                            component:OrderView
+                                        })
+                                    }
+                                }
+                            ]
+                        )
+                    }
                 }))
             } else {
                 console.log("没有获取到用户信息?")

@@ -129,7 +129,7 @@ class ActivitieListView extends Component {
                     <Image
                         source={{uri: rowData.ACT_IMAGE}}
                         style={styles.thumbnail}
-                        resizeMode={"contain"}
+                        resizeMode={"cover"}
                     />
                     <View style={styles.cellBottomView}>
                         <Text numberOfLines={1}>{rowData.SUMMARY}</Text>
@@ -151,7 +151,7 @@ export default connect((state) => {
 
 const styles = StyleSheet.create({
     cellView: {
-        height: 252
+        height: 280
     },
     button: {
         flex: 1,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         width: Screen.width,
-        height: 172,
+        height: 200,
     },
     listView: {
         backgroundColor: '#f4f4f4',

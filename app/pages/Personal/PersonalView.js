@@ -5,6 +5,7 @@ import{
     View,
     StyleSheet,
     Image,
+    Alert,
     TouchableOpacity,
     ScrollView,
     Platform
@@ -17,7 +18,7 @@ import {Screen, pixel1} from '../../utils/CommonUtil';
 import UserDefaults from  '../../utils/GlobalStorage';
 import { IMGURL } from '../../utils/RequestURL';
 // action
-import {fetchScores, fetchAvatar, changeAvatar} from '../../actions/personalAction';
+import {fetchScores, fetchAvatar, changeAvatar,handleCarUnbind} from '../../actions/personalAction';
 // sigle component
 import CustomButton from '../Home/CustomButton';
 // page component
@@ -34,6 +35,8 @@ import CarBindView from './CarBindView';
 import Point from './PointView';
 // 意见反馈
 import Suggest from './SuggestView';
+
+import PersonalInfoView from './PersonalInfoView'
 
 const userType1 = [
     [
@@ -80,13 +83,12 @@ const userType2 = [
             text:"车主信息",
             targetComponent:"车主信息",
             image:require("../../image/icon_uc_info.png"),
-            component: LoginView
+            component: PersonalInfoView
         },
         {
             text:"解除绑定",
             targetComponent:"解除绑定",
             image:require("../../image/icon_uc_unbind.png"),
-            component: LoginView
         },
         {
             text:"我的预约",
@@ -176,9 +178,28 @@ class PersonalView extends Component{
                                             textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
                                             text={item.text}
                                             onPress={()=> {
-                                                this.props.navigator.push({
-                                                    component: item.component
-                                                })
+                                                if(item.text=="解除绑定"){
+                                                    Alert.alert("温馨提示","请确认是否解除车辆绑定？",
+                                                        [
+                                                            {
+                                                                text:"取消",
+                                                                onPress:()=>{
+                                                                    return;
+                                                                }
+                                                            },
+                                                            {
+                                                                text:"确认解除",
+                                                                onPress:()=>{
+                                                                    this.handleCarUnbind();
+                                                                }
+                                                            }
+                                                        ]
+                                                    )
+                                                }else{
+                                                    this.props.navigator.push({
+                                                        component: item.component
+                                                    })
+                                                }
                                             }}
                                         />
                                     )
@@ -201,13 +222,29 @@ class PersonalView extends Component{
                                             textStyle={{marginBottom:10,fontSize:12,marginTop:5}}
                                             text={item.text}
                                             onPress={()=> {
-                                                if(item.component){
+                                                if(item.text == "车主绑定"){
                                                     this.props.navigator.push({
-                                                        component: item.component
+                                                        component: CarBindView,
+                                                        params:{
+                                                            getUserInfo:(user)=>{
+                                                                this.setState({
+                                                                    userName:user.userName,
+                                                                    userPhone:user.userPhone
+                                                                })
+                                                            }
+                                                        }
                                                     })
+
                                                 }else{
-                                                    return
+                                                    if(item.component){
+                                                        this.props.navigator.push({
+                                                            component: item.component
+                                                        })
+                                                    }else{
+                                                        return
+                                                    }
                                                 }
+
                                             }}
                                         />
                                     )
@@ -219,6 +256,45 @@ class PersonalView extends Component{
             }
             return aItems;
     }
+
+    //车主解绑
+    handleCarUnbind = () => {
+        UserDefaults.objectForKey("userInfo",userInfo => {
+            if(userInfo) {
+                const {dispatch} = this.props;
+                dispatch(handleCarUnbind(userInfo["LOGIN_USER_ID"],()=>{
+                    Alert.alert("温馨提示","解绑成功!",
+                        [
+                            {
+                                text:"确定",
+                                onPress:()=>{
+                                    const {personal} = this.props;
+                                    const uc_img = `${IMGURL}/images/uc_img.png`;
+                                    dispatch(changeAvatar(uc_img));
+                                    //清空积分
+                                    //dispatch(personal.scores({TOTAL_POINT:0}))
+                                    //还原头像
+                                    UserDefaults.setObject('avatar', uc_img);
+                                    //清空用户信息缓存
+                                    UserDefaults.setObject("userInfo",{
+                                        USER_TYPE:"3",
+                                        CUST_NAME:"",
+                                        GENDER:"2",
+                                        CUST_NO:"",
+                                        CARD_NO:"",
+                                        VIN:"",
+                                        CAR_NO:"",
+                                        DLR_CODE:"",
+                                        DLR_SHORT_NAME:"",
+                                    })
+                                }
+                            }
+                        ]
+                    )
+                }))
+            }
+        })
+    };
 
     // 选择照片
     selectPhotoTapped() {

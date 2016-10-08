@@ -20,6 +20,91 @@ export function updateLogin(value) {
         value: value
     }
 }
+//获取车辆信息
+// export let getCarInfo = (userId,callback) => {
+//     requestPOST(
+//         HANDLER,
+//         {
+//             "API_CODE": "CarInfo",
+//             "PAGE_SIZE": "20",
+//             "PAGE_INDEX": 1,
+//             "SORT": "BUY_DATE DESC",
+//             "PARAM": {
+//                 "LOGIN_USER_ID": userId
+//             }
+//         },
+//         data => {
+//             if(data.RESULT_CODE == "0"){
+//                 callback({
+//                     type:"getCarInfo",
+//                     value:data.DATA
+//                 })
+//             }else{
+//                 ly_Toast(data.RESULT_DESC+"===");
+//                 return;
+//             }
+//         },
+//         err => {
+//             console.log(err)
+//         }
+//     );
+// }
+
+//获取会员信息
+export let getVIPInfo = (userId,callback) => {
+    requestPOST(
+        HANDLER,
+        {
+            "API_CODE": "MemberInfo",
+            "PARAM": {
+                "LOGIN_USER_ID": userId
+            }
+        },
+        (data)=>{
+            if(data.RESULT_CODE == "0"){
+                callback({
+                    type:"getVIPInfo",
+                    value:data.DATA[0]
+                })
+            }else{
+                ly_Toast(data.RESULT_DESC);
+                return;
+            }
+        },
+        (err)=>{
+            ly_Toast(err.message,-20)
+            return;
+        }
+    )
+}
+
+//获取个人信息
+export let getUserInfo = (userId,callback) => {
+        requestPOST(
+            HANDLER,
+            {
+                "API_CODE": "OwnerInfo",
+                "PARAM": {
+                    "LOGIN_USER_ID": userId
+                }
+            },
+            (data)=>{
+                if(data.RESULT_CODE == "0"){
+                    callback({
+                        type:"getUserInfo",
+                        value:data.DATA[0]
+                    })
+                }else{
+                    ly_Toast(data.RESULT_DESC);
+                    return;
+                }
+            },
+            (err)=>{
+                ly_Toast(err.message,-20)
+                return;
+            }
+        )
+}
 //修改密码
 export let modifyUser = (phone,valiCode,pwd) => {
     return dispatch =>{
@@ -144,7 +229,12 @@ export let loginSubim = (mobile, password,nav) =>{
                             }
                         },
                         carData => {
-                            UserDefaults.setObject("carInfo",carData.DATA);
+                            if(carData.RESULT_CODE=="0"){
+                                dispatch(updateLogin({carInfo:carData.DATA}))
+                                UserDefaults.setObject("carInfo",carData.DATA);
+                            }else{
+                                ly_Toast(carData.RESULT_DESC)
+                            }
                         },
                         err => {
                             console.log(err)
@@ -177,6 +267,7 @@ export let loginSubim = (mobile, password,nav) =>{
                             )
                         }else{
                             nav.pop();
+
                         }
                     })
 

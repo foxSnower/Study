@@ -51,6 +51,7 @@ class RepairView extends Component {
             carInfoArr:[],
             carInfo:{},
             addImage: {uri:icon_addImg},
+            postImage:"",
             faultDesc:'',
             faultDescCount:0,
         }
@@ -88,7 +89,7 @@ class RepairView extends Component {
             return;
         }
 
-        if(this.state.commissionMark == ''){
+        if(this.state.faultDesc == ''){
             ly_Toast("请输入备注");
             return;
         }
@@ -104,8 +105,8 @@ class RepairView extends Component {
                     return;
                 }else{
                     let post_img = [];
-                    if(this.state.addImage[0].indexOf("http")==-1){
-                        post_img.push(this.state.addImage[0])
+                    if(this.state.postImage != ""){
+                        post_img.push(this.state.postImage)
                     }else{
                         post_img = [];
                     }
@@ -127,25 +128,29 @@ class RepairView extends Component {
                             btnDisabled:false,
                             btnText:"立即预约"
                         })
-                        if(res.RESULT_CODE == 0){
-                            ly_Toast("预约成功",1000,20,()=>{
-                                this.props.navigator.push({
-                                    component:OrderView
-                                })
-                            });
-                        }else{
-                            Alert.alert("温馨提示",res.RESULT_DESC,
-                                [
-                                    {
-                                        text:"确定",
-                                        onPress:()=>{
-                                            this.props.navigator.push({
-                                                component:OrderView
-                                            })
+                        if(res.RESULT_CODE == "0"){
+                            if(res.RESULT_CODE == 0){
+                                ly_Toast("预约成功",1000,20,()=>{
+                                    this.props.navigator.push({
+                                        component:OrderView
+                                    })
+                                });
+                            }else{
+                                Alert.alert("温馨提示",res.RESULT_DESC,
+                                    [
+                                        {
+                                            text:"确定",
+                                            onPress:()=>{
+                                                this.props.navigator.push({
+                                                    component:OrderView
+                                                })
+                                            }
                                         }
-                                    }
-                                ]
-                            )
+                                    ]
+                                )
+                            }
+                        }else{
+                            ly_Toast(res.RESULT_DESC)
                         }
                     }))
                 }
@@ -223,7 +228,8 @@ class RepairView extends Component {
                 }
 
                 this.setState({
-                    addImage: source
+                    addImage: source,
+                    postImage:response.data
                 })
             }
         });
@@ -245,7 +251,7 @@ class RepairView extends Component {
                 />
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                     <View style={{marginTop:15}}>
-                        <LabelInput style={{height:40}}
+                        <LabelInput
                                     label="车主姓名"
                                     max={11}
                                     hasRightIcon={true}
@@ -257,7 +263,7 @@ class RepairView extends Component {
                                     }}
 
                         />
-                        <LabelInput style={{height:40}}
+                        <LabelInput
                                     label="手机号"
                                     max={11}
                                     hasRightIcon={true}

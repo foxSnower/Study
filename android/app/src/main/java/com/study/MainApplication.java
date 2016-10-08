@@ -3,6 +3,7 @@ package com.study;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.lovebing.reactnative.baidumap.BaiduMapPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;

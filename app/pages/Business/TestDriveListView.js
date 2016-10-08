@@ -63,7 +63,7 @@ export default class TestDriveListView extends Component {
         return (
             <View style={styles.sectionHeader}>
 
-                <Image style={{flex:1,width:60,height:50}}
+                <Image style={{flex:1,width:60,height:60}}
                        source={{uri:`${IMGURL}${friend.CAR_IMAGE}`}}
                        resizeMode="contain"/>
                 <View style={{flex:2}}>

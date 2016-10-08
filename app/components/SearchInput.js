@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         color:"#000",
         flex: 1,
         borderWidth: 0,
-        height: 36,
+        height: 40,
         fontSize: 15,
         marginLeft: 10
     },

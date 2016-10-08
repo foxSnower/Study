@@ -10,8 +10,13 @@ import {
     View,
     TouchableOpacity,
     WebView,
-    Geolocation
 } from 'react-native';
+//百度地图api
+import {
+    MapView,
+    MapTypes,
+    Geolocation
+} from 'react-native-baidu-map';
 
 import {connect} from 'react-redux'
 import NavBar from '../../components/DefaultNavBar'
@@ -29,8 +34,23 @@ class RescueView extends Component {
         super(props)
         const {dispatch, DLR_CODE, DLR_SHORT_NAME, URG_SOS_TEL, INSURANCE_TEL,LINK_ADDR}=this.props;
         this.state={
-            lng:'113.156634',
-            lat:'23.385141',
+            mayType: MapTypes.NORMAL,
+            zoom: 15,
+            center: {
+                longitude: 113.981718,
+                latitude: 22.542449
+            },
+            trafficEnabled: false,
+            baiduHeatMapEnabled: false,
+            markers: [{
+                longitude: 113.981718,
+                latitude: 22.542449,
+                title: "Window of the world"
+            },{
+                longitude: 113.995516,
+                latitude: 22.537642,
+                title: ""
+            }],
             dlrInfo: {DLR_CODE, DLR_SHORT_NAME,URG_SOS_TEL,INSURANCE_TEL,LINK_ADDR},
         }
     }
@@ -38,41 +58,19 @@ class RescueView extends Component {
     componentDidMount(){
         getCurrentLocatiom((res)=>{
             this.setState({
-                lng:res.lng,
-                lat:res.lat,
+                center:{
+                    lng:res.lng,
+                    lat:res.lat,
+                }
             })
-            alert(JSON.stringify(res.dlrInfo))
+            //alert(JSON.stringify(res.dlrInfo))
         })
     }
 
     render(){
         const icon_go = `${IMGURL}/images/icon_link_go2.png`;
         const icon_tel = `${IMGURL}/images/icon_tel.png`;
-        let html =`<!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="utf-8">
-                        <title></title>
-                    </head>
-                    <body id="map" style="width:200px;height:200px;background:none;z-index:8888">
-					<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=IfMMDZYerUgh6yfc7MtKqOpCv0e4hMLd"></script>
-                    <script>
-                        initialize("113.156634", "23.385141")
-                         /*初始化地图*/
-                        var mp = null; //百度地图对象
-                        function initialize(lng, lat) {
-                            mp = new BMap.Map('map');
-                            var point = new BMap.Point(lng, lat);
-                            mp.centerAndZoom(point, 18);
-                            var marker = new BMap.Marker(point); // 创建标注
-                            mp.addOverlay(marker); // 将标注添加到地图中
-                            marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-                        }
-                    </script>
-                    </body>
-                    </html>
-                    `
-        alert(html)
+
         return(
             <View style={{backgroundColor:"#fff"}}>
                 <NavBar title="紧急救援"
@@ -80,14 +78,19 @@ class RescueView extends Component {
                             this.props.navigator.pop()
                         }}
                 />
-                <WebView ref={'webview'}
-                         automaticallyAdjustContentInsets={false}
-                         javaScriptEnabled={true}
-                         domStorageEnabled={true}
-                         decelerationRate="normal"
-                         startInLoadingState={true}
-                         scalesPageToFit={true}
-                         style={{height:Screen.height*0.4}} source={{html:html}} />
+                <MapView
+                    trafficEnabled={this.state.trafficEnabled}
+                    baiduHeatMapEnabled={this.state.baiduHeatMapEnabled}
+                    zoom={this.state.zoom}
+                    mapType={this.state.mapType}
+                    center={this.state.center}
+                    marker={this.state.marker}
+                    markers={this.state.markers}
+                    style={{height:Screen.height*0.4}}
+                    onMapClick={(e) => {
+                    }}
+                >
+                </MapView>
                 <View style={{marginTop:15}}>
                     <LabelRow title="当前位置"
                               hasRightIcon={true}

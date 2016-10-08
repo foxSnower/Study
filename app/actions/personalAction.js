@@ -18,6 +18,24 @@ export let changeAvatar = (source)=> {
         value: source
     };
 };
+
+//车辆解绑
+export let handleCarUnbind = (userId,callback) => {
+    requestPOST(HANDLER, {
+        "API_CODE": "Carowner_Release",
+        "PARAM": {
+            "LOGIN_USER_ID": userId
+        }
+    }, (data) => {
+        if(data["RESULT_CODE"] === '0') {
+            callback();
+        }else {
+            alert("解绑失败")
+        }
+    }, (err) => {
+        console.log(err);
+    });
+}
 // 获取积分
 export let fetchScores = (userId, cb)=> {
      requestPOST(HANDLER, {
