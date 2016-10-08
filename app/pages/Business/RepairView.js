@@ -50,15 +50,12 @@ class RepairView extends Component {
             btnText:"立即预约",
             carInfoArr:[],
             carInfo:{},
-            addImage: [icon_addImg],
+            addImage: {uri:icon_addImg},
             faultDesc:'',
             faultDescCount:0,
         }
 
     }
-
-
-
 
     //提交维修预约
     handleCommissonBook = () => {
@@ -172,7 +169,6 @@ class RepairView extends Component {
                     })
                 }else{
                     ly_Toast("您还没有绑定车辆?")
-                    return;
                 }
             }
         )
@@ -207,7 +203,6 @@ class RepairView extends Component {
         };
 
         ImagePicker.showImagePicker(options, (response) => {
-            alert('Response = ', response);
 
             if (response.didCancel) {
                 console.log('User cancelled photo picker');
@@ -221,30 +216,18 @@ class RepairView extends Component {
             else {
                 var source;
 
-                // You can display the image using either:
-                //source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
-
-                //Or:
                 if (Platform.OS === 'android') {
                     source = {uri: response.uri, isStatic: true};
                 } else {
                     source = {uri: response.uri.replace('file://', ''), isStatic: true};
                 }
 
-                //当用户设置完头像时 存到本地 使用base64格式
-                // UserDefaults.setObject('userImageBase64',`data:image/png;base64,${response.data}`);
-                //
-                // this.setState({
-                //     avatarSource: source,
-                //     base64Icon: `data:image/png;base64,${response.data}`
-                // });
-                alert(source)
                 this.setState({
-                    addImage: [source]
+                    addImage: source
                 })
             }
         });
-    }
+    };
 
     render(){
         const {LOGIN_MOBILE, CUST_NAME} = this.props;
@@ -366,7 +349,7 @@ class RepairView extends Component {
                         }} onPress={
                             this.handleAddImg
                         }>
-                            <Image style={styles.img} source={{uri:this.state.addImage[0]}} resizeMode={"cover"} />
+                            <Image style={styles.img} source={this.state.addImage} resizeMode={"cover"} />
                         </TouchableOpacity>
                     </View>
                     <View>
