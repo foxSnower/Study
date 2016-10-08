@@ -13,9 +13,8 @@ import {
 
 import {connect} from 'react-redux';
 import ScrollableTabView, {ScrollableTabBar,} from 'react-native-scrollable-tab-view';
-import {BGColor, BTNColor, Screen, pixelRation,GM_CALL, validateMobile,ly_Toast} from '../../utils/CommonUtil';
+import {BGColor, BTNColor, Screen, pixel1,ly_Toast} from '../../utils/CommonUtil';
 import NavBar from '../../components/DefaultNavBar';
-import LabelRow from '../../components/LabelRow';
 import LoaderView from '../../components/LoaderView'
 import {IMGURL} from '../../utils/RequestURL'
 import { updateLogin,getUserInfo,getVIPInfo,getCarInfo } from '../../actions/loginAction'
@@ -171,7 +170,6 @@ class PersonalInfoView extends Component {
                 </View>
             )
         }
-        const {dispatch} = this.props;
         return (
             <View style={styles.page}>
                 <NavBar title="个人信息"
@@ -213,13 +211,14 @@ const styles = StyleSheet.create({
         flex:1
     },
     row:{
-        borderBottomWidth:1/pixelRation,
+        borderBottomWidth:0.8,
         borderBottomColor:"#d9d9d9",
         flexDirection: "row",
         alignItems:"center",
         padding:10,
         backgroundColor:"#fff",
         justifyContent: "space-between",
+        height:55
     },
     title:{
         color:"#2b2b2b",
