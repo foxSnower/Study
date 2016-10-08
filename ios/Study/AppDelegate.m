@@ -15,6 +15,7 @@
 
 #import "RCTBundleURLProvider.h"
 #import "RCTRootView.h"
+#import "RCTBaiduMapViewManager.h"
 
 static NSString *appKey = @"f13507c108f636d6135a9148";     //填写appkey
 static NSString *channel = @"";    //填写channel   一般为nil
@@ -45,6 +46,9 @@ static BOOL isProduction = false;  //填写isProdurion  平时测试时为false 
   
   [JPUSHService setupWithOption:launchOptions appKey:appKey
                         channel:nil apsForProduction:isProduction];
+  
+  [RCTBaiduMapViewManager initSDK:@"IfMMDZYerUgh6yfc7MtKqOpCv0e4hMLd"];
+  
   NSURL *jsCodeLocation;
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];

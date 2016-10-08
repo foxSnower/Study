@@ -11,6 +11,7 @@
     "moment": "^2.15.1",
     "react": "15.3.2",
     "react-native": "0.34.0",
+    "react-native-baidu-map": "^0.4.2",
     "react-native-device-info": "^0.9.5",
     "react-native-fs": "^2.0.1-rc.2",
     "react-native-image-picker": "^0.22.9",

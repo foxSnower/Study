@@ -17,7 +17,7 @@ import RescueView from '../Business/RescueView'
 import CarBindView from '../Personal/CarBindView'
 import RepairView from '../Business/RepairView'
 import {pixel1,BORDERColor} from '../../utils/CommonUtil'
-
+import BaiduMapDemo from '../Business/BaiduMapDemo'
 
 let userInfo = {};
 const customerButtonItems = [
@@ -157,7 +157,7 @@ export default class BussinessView extends Component{
                         })
                     } else if (component == 6) {
                         this.props.navigator.push({
-                            component: RescueView,
+                            component: BaiduMapDemo,
                             params
                         })
                     }
