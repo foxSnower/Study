@@ -2,6 +2,12 @@
 import * as types from '../actions/actionTypes';
 
 const initialiState = {
+    // 默认头像
+    avatar: require('../image/uc_img.jpg'),
+    // 积分
+    scores: {
+        TOTAL_POINT: "load..."
+    },
     // 我的消费查询列表
     costList: [],
     // 我的预约列表
@@ -16,6 +22,21 @@ const initialiState = {
 
 export default function personal(state = initialiState, action = {}) {
     switch(action.type) {
+        // 获取初始头像
+        case types.FETCH_AVATAR:
+            return Object.assign({}, state, {
+                avatar: action.value
+            });
+        // 修改头像
+        case types.CHANGE_AVATAR:
+            return Object.assign({}, state, {
+                avatar: action.value
+            });
+        // 积分
+        case types.FETCH_SCORES:
+            return Object.assign({}, state, {
+                scores: action.value
+            });
         case types.COST_QUERY:
             return Object.assign({}, state, {
                 costList: action.value
