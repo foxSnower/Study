@@ -17,6 +17,7 @@ import {
 import { IMGURL } from '../../utils/RequestURL'
 import LoginView from '../Login/LoginView'
 import NavBar from '../../components/DefaultNavBar'
+import TabBarView from '../../containers/TabBarView';
 import UserDefaults from '../../utils/GlobalStorage'
 import {Screen, pixel1, BTNColor, BORDERColor} from  '../../utils/CommonUtil';
 
@@ -47,8 +48,8 @@ export default class SettingView extends Component {
         UserDefaults.setObject("userInfo",{});
         //清空车辆信息
         UserDefaults.setObject("carInfo",{});
-        this.props.navigator.push({
-            component:LoginView
+        this.props.navigator.resetTo({
+            component: TabBarView
         });
     }
     //点击退出登录

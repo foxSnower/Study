@@ -4,6 +4,12 @@ export const UPDATE_FIELDS = 'UPDATE_FIELDS';
 export const UPDATE_HOME = 'UPDATE_HOME';
 
 export const UPDATE_LOGIN = 'UPDATE_LOGIN';
+
+/*------------------
+    首页
+------------------*/
+// 初始化首页
+export const INIT_INDEX = "INIT_INDEX";
 /*------------------
     用车百科
 ------------------*/

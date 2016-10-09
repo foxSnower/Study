@@ -26,24 +26,28 @@ export default function fields(state = initialState, action = {}) {
     switch (action.type) {
         case types.UPDATE_LOGIN:
             return Object.assign({}, state, action.value);
+        case "initIndex":
+            return Object.assign({}, state, {
+                userInfo: action.value.userInfo,
+                carInfo: action.value.carInfo
+            });
         case "getUserInfo":
             return Object.assign({}, state,{
                 userInfo:action.value
-            })
+            });
         case "getVIPInfo":
             return Object.assign({}, state,{
                 VIPInfo:action.value
-            })
+            });
         case "getCarInfo":
-            if(action.value == undefined){
-                ly_Toast("服务器忙!",1000,-20)
-                return
+            if(action.value === undefined){
+                ly_Toast("服务器忙!",1000,-20);
+                return;
             }else{
                 return Object.assign({}, state,{
                     carInfo:action.value
-                })
+                });
             }
-
         default:
             return state;
     }

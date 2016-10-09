@@ -7,6 +7,8 @@ import {
     Image,
     Text
 } from 'react-native';
+// util
+import {Screen, pixel1} from '../utils/CommonUtil';
 
 export default class Item extends Component {
     constructor(props) {
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
       paddingLeft: 10,
       paddingRight: 10,
       borderBottomColor: '#ccc',
-      borderBottomWidth: 1,
+      borderBottomWidth: pixel1,
       borderStyle: 'solid'
     },
     thumbnail: {
