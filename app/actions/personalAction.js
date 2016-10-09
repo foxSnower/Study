@@ -199,3 +199,31 @@ export let deleteImage = (index)=> {
         value: index
     };
 };
+// 意见反馈提交
+
+export let submitSuggest = (submitContent, userId, cb)=> {
+    requestPOST(HANDLER, {
+        "API_CODE":"FeedBack",
+        "PARAM":{
+            "USER_ID": userId,
+            "DEVICE_TYPE": submitContent.deviceModel,
+            "OS_VERSION": submitContent.deviceOs,
+            "FB_TYPE": submitContent.type,
+            "FB_CONTENTS": submitContent.content,
+            "DEVICE_NAME": submitContent.deviceName,
+            "ATTACHS": submitContent.imgList
+        }
+    }, (data) => {
+        if(data.RESULT_CODE === '0') {
+            // 提交成功
+            cb({
+                type: types.SUBMIT_SUGGEST,
+                value: submitContent
+            });
+        }else {
+            cb(data);
+        }
+    }, (err) => {
+        cb(err);
+    });
+};

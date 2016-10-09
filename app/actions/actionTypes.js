@@ -46,6 +46,8 @@ export const FETCH_MESSAGE_LIST = 'FETCH_MESSAGE_LIST';
 export const ADD_IMAGE = 'ADD_IMAGE';
 // 意见反馈删除图片
 export const DELETE_IMAGE = 'DELETE_IMAGE';
+// 意见反馈提交
+export const SUBMIT_SUGGEST = 'SUBMIT_SUGGEST';
 //试驾
 export const UPDATE_DRIVE = 'UPDATE_DRIVE';
 //4s专营店

@@ -8,31 +8,38 @@ import {
     TouchableOpacity,
     TextInput,
     Image,
-    Platform
+    Platform,
+    ScrollView
 } from 'react-native';
 // third modules
 import {connect} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 // action
-import {addImage, deleteImage} from '../../actions/personalAction';
+import {addImage, deleteImage, submitSuggest} from '../../actions/personalAction';
 // util
 import UserDefaults from  '../../utils/GlobalStorage';
-import {Screen, pixel1, BTNColor, BORDERColor} from  '../../utils/CommonUtil';
+import {Screen, pixel1, BTNColor, BORDERColor, ly_Toast} from  '../../utils/CommonUtil';
 // common component
 import NavBar from '../../components/DefaultNavBar';
 import Loader from '../../components/LoaderView';
+import Button from '../../components/Button';
 
 class Suggest extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            deivceModel: '未知',
-            deivceName: '未知',
-            currentType: 0
+            deviceOs: '未知',
+            deviceModel: '未知',
+            deviceName: '未知',
+            currentType: "1",
+            faultDesc: '',
+            faultDescCount: 0,
+            btnText: '提交'
         };
 
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
         this.deleteImage = this.deleteImage.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
     componentDidMount() {
@@ -40,8 +47,12 @@ class Suggest extends Component {
         UserDefaults.objectForKey('deviceInfo', deviceInfo=> {
             if(deviceInfo) {
                 this.setState({
-                    deivceModel: deviceInfo.MODEL,
-                    deivceName: deviceInfo.DEVICE_TYPE
+                    // 手机系统
+                    deviceOs: deviceInfo.OS_VERSION,
+                    // 手机型号
+                    deviceModel: deviceInfo.MODEL,
+                    // 手机名称
+                    deviceName: deviceInfo.DEVICE_TYPE
                 });
             }
         });
@@ -103,6 +114,54 @@ class Suggest extends Component {
         dispatch(deleteImage(index));
     }
 
+    // 处理提交
+    submit() {
+        if(this.state.btnText === "提交成功") {
+            return;
+        }
+        const {personal} = this.props;
+        // 拿到设备信息、提交内容、图片、问题类型
+        let content = this.state.faultDesc.trim(); 
+        let type = this.state.currentType;
+        let imgList = personal.img.uploadAry;
+        let deviceOs = this.state.deviceOs;
+        let deviceModel = this.state.deviceModel;
+        let deviceName = this.state.deviceName;
+        // 判断问题描述是否有值
+        if(content === "" || !content) {
+            ly_Toast("请输入问题描述", 1000, -20);
+            return;
+        }
+        this.setState({
+            btnText: '提交中...'
+        });
+        let submitContent = {
+            content,
+            type,
+            imgList,
+            deviceOs,
+            deviceModel,
+            deviceName
+        };
+        UserDefaults.objectForKey("userInfo",userInfo => {
+            if(userInfo){
+                submitSuggest(submitContent, userInfo.LOGIN_USER_ID, (action)=> {
+                    //
+                    if(action.type) {
+                        // 如果有 type，就表示成功
+                        dispatch(action);
+                        this.setState({
+                            btnText: '提交成功'
+                        });
+                        alert("提交成功，感谢您的支持");
+                    }else {
+                        ly_Toast(JSON.stringify(action));
+                    }
+                });
+            }
+        });
+    }
+
     render() {
         const {personal} = this.props;
         // 为了给imgAry 一个 key，循环这个数据加上 key
@@ -115,6 +174,7 @@ class Suggest extends Component {
                     <Image 
                         source = {value} 
                         style = {styles.imgItem}
+                        //resizeMode={"stretch"}
                     />
                     <TouchableOpacity
                         onPress = {()=> {
@@ -123,7 +183,7 @@ class Suggest extends Component {
                         style = {styles.delBtn}
                     >
                         <Image
-                            source = {require('../../image/delete_img.png')}
+                            source = {require('../../image/icon_delete_img.png')}
                             style = {{width: 20, height: 20}}
                         />
                     </TouchableOpacity>
@@ -132,15 +192,15 @@ class Suggest extends Component {
         })
         let type = ['问题', '建议'];
         let btnGroup = type.map((item, index)=>{
-            let color = index === this.state.currentType ? {backgroundColor: BTNColor} : null;
-            let textColor = index === this.state.currentType ? {color: '#fff'} : null;
+            let color = index+1+"" === this.state.currentType ? {backgroundColor: BTNColor} : null;
+            let textColor = index+1+"" === this.state.currentType ? {color: '#fff'} : null;
             return (
                 <TouchableOpacity
                     style = {[styles.typeBtn, color]}
                     key = {index}
                     onPress = {()=> {
                         this.setState({
-                            currentType: index
+                            currentType: index+1+""
                         })
                     }}
                 >
@@ -157,79 +217,89 @@ class Suggest extends Component {
                         this.props.navigator.pop()
                     }}
                 />
-                <View style = {styles.item}>
-                    <Text>手机系统</Text>
-                    <Text>{this.state.deivceModel}</Text>
-                </View>
-                <View style = {styles.item}>
-                    <Text>手机名称</Text>
-                    <Text>{this.state.deivceName}</Text>
-                </View>
-                <View style = {styles.item}>
-                    <Text>意见类型</Text>
-                    <View style = {styles.btnGroup}>
-                        {btnGroup}
+                <ScrollView contentContainerStyle={styles.contentContainer}>
+                    <View style = {styles.item}>
+                        <Text>手机系统</Text>
+                        <Text>{this.state.deviceOs}</Text>
                     </View>
-                </View>
-                <View>
-                    <Text style = {styles.title}>上传图片(选项)</Text>
-                    <View style = {styles.imgItems}>
-                        {showAry}
-                        {
-                            showAry.length < 3 ?
-                            <View style = {styles.uploadBtnWrap}>
-                                <TouchableOpacity
-                                    style = {[styles.uploadBtn, styles.imgItem]}
-                                    onPress = {this.selectPhotoTapped}
-                                >
-                                    <Image
-                                        source = {require('../../image/icon_img_add.png')}
-                                    />
-                                </TouchableOpacity>
-                            </View> :
-                            null
-                        }
+                    <View style = {styles.item}>
+                        <Text>手机型号</Text>
+                        <Text>{this.state.deviceModel}</Text>
                     </View>
-                </View>
-                <View>
-                    <Text style = {styles.title}>详情(必填项)</Text>
-                    <View style = {styles.inputArea}>
-                        <TextInput multiline={true}
-                           maxLength={200}
-                           style={[styles.textArea,{height: Math.max(35, this.state.height)}]}
-                           clearButtonMode="while-editing"
-                           placeholder="请输入问题描述"
-                           enablesReturnKeyAutomatically={true}
-                           keyboardType="default"
-                           returnKeyType="done"
-                           underlineColorAndroid="transparent"
-                           onChange={(event)=>{
-                               this.setState({
-                                   height: event.nativeEvent.contentSize.height,
-                               })
-                           }}
-                           onChangeText={ (text) => {
-
-                               this.setState({
-                                   faultDesc:text,
-                                   faultDescCount:text?text.length:0,
-
-                               })
-                           }}
-                        >
-
-                        </TextInput>
-                        <Text style={{alignSelf:"flex-end"}}>{this.state.faultDescCount}/200</Text>
+                    <View style = {styles.item}>
+                        <Text>手机名称</Text>
+                        <Text>{this.state.deviceName}</Text>
                     </View>
-                </View>
-                <TouchableOpacity
-                    style = {styles.submitBtn}
-                    onPress = {()=> {
-                        alert('hello')
+                    <View style = {styles.item}>
+                        <Text>意见类型</Text>
+                        <View style = {styles.btnGroup}>
+                            {btnGroup}
+                        </View>
+                    </View>
+                    <View>
+                        <Text style = {styles.title}>上传图片(可选，最多三张)</Text>
+                        <View style = {styles.imgItems}>
+                            {showAry}
+                            {
+                                showAry.length < 3 ?
+                                <View style = {styles.uploadBtnWrap}>
+                                    <TouchableOpacity
+                                        style = {[styles.uploadBtn, styles.imgItem]}
+                                        onPress = {this.selectPhotoTapped}
+                                    >
+                                        <Image
+                                            source = {require('../../image/icon_img_add.png')}
+                                        />
+                                    </TouchableOpacity>
+                                </View> :
+                                null
+                            }
+                        </View>
+                    </View>
+                    <View>
+                        <Text style = {styles.title}>详情(必填项)</Text>
+                        <View style = {styles.inputArea}>
+                            <TextInput multiline={true}
+                               maxLength={200}
+                               style={[styles.textArea,{height: Math.max(35, this.state.height)}]}
+                               clearButtonMode="while-editing"
+                               placeholder="请输入问题描述"
+                               enablesReturnKeyAutomatically={true}
+                               keyboardType="default"
+                               returnKeyType="done"
+                               underlineColorAndroid="transparent"
+                               onChange={(event)=>{
+                                   this.setState({
+                                       height: event.nativeEvent.contentSize.height,
+                                   })
+                               }}
+                               onChangeText={ (text) => {
+                                   this.setState({
+                                       faultDesc:text,
+                                       faultDescCount:text?text.length:0,
+                                   })
+                               }}
+                            >
+                            </TextInput>
+                            <Text style={{alignSelf:"flex-end"}}>
+                                {this.state.faultDescCount}/200
+                            </Text>
+                        </View>
+                    </View>
+                </ScrollView>
+                <Button 
+                    text = {this.state.btnText}
+                    disabled={this.state.btnDisabled}
+                    style={{
+                        marginTop:5,
+                        marginBottom:6,
+                        width: Screen.width - 40,
+                        backgroundColor: BTNColor,
+                        alignSelf: "center",
+                        borderRadius: 8
                     }}
-                >
-                    <Text style = {styles.submitText}>立即提交</Text>
-                </TouchableOpacity>
+                    onPress={this.submit}
+                />
             </View>
         )
     }
@@ -273,10 +343,12 @@ let styles = StyleSheet.create({
     imgItems: {
         flexDirection: 'row',
         backgroundColor: '#fff',
-        paddingVertical: 5
+        paddingVertical: 5,
+        paddingHorizontal: 10
     },
     inputArea: {
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        paddingHorizontal: 20
     },
     title: {
         marginVertical: 10,
@@ -285,11 +357,20 @@ let styles = StyleSheet.create({
     imgWrap: {
         position: 'relative',
         paddingVertical: 10,
-        paddingLeft: 20
+        paddingLeft: 10
     },
     imgItem: {
-        width: 60,
-        height: 60,
+        width: 100,
+        height: 100,
+        paddingTop: 18,
+        paddingRight: 20,
+        paddingBottom: 20,
+        paddingLeft: 18,
+        borderWidth:2,
+        borderColor:BORDERColor,
+        flex:1,
+        backgroundColor:"#fff",
+        borderRadius:4,
     },
     delBtn: {
         width: 20,
@@ -300,7 +381,7 @@ let styles = StyleSheet.create({
     },
     uploadBtnWrap: {
         paddingVertical: 10,
-        paddingLeft: 20
+        paddingLeft: 10
     },
     uploadBtn: {
         borderWidth: 2,
