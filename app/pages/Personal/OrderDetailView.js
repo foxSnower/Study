@@ -26,7 +26,7 @@ class OrderView extends Component {
     }
 
     componentDidMount() {
-        const {dispatch, orderId} = this.props;
+        const {dispatch, orderId,orderName} = this.props;
 
         // 
         fetchOrderDetail(orderId, (action)=> {

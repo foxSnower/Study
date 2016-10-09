@@ -94,6 +94,10 @@ export default function personal(state = initialiState, action = {}) {
             return Object.assign({}, state, {
                 img
             });
+        case "carUnbind":
+            return Object.assign({}, state, {
+                avatar: require('../image/uc_img.jpg')
+            })
         default:
             return state;
     }

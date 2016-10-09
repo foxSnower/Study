@@ -23,7 +23,7 @@ import Loader from '../../components/LoaderView';
 import CustomButton from '../Home/CustomButton';
 // page component
 import OrderDetail from './OrderDetailView';
-
+import { IMGURL } from '../../utils/RequestURL'
 // 初始化页数
 // 这个值其实也可以放到 state 中，不过 dataSource 也可以触发 render，所以不放 state 也ok
 let pageIndex = 1;
@@ -109,7 +109,9 @@ class Order extends Component {
     }
 
     // 单行样式，会传入数组中的单个元素
+    //require('../../image/mine/mait.png')
     renderCell(row) {
+        alert(JSON.stringify(row))
         return (
             <View style = {styles.item}>
                 <TouchableOpacity
@@ -117,14 +119,15 @@ class Order extends Component {
                         this.props.navigator.push({
                             component: OrderDetail,
                             params: {
-                                orderId: row["BILL_NO"]
+                                orderId: row["BILL_NO"],
+                                orderName:row["BILL_NAME"]
                             }
                         })
                     }}
                 >
                     <Image
                         style = {styles.icon}
-                        soruce = {require('../../image/mine/da.png')}
+                        source= {require('../../image/mine/mait.png')}
                     />
                     <View style = {styles.orderInfo}>
                         <Text style = {styles.dlrName}>{`${row["BILL_NAME"]}`}</Text>
@@ -202,16 +205,14 @@ let styles = StyleSheet.create({
     },
     item: {
         backgroundColor: '#fff',
-        flexDirection: 'row',
+        flexDirection:"row",
         marginTop: 20,
-        paddingTop: 20,
-        paddingLeft: 20,
-        paddingBottom: 20,
-        paddingRight: 20
+        padding: 20,
+        justifyContent:"space-between"
     },
     icon: {
-        height: 30,
-        width: 30
+        height: 50,
+        width: 50,
     },
     orderInfo: {
         width: Screen.width*0.6

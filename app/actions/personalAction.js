@@ -28,9 +28,12 @@ export let handleCarUnbind = (userId,callback) => {
         }
     }, (data) => {
         if(data["RESULT_CODE"] === '0') {
-            callback();
+            callback({
+                type: "carUnbind"
+            });
         }else {
-            alert("解绑失败")
+            alert(data["RESULT_DESC"])
+            // alert("解绑失败")
         }
     }, (err) => {
         console.log(err);
