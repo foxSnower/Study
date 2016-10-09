@@ -8,6 +8,7 @@ import {
 
 import {Screen,BGColor} from '../../utils/CommonUtil'
 import NavBar from '../../components/DefaultNavBar'
+import LoaderView from '../../components/LoaderView'
 
 const html = `<!DOCTYPE html>
 <html>
@@ -98,21 +99,54 @@ const html = `<!DOCTYPE html>
 `;
 
 export default class Agreement extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            loaded:false
+        }
+    }
+    componentDidMount(){
+        this.timer = setTimeout(()=>{
+            this.setState({
+                loaded:true
+            })
+        },1500)
+    }
+    componentWillUnmount() {
+        this.timer && clearTimeout(this.timer);
+    }
     render(){
+        if(!this.state.loaded){
+            return(
+                <View style={styles.container}>
+                    <NavBar title="使用协议"
+                            onBack={()=>{
+                                this.props.navigator.pop()
+                            }} />
+                    <View style={styles.container}>
+                        <LoaderView/>
+                    </View>
+                </View>
+            )
+        }
         return(
-            <View style={{flex:1}}>
+            <View style={styles.container}>
                 <NavBar title="使用协议"
                         onBack={()=>{
                             this.props.navigator.pop()
                         }} />
                 <WebView
-                  style={{
-                    backgroundColor: BGColor,
-                  }}
-                  source={{html:html}}
-                  //scalesPageToFit={true}
+                    style={{height:Screen.height-45,borderWidth:0}}
+                    source={{html:html}}
+                    //scalesPageToFit={true}
                 />
             </View>
         )
     }
 }
+const styles =StyleSheet.create({
+    container:{
+        flex:1,
+        backgroundColor:"#fff",
+    }
+})
