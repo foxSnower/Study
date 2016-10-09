@@ -108,13 +108,11 @@ class CarBindView extends Component {
                         btnDisabled:false
                     })
                     if(res.RESULT_CODE == "0"){
-                         alert(JSON.stringify(res.DATA[0]))
                         let userInfo2 = res.DATA[0]
                         userInfo2["LOGIN_USER_ID"] = userInfo["LOGIN_USER_ID"]
                         userInfo2["USER_TYPE"] = '2';
-                        alert(JSON.stringify(userInfo2))
                         UserDefaults.setObject("userInfo",userInfo2);
-                        //dispatch(ReGetCarInfo(userInfo["LOGIN_USER_ID"]))
+                        dispatch(ReGetCarInfo(userInfo["LOGIN_USER_ID"]))
                         Alert.alert("温馨提示","恭喜您,车辆绑定成功!",
                             [
                                 {

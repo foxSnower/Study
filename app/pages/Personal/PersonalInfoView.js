@@ -46,8 +46,16 @@ class PersonalInfoView extends Component {
             loaded:false
         }
     }
+    componentWillUnmount(){
+        this.timer && clearTimeout(this.timer)
+    }
 
     componentDidMount(){
+        this.timer = setTimeout(()=>{
+            this.setState({
+                loaded:true
+            })
+        },1500)
         const { carInfo } = this.props.login;
         this.setState({
             carInfoArr:carInfo.CARS,
@@ -158,7 +166,7 @@ class PersonalInfoView extends Component {
 
 
     render() {
-        if(this.state.loaded){
+        if(!this.state.loaded){
             return(
                 <View style={styles.page}>
                     <NavBar title="个人信息"

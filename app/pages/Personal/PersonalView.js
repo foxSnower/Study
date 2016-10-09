@@ -268,7 +268,6 @@ class PersonalView extends Component{
                                 onPress:()=>{
                                     dispatch(action)
                                     dispatch(changeAvatar(require('../../image/uc_img.jpg')));
-                                    alert(JSON.stringify(userInfoPerson))
                                     this.setState({
                                         userType:"3",
                                         userPhone:userInfoPerson["LOGIN_MOBILE"],
@@ -278,7 +277,7 @@ class PersonalView extends Component{
                                     //还原头像
                                     //UserDefaults.setObject('avatar', require('../../image/uc_img.jpg'));
                                     //清空用户信息缓存
-                                    UserDefaults.setObject("userInfo",{
+                                    let clearUserInfo ={
                                         LOGIN_USER_ID:userInfoPerson["LOGIN_USER_ID"],
                                         USER_TYPE:"3",
                                         CUST_NAME:"",
@@ -290,7 +289,11 @@ class PersonalView extends Component{
                                         CAR_NO:"",
                                         DLR_CODE:"",
                                         DLR_SHORT_NAME:"",
-                                    })
+                                    }
+                                    dispatch({type:"getCarInfo",value:{}},);
+                                    UserDefaults.setObject("carInfo",{})
+                                    dispatch({type:"getUserInfo",value:clearUserInfo});
+                                    UserDefaults.setObject("userInfo",clearUserInfo)
                                 }
                             }
                         ]

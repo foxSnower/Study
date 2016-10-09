@@ -31,7 +31,7 @@ export let ReGetCarInfo = (userId) => {
             },
             carData => {
                 if(carData.RESULT_CODE=="0"){
-                    dispatch({type:"carInfo",value:carData.DATA})
+                    dispatch({type:"getCarInfo",value:carData.DATA})
                     UserDefaults.setObject("carInfo",carData.DATA);
                 }else{
                     ly_Toast(carData.RESULT_DESC)
