@@ -13,14 +13,14 @@ import {
 import {connect} from 'react-redux'
 import NavBar from '../../components/DefaultNavBar'
 import {IMGURL} from '../../utils/RequestURL'
-import {BGColor,BTNColor,Screen,pixelRation,GetDateStr,ly_Toast,setDefaultTime,validateMobile,validateDateExpries} from '../../utils/CommonUtil'
+import {BGColor,BTNColor,Screen,GetDateStr,ly_Toast,validateMobile} from '../../utils/CommonUtil'
 import LabelRow from '../../components/LabelRow'
 import LabelInput from '../../components/LabelInput'
 
 import SelectPickerView from '../Business/CarBrandPicker'
 
 import Button from '../../components/Button'
-import { handleCarBind } from '../../actions/carBindAction'
+import { handleCarBind ,ReGetCarInfo} from '../../actions/carBindAction'
 import UserDefaults from '../../utils/GlobalStorage'
 import PersonalView from './PersonalView'
 
@@ -108,9 +108,13 @@ class CarBindView extends Component {
                         btnDisabled:false
                     })
                     if(res.RESULT_CODE == "0"){
-                        let userInfo = res.DATA[0]
-                        userInfo["USER_TYPE"] = '2';
-                        UserDefaults.setObject("userInfo",userInfo);
+                         alert(JSON.stringify(res.DATA[0]))
+                        let userInfo2 = res.DATA[0]
+                        userInfo2["LOGIN_USER_ID"] = userInfo["LOGIN_USER_ID"]
+                        userInfo2["USER_TYPE"] = '2';
+                        alert(JSON.stringify(userInfo2))
+                        UserDefaults.setObject("userInfo",userInfo2);
+                        //dispatch(ReGetCarInfo(userInfo["LOGIN_USER_ID"]))
                         Alert.alert("温馨提示","恭喜您,车辆绑定成功!",
                             [
                                 {
@@ -274,7 +278,8 @@ class CarBindView extends Component {
                         this.renderByBindType()
                     }
 
-                    <Button text="立即绑定"
+                    <Button text={this.state.btnText}
+                            disabled={this.state.btnDisabled}
                             style={{
                                 marginTop:20,
                                 width: Screen.width - 40,
@@ -290,9 +295,10 @@ class CarBindView extends Component {
     }
 }
 export default connect((state)=>{
-    const {carBind} = state;
+    const {carBind,login} = state;
     return {
-        carBind
+        carBind,
+        login
     }
 })(CarBindView)
 

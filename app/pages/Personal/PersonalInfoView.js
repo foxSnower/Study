@@ -6,7 +6,7 @@ import {
     StyleSheet,
     View,
     Text,
-    TextInput,
+    TextInput,ScrollView,
     Image,
     TouchableOpacity
 } from 'react-native';
@@ -81,7 +81,7 @@ class PersonalInfoView extends Component {
     infoLeft = () => {
         const { login } = this.props
         return(
-            <View tabLabel="个人信息">
+            <ScrollView tabLabel="个人信息">
                 <View>
                     <PersonalRow title="姓名" content={login.userInfo.CUST_NAME} />
                     <PersonalRow title="性别" content={login.userInfo.GENDER} />
@@ -92,7 +92,7 @@ class PersonalInfoView extends Component {
                     <PersonalRow title="详细地址" content={login.userInfo.CUST_ADDR} />
                 </View>
 
-            </View>
+            </ScrollView>
         )
     }
     //车辆信息
@@ -100,7 +100,7 @@ class PersonalInfoView extends Component {
         const icon_go = `${IMGURL}/images/icon_link_go2.png`;
         const { carInfo } = this.props.login;
         return(
-                <View tabLabel="车辆信息">
+                <ScrollView tabLabel="车辆信息">
                     <View>
                         <TouchableOpacity style={[styles.row,{backgroundColor:"rgba(200,250,100,1)"}]}
                                             onPress={()=>{
@@ -136,7 +136,7 @@ class PersonalInfoView extends Component {
                         <PersonalRow title="购车日期" content={this.state.carInfo.buyDate} />
                         <PersonalRow title="最后维修日期" content={this.state.carInfo.lastRepairDate} />
                     </View>
-                </View>
+                </ScrollView>
             )
     }
     //会员信息
@@ -144,7 +144,7 @@ class PersonalInfoView extends Component {
         const icon_code = `${IMGURL}/images/icon_code.png`;
         const  { login } = this.props;
         return(
-            <View tabLabel="会员信息">
+            <ScrollView tabLabel="会员信息">
                 <View>
                     <PersonalRow title="会员卡号" content={login.VIPInfo.CARD_NO} />
                     <PersonalRow title="卡级别" content={login.VIPInfo.CARD_DEGREE} />
@@ -152,7 +152,7 @@ class PersonalInfoView extends Component {
                     <PersonalRow title="有效时间" content={login.VIPInfo.EXPIRS_DATE} />
                     <PersonalRow title="入会专营店" content={login.VIPInfo.JOIN_DLR_SHORT_NAME} />
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 

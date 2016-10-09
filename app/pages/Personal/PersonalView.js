@@ -39,7 +39,9 @@ import Suggest from './SuggestView';
 import SettingView from './SettingView'
 
 import PersonalInfoView from './PersonalInfoView'
+import MyActivity from './MyActivity'
 
+let userInfoPerson = {};
 const userType1 = [
     [
         {
@@ -58,7 +60,7 @@ const userType1 = [
             text:"我的活动",
             targetComponent:"我的活动",
             image:require("../../image/icon_uc_activity.png"),
-            component: LoginView
+            component: MyActivity
         }
     ],
     [
@@ -104,7 +106,7 @@ const userType2 = [
             text:"我的活动",
             targetComponent:"我的活动",
             image:require("../../image/icon_uc_activity.png"),
-            component: LoginView
+            component: MyActivity
         },
         {
             text:"消费查询",
@@ -254,9 +256,11 @@ class PersonalView extends Component{
     //车主解绑
     handleCarUnbindClick = () => {
         UserDefaults.objectForKey("userInfo",userInfo => {
-            if(userInfo) {
+            userInfoPerson = userInfo;
+            if(userInfoPerson) {
                 const {dispatch,personal} = this.props;
-                handleCarUnbind(userInfo["LOGIN_USER_ID"],(action)=>{
+                handleCarUnbind(userInfoPerson["LOGIN_USER_ID"],(action)=>{
+
                     Alert.alert("温馨提示","解绑成功!",
                         [
                             {
@@ -264,25 +268,29 @@ class PersonalView extends Component{
                                 onPress:()=>{
                                     dispatch(action)
                                     dispatch(changeAvatar(require('../../image/uc_img.jpg')));
+                                    alert(JSON.stringify(userInfoPerson))
                                     this.setState({
-                                        userType:"3"
+                                        userType:"3",
+                                        userPhone:userInfoPerson["LOGIN_MOBILE"],
                                     })
                                     //清空积分
-                                    //dispatch(personal.scores({TOTAL_POINT:0}))
+                                    //dispatch(personal({scores:{TOTAL_POINT:0}}));
                                     //还原头像
                                     //UserDefaults.setObject('avatar', require('../../image/uc_img.jpg'));
                                     //清空用户信息缓存
-                                    // UserDefaults.setObject("userInfo",{
-                                    //     USER_TYPE:"3",
-                                    //     CUST_NAME:"",
-                                    //     GENDER:"2",
-                                    //     CUST_NO:"",
-                                    //     CARD_NO:"",
-                                    //     VIN:"",
-                                    //     CAR_NO:"",
-                                    //     DLR_CODE:"",
-                                    //     DLR_SHORT_NAME:"",
-                                    // })
+                                    UserDefaults.setObject("userInfo",{
+                                        LOGIN_USER_ID:userInfoPerson["LOGIN_USER_ID"],
+                                        USER_TYPE:"3",
+                                        CUST_NAME:"",
+                                        LOGIN_MOBILE:userInfoPerson["LOGIN_MOBILE"],
+                                        GENDER:"2",
+                                        CUST_NO:"",
+                                        CARD_NO:"",
+                                        VIN:"",
+                                        CAR_NO:"",
+                                        DLR_CODE:"",
+                                        DLR_SHORT_NAME:"",
+                                    })
                                 }
                             }
                         ]

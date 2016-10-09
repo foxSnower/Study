@@ -10,6 +10,7 @@ import UserDefaults from '../utils/GlobalStorage';
 
 import RegistView from '../pages/Login/RegistView';
 import CarBindView from '../pages/Personal/CarBindView'
+import PersonalView from '../pages/Personal/PersonalView'
 
 import {Alert} from 'react-native'
 import JPush from 'jpush-react-native'
@@ -204,48 +205,49 @@ export let loginSubim = (mobile, password,nav) =>{
                     "VALIDATE_CODE": password,
                 }
             },
-            (data) => {
+            (userInfoData) => {
                 dispatch(updateLogin({'loginBtnDisabled': false,'loginBtnText':'登录'}));
-                if(data.RESULT_CODE == 0){
+                if(userInfoData.RESULT_CODE == 0){
                     //设置极光推送的tag标签
-                    JPush.setTags([data.DATA[0]["LOGIN_USER_ID"]],()=>{
-                        console.log("设置tag成功")
+                    JPush.setTags([userInfoData.DATA[0]["LOGIN_USER_ID"]],()=>{
+                        ly_Toast("设置tag成功")
                     },()=>{
-                        console.log("设置tag失败")
+                        ly_Toast("设置tag失败")
                     })
 
                     //登陆成功将用户信息写入缓存中
-                    alert(JSON.stringify(data.DATA[0]))
-                    UserDefaults.setObject("userInfo",data.DATA[0]);
-                    dispatch({type:"getUserInfo",value:data.DATA[0]})
+                    UserDefaults.setObject("userInfo",userInfoData.DATA[0]);
+                    dispatch({type:"getUserInfo",value:userInfoData.DATA[0]})
                     //根据用户信息查询用户的车辆信息
-                    requestPOST(
-                        HANDLER,
-                        {
-                            "API_CODE": "CarInfo",
-                            "PAGE_SIZE": "20",
-                            "PAGE_INDEX": 1,
-                            "SORT": "BUY_DATE DESC",
-                            "PARAM": {
-                                "LOGIN_USER_ID": data.DATA[0].LOGIN_USER_ID
+                    if(userInfoData.DATA[0]["USER_TYPE"]==2){
+                        requestPOST(
+                            HANDLER,
+                            {
+                                "API_CODE": "CarInfo",
+                                "PAGE_SIZE": "20",
+                                "PAGE_INDEX": 1,
+                                "SORT": "BUY_DATE DESC",
+                                "PARAM": {
+                                    "LOGIN_USER_ID": userInfoData.DATA[0].LOGIN_USER_ID
+                                }
+                            },
+                            carData => {
+                                if(carData.RESULT_CODE=="0"){
+                                    dispatch(updateLogin({carInfo:carData.DATA}))
+                                    UserDefaults.setObject("carInfo",carData.DATA);
+                                }else{
+                                    ly_Toast(carData.RESULT_DESC)
+                                }
+                            },
+                            err => {
+                                console.log(err)
                             }
-                        },
-                        carData => {
-                            if(carData.RESULT_CODE=="0"){
-                                dispatch(updateLogin({carInfo:carData.DATA}))
-                                UserDefaults.setObject("carInfo",carData.DATA);
-                            }else{
-                                ly_Toast(carData.RESULT_DESC)
-                            }
-                        },
-                        err => {
-                            console.log(err)
-                        }
-                    );
+                        );
+                    }
 
                     ly_Toast("登录成功",1000,20,()=>{
                         //如果是没有绑定车辆的用户  给一个引导
-                        if(data.DATA[0]["USER_TYPE"]==1){
+                        if(userInfoData.DATA[0]["USER_TYPE"]==1){
                             Alert.alert("温馨提示","尊敬的客户您好，为了让您正常使用本系统，建议绑定车辆，绑定后可享受以下服务: \n" +
                                 "1、享受在线预约服务; \n"+
                                 "2、享受会员折扣及积分; \n"+
@@ -262,14 +264,17 @@ export let loginSubim = (mobile, password,nav) =>{
                                     {
                                         text:"暂不绑定",
                                         onPress:()=>{
-                                            nav.pop();
+                                            nav.push({
+                                                component:PersonalView
+                                            })
                                         }
                                     }
                                 ]
                             )
                         }else{
-                            nav.pop();
-
+                            nav.push({
+                                component:PersonalView
+                            })
                         }
                     })
 

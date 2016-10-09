@@ -116,7 +116,6 @@ export default class TabBarView extends Component {
                                             onPress={() => {
                                                 if (item.title === "我的") {
                                                     UserDefaults.objectForKey("userInfo", (data)=> {
-                                                        alert(JSON.stringify(data))
                                                         if (!data || !data["LOGIN_USER_ID"]) {
                                                             this.props.navigator.push({
                                                                 component: LoginView
