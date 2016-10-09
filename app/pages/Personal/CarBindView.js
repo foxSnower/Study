@@ -22,6 +22,7 @@ import SelectPickerView from '../Business/CarBrandPicker'
 import Button from '../../components/Button'
 import { handleCarBind } from '../../actions/carBindAction'
 import UserDefaults from '../../utils/GlobalStorage'
+import PersonalView from './PersonalView'
 
 
 
@@ -89,9 +90,11 @@ class CarBindView extends Component {
             btnText:"正在绑定...",
             btnDisabled:true
         })
+        let that = this ;
         UserDefaults.objectForKey("userInfo",userInfo => {
             if(userInfo){
-                handleCarBind({
+                const { dispatch } = this.props;
+                dispatch(handleCarBind({
                     "LOGIN_USER_ID": userInfo["LOGIN_USER_ID"],
                     "BIND_TYPE": this.state.bindTypeValue,
                     "CARD_NO": this.state.cardNo,
@@ -113,18 +116,11 @@ class CarBindView extends Component {
                                 {
                                     text:"确定",
                                     onPress:()=>{
-                                        const { navigator } = this.props;
-
-                                        if(this.props.getUserInfo) {
-                                            let user = {
-                                                userName:userInfo["CUST_NAME"],
-                                                userPhone:userInfo["LOGIN_MOBILE"]
-                                            };
-                                            this.props.getUser(user);
-                                        }
-
+                                        const { navigator } = that.props;
                                         if(navigator) {
-                                            navigator.pop();
+                                            navigator.push({
+                                                component:PersonalView
+                                            });
                                         }
                                     }
                                 }
@@ -142,7 +138,7 @@ class CarBindView extends Component {
                             ]
                         )
                     }
-                })
+                }))
             }else{
                 ly_Toast("请先登录!")
                 return

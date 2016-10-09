@@ -215,7 +215,9 @@ export let loginSubim = (mobile, password,nav) =>{
                     })
 
                     //登陆成功将用户信息写入缓存中
+                    alert(JSON.stringify(data.DATA[0]))
                     UserDefaults.setObject("userInfo",data.DATA[0]);
+                    dispatch({type:"getUserInfo",value:data.DATA[0]})
                     //根据用户信息查询用户的车辆信息
                     requestPOST(
                         HANDLER,

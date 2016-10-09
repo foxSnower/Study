@@ -192,7 +192,7 @@ class PersonalView extends Component{
                                                             {
                                                                 text:"确认解除",
                                                                 onPress:()=>{
-                                                                    this.handleCarUnbind();
+                                                                    this.handleCarUnbindClick();
                                                                 }
                                                             }
                                                         ]
@@ -227,14 +227,6 @@ class PersonalView extends Component{
                                                 if(item.text == "车主绑定"){
                                                     this.props.navigator.push({
                                                         component: CarBindView,
-                                                        params:{
-                                                            getUserInfo:(user)=>{
-                                                                this.setState({
-                                                                    userName:user.userName,
-                                                                    userPhone:user.userPhone
-                                                                })
-                                                            }
-                                                        }
                                                     })
 
                                                 }else{
@@ -260,42 +252,46 @@ class PersonalView extends Component{
     }
 
     //车主解绑
-    handleCarUnbind = () => {
+    handleCarUnbindClick = () => {
         UserDefaults.objectForKey("userInfo",userInfo => {
             if(userInfo) {
-                const {dispatch} = this.props;
-                dispatch(handleCarUnbind(userInfo["LOGIN_USER_ID"],()=>{
+                const {dispatch,personal} = this.props;
+                handleCarUnbind(userInfo["LOGIN_USER_ID"],(action)=>{
                     Alert.alert("温馨提示","解绑成功!",
                         [
                             {
                                 text:"确定",
                                 onPress:()=>{
-                                    const {personal} = this.props;
-                                    const uc_img = `${IMGURL}/images/uc_img.png`;
-                                    dispatch(changeAvatar(uc_img));
+                                    dispatch(action)
+                                    dispatch(changeAvatar(require('../../image/uc_img.jpg')));
+                                    this.setState({
+                                        userType:"3"
+                                    })
                                     //清空积分
                                     //dispatch(personal.scores({TOTAL_POINT:0}))
                                     //还原头像
-                                    UserDefaults.setObject('avatar', uc_img);
+                                    //UserDefaults.setObject('avatar', require('../../image/uc_img.jpg'));
                                     //清空用户信息缓存
-                                    UserDefaults.setObject("userInfo",{
-                                        USER_TYPE:"3",
-                                        CUST_NAME:"",
-                                        GENDER:"2",
-                                        CUST_NO:"",
-                                        CARD_NO:"",
-                                        VIN:"",
-                                        CAR_NO:"",
-                                        DLR_CODE:"",
-                                        DLR_SHORT_NAME:"",
-                                    })
+                                    // UserDefaults.setObject("userInfo",{
+                                    //     USER_TYPE:"3",
+                                    //     CUST_NAME:"",
+                                    //     GENDER:"2",
+                                    //     CUST_NO:"",
+                                    //     CARD_NO:"",
+                                    //     VIN:"",
+                                    //     CAR_NO:"",
+                                    //     DLR_CODE:"",
+                                    //     DLR_SHORT_NAME:"",
+                                    // })
                                 }
                             }
                         ]
                     )
-                }))
+                })
             }
         })
+
+
     };
 
     // 选择照片
@@ -431,9 +427,10 @@ class PersonalView extends Component{
 }
 
 export default connect((state)=> {
-    const {personal} = state;
+    const {personal,login} = state;
     return {
-        personal
+        personal,
+        login
     };
 })(PersonalView)
 
