@@ -1,6 +1,7 @@
 /**
  * Created by DB on 16/9/26.
  */
+ "use strict";
 import React, {Component} from 'react';
 import {
     StyleSheet,
@@ -9,28 +10,38 @@ import {
     TouchableOpacity,
     Image,
     Linking,
-    Geolocation
+    Geolocation,
+    Alert
 } from 'react-native';
-
+// 第三方依赖
 import {connect} from 'react-redux';
-import Swiper from 'react-native-swiper'
-import {Screen, pixel1,Debug} from '../../utils/CommonUtil'
-import {fetchAction, fetchWeatherInfo,handleDeviceInfo} from '../../actions/homeAction'
-import CustomButton from './CustomButton'
-import ActivitieListView from './ActionListView'// 用车百科
-import Wiki from './Wiki/IndexView'
-import DeviceInfo from 'react-native-device-info'
-import UserDefaults from '../../utils/GlobalStorage'
-import ActionDetailView from './ActionDetailView'
-import TestDriveHomeView from '../Business/TestDriveHomeView'
-import MaintainView from '../Business/MaintainView'
-import LoginView from '../Login/LoginView'
-import RescueView from '../Business/RescueView'
-import MessageListView from '../Personal/MessageListView'
-import CarBindView from '../Personal/CarBindView'
-import { IMGURL } from '../../utils/RequestURL'
+import Swiper from 'react-native-swiper';
+import DeviceInfo from 'react-native-device-info';
+// action
+import {initIndex, fetchAction, fetchWeatherInfo,handleDeviceInfo} from '../../actions/homeAction';
+// utils
+import {Screen, pixel1,Debug, ly_Toast} from '../../utils/CommonUtil';
+import UserDefaults from '../../utils/GlobalStorage';
+import { IMGURL } from '../../utils/RequestURL';
+import auth from '../../utils/AuthUtil';
+// common component
+import CustomButton from './CustomButton';
+// page component
+import ActivitieListView from './ActionListView';
+import TestDriveHomeView from '../Business/TestDriveHomeView';
+import Wiki from './Wiki/IndexView';
+import ActionDetailView from './ActionDetailView';
+import MaintainView from '../Business/MaintainView';
+import LoginView from '../Login/LoginView';
+import RescueView from '../Business/RescueView';
+import MessageListView from '../Personal/MessageView';
+import CarBindView from '../Personal/CarBindView';
 
 class HomeView extends Component {
+    constructor(props) {
+      super(props);
+      this.pushWiki = this.pushWiki.bind(this);
+    }
 
     componentDidMount() {
         let deviceInfo = {};
@@ -40,10 +51,14 @@ class HomeView extends Component {
         const {dispatch} = this.props;
         dispatch(fetchAction());
         dispatch(fetchWeatherInfo());
+        // 初始化
+        initIndex(action=> {
+            dispatch(action);
+        });
 
         if(!Debug){
             deviceInfo.DEVICE_TOKEN = DeviceInfo.getUniqueID();
-            deviceInfo.OS_VERSION = DeviceInfo.getSystemName()
+            deviceInfo.OS_VERSION = DeviceInfo.getSystemName();
             deviceInfo.MODEL = DeviceInfo.getModel();
             deviceInfo.DEVICE_TYPE = DeviceInfo.getBrand();
             deviceInfo.APP_VERSION = DeviceInfo.getVersion();
@@ -63,6 +78,7 @@ class HomeView extends Component {
 
             UserDefaults.setObject('deviceInfo',deviceInfo);
         }
+
        // dispatch(handleDeviceInfo(DeviceInfo.getUniqueID(),DeviceInfo.getVersion()))
 //         console.log("Device Unique ID", DeviceInfo.getUniqueID());  // e.g. FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
 // // * note this is IDFV on iOS so it will change if all apps from the current apps vendor have been previously uninstalled
@@ -101,7 +117,6 @@ class HomeView extends Component {
 
     }
     render() {
-
         const {home} = this.props;
         return (
             <View style={styles.container}>
@@ -114,6 +129,17 @@ class HomeView extends Component {
 
             </View>
         );
+    }
+
+    // 跳转到用车百科
+    pushWiki() {
+        const {login} = this.props;
+        let userInfo = login.userInfo;
+        // 对用户身份进行判断
+        auth(userInfo.USER_TYPE, Wiki, this.props.navigator);
+        // this.props.navigator.push({
+        //   component: Wiki
+        // });
     }
 
     // Swiper的子视图布局
@@ -216,11 +242,7 @@ class HomeView extends Component {
                                   textStyle={{marginTop:10,marginBottom:15}}
                                   image={require("../../image/icon_index_wiki.png")}
                                   imageStyle={styles.imageStyle}
-                                  onPress = {() => {
-                                    this.props.navigator.push({
-                                        component: Wiki
-                                    })
-                                  }}
+                                  onPress = {this.pushWiki}
                     />
                 </View>
                 <View style={{flex: 2, flexDirection: 'row', marginTop: pixel1, backgroundColor: '#fff'}}>
@@ -286,7 +308,7 @@ class HomeView extends Component {
                                               })
                                           }else{
                                               this.props.navigator.push({
-                                                  component:MessageListView
+                                                  component: MessageListView
                                               })
                                           }
                                       });
@@ -302,9 +324,10 @@ class HomeView extends Component {
 // component: TestDriveBook
 //})
 export default connect((state) => {
-    const {home} = state;
+    const {home, login} = state;
     return {
-        home
+        home,
+        login
     }
 })(HomeView);
 

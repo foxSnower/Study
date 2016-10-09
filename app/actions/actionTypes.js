@@ -4,6 +4,12 @@ export const UPDATE_FIELDS = 'UPDATE_FIELDS';
 export const UPDATE_HOME = 'UPDATE_HOME';
 
 export const UPDATE_LOGIN = 'UPDATE_LOGIN';
+
+/*------------------
+    首页
+------------------*/
+// 初始化首页
+export const INIT_INDEX = "INIT_INDEX";
 /*------------------
     用车百科
 ------------------*/
@@ -46,6 +52,8 @@ export const FETCH_MESSAGE_LIST = 'FETCH_MESSAGE_LIST';
 export const ADD_IMAGE = 'ADD_IMAGE';
 // 意见反馈删除图片
 export const DELETE_IMAGE = 'DELETE_IMAGE';
+// 意见反馈提交
+export const SUBMIT_SUGGEST = 'SUBMIT_SUGGEST';
 //试驾
 export const UPDATE_DRIVE = 'UPDATE_DRIVE';
 //4s专营店

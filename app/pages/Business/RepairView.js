@@ -348,14 +348,21 @@ class RepairView extends Component {
                         <Text style={{marginLeft:10,marginBottom:10}}>
                             上传图片
                         </Text>
-                        <TouchableOpacity style={{
-                            backgroundColor:"#fff",
-                            paddingLeft:10,
-                            paddingVertical:10
-                        }} onPress={
-                            this.handleAddImg
-                        }>
-                            <Image style={styles.img} source={this.state.addImage} resizeMode={"cover"} />
+                        <TouchableOpacity 
+                            style={{
+                                backgroundColor:"#fff",
+                                paddingLeft:10,
+                                paddingVertical:10
+                            }} 
+                            onPress={
+                                this.handleAddImg
+                            }
+                        >
+                            <Image 
+                                style={styles.img} 
+                                source={this.state.addImage} 
+                                //resizeMode={"cover"} 
+                            />
                         </TouchableOpacity>
                     </View>
                     <View>
@@ -418,13 +425,17 @@ export default connect((state)=>{
 
 const styles = StyleSheet.create({
     img:{
-        width:50,
-        height:50,
+        width: 100,
+        height: 100,
+        paddingTop: 18,
+        paddingRight: 20,
+        paddingBottom: 20,
+        paddingLeft: 18,
         borderWidth:2,
         borderColor:BORDERColor,
         flex:1,
         backgroundColor:"#fff",
-        borderRadius:4,
+        borderRadius:4
     },
     textArea:{
         flex:1,

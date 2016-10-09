@@ -1,19 +1,35 @@
 /**
  * Created by DB on 16/6/24.
  */
+"use strict";
 import * as types from './actionTypes';
-import {requestPOST} from '../utils/FetchUtil'
-import {HANDLER} from '../utils/RequestURL'
+import {requestPOST} from '../utils/FetchUtil';
+import {HANDLER} from '../utils/RequestURL';
 
-import {ly_Toast} from '../utils/CommonUtil'
+import {ly_Toast} from '../utils/CommonUtil';
 import UserDefaults from '../utils/GlobalStorage';
 
 export function updateHome(value) {
     return {
         type: types.UPDATE_HOME,
         value: value
-    }
+    };
 }
+export function initIndex(cb) {
+    UserDefaults.objectForKey("userInfo", userInfo => {
+        if(userInfo){
+            UserDefaults.objectForKey("carInfo", carInfo=> {
+                cb({
+                    type: "initIndex",
+                    value: {
+                        userInfo,
+                        carInfo
+                    }
+                });
+            })
+        }
+    });
+};
 
 //首页头部活动接口数据
 export let fetchAction = () => {

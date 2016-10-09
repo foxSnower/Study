@@ -1,3 +1,4 @@
+"use strict";
 import * as types from './actionTypes';
 // utils
 import {requestPOST} from '../utils/FetchUtil';
@@ -5,25 +6,26 @@ import {HANDLER, IMGURL} from '../utils/RequestURL';
 
 // Carinfo 获取车辆信息
 export let fetchCarInfo = (value, cb) => {
-        requestPOST(HANDLER, {
-            "API_CODE": "CarInfo",
-            "PARAM": {
-                "LOGIN_USER_ID": value
-            }
-        }, (data) => {
-            if(data["RESULT_CODE"] === '0') {
-                console.log('fetchCarInfo success')
-                cb({
-                    type: types.FETCH_CAR_INFO,
-                    value: {
-                        car: data["DATA"]["CARS"][0]
-                    }
-                })
-            }
-        }, (err) => {
-            cb(err)
-        })
-    }
+    requestPOST(HANDLER, {
+        "API_CODE": "CarInfo",
+        "PARAM": {
+            "LOGIN_USER_ID": value
+        }
+    }, (data) => {
+        if(data.RESULT_CODE === '0') {
+            cb({
+                type: types.FETCH_CAR_INFO,
+                value: {
+                    car: data.DATA.CARS[0]
+                }
+            });
+        }else {
+            cb(data);
+        }
+    }, (err) => {
+        cb(err);
+    });
+};
     // GetCarSeriesIMG 获取用车百科顶部图片
 export let fetchImg = (value, cb) => {
     //在这个地方进行请求

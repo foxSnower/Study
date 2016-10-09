@@ -1,5 +1,4 @@
 'use strict';
-
 import React, {Component} from 'react';
 import {
     StyleSheet,
@@ -12,51 +11,42 @@ import {
 import {connect} from 'react-redux';
 import RNFS from 'react-native-fs';
 // action
-import {fetchImg, fetchCarInfo} from '../../../actions/wikiAction'
+import {fetchImg, fetchCarInfo} from '../../../actions/wikiAction';
 // utils
-import {Screen, pixel1} from '../../../utils/CommonUtil';
+import {Screen, pixel1, ly_Toast} from '../../../utils/CommonUtil';
 import UserDefaults from '../../../utils/GlobalStorage';
 // common component
 import NavBar from '../../../components/DefaultNavBar';
 import Item from '../../../components/Item';
-import Loader from '../../../components/LoaderView'
+import Loader from '../../../components/LoaderView';
 // page component
 import Answer from './AnswerView';
 import Manual from './ManualView';
 import LearnReplacement from './LearnReplacementView';
 
 let jobId = -1;
-let url = 'http://obqi5r9i0.bkt.clouddn.com/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89%E4%B8%AD%E6%96%87%20%E9%AB%98%E6%B8%85%20%E5%AE%8C%E6%95%B4.pdf'
+let url = 'http://obqi5r9i0.bkt.clouddn.com/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89%E4%B8%AD%E6%96%87%20%E9%AB%98%E6%B8%85%20%E5%AE%8C%E6%95%B4.pdf';
 
 class Cyclopedia extends Component {
     constructor(props) {
         super(props);
-        let {dispatch} = props;
-        this.state = {
-          loaded: false
-        }
+        let {dispatch, login} = props;
         // 获取数据
-        UserDefaults.objectForKey("userInfo", (data)=> {
-            if (data) {
-                //alert(data["LOGIN_USER_ID"])
-                // 如果用户id存在，就改变用车百科页面图片
-                fetchCarInfo(data["LOGIN_USER_ID"], (data)=> {
-                  console.log('fetchcarinfo', data)
-                  dispatch(data)
-                  // 这个data里面就保存了 name 和 code
-                  //dispatch(fetchImg(data["DATA"]["CAR"][0]["CAR_SERIES_NAME"] + data["DATA"]["CAR"][0]["CAR_SERIES_CODE"]))
-                    fetchImg(data.value.car["CAR_SERIES_CODE"], (data)=> {
-                      // 这里要做判断
-                      console.log('fetchimg', data)
-                      // 改变图片的 action
-                      dispatch(data)
-                      this.setState({
-                        loaded: true
-                      })
-                    })
-                })
+        let userId = login.userInfo.LOGIN_USER_ID;
+        let carSeriesCode = login.carInfo.CAR_SERIES_CODE;
+        if (userId) {
+            // 如果用户id存在，就改变用车百科页面图片
+            if(carSeriesCode){
+                fetchImg(carSeriesCode, (action)=> {
+                  // 改变图片的 action
+                  dispatch(action);
+                });
+            }else {
+                ly_Toast("没有车辆信息", 1000, 0);
             }
-        });
+        }else {
+            ly_Toast("没有用户信息", 1000, 0);
+        }
         //
         // this.state = {
         //   output: 'Doc folder: ' + RNFS.DocumentDirectoryPath
@@ -130,21 +120,7 @@ class Cyclopedia extends Component {
 
     render() {
         let {dispatch, wiki} = this.props;
-        //alert(JSON.stringify(this.state.imagePath))
-        console.log(this.state)
-        if(!this.state.loaded) {
-          // 如果还没加载好图片
-          return (<View style = {styles.container}>
-            <NavBar
-              title = "用车百科"
-              style={styles.navbar}
-              onBack={()=> {
-                  this.props.navigator.pop()
-              }}
-            />
-            <Loader />
-          </View>)
-        }
+
         return (
             <View style={styles.container}>
                 <NavBar
@@ -238,8 +214,9 @@ const styles = StyleSheet.create({
 
 export default connect((state) => {
     //console.log(state);
-    const {wiki} = state;
+    const {wiki, login} = state;
     return {
-        wiki
-    }
+        wiki,
+        login
+    };
 })(Cyclopedia);
