@@ -61,7 +61,7 @@ export default function personal(state = initialiState, action = {}) {
         // 消息
         case types.FETCH_MESSAGE:
             return Object.assign({}, state, {
-                messageType: action.value.MESSAGES
+                messageType: action.value
             });
         // 消息详情
         case types.FETCH_MESSAGE_LIST:

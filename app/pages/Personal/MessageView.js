@@ -5,7 +5,8 @@ import {
     View,
     Text,
     ListView,
-    RefreshControl
+    RefreshControl,
+    Alert
 } from 'react-native';
 
 import {connect} from 'react-redux';
@@ -40,14 +41,19 @@ class Message extends Component {
     refresh() {
         const {dispatch} = this.props;
         fetchMessage(userId, (action)=> {
-            if(action !== 'error') {
+            //alert(JSON.stringify(action))
+            if(action.type) {
+                // 请求数据成功
                 dispatch(action);
                 this.setState({
                     loaded: true,
-                    dataSource: this.state.dataSource.cloneWithRows(action.value.MESSAGES)
+                    dataSource: this.state.dataSource.cloneWithRows(action.value)
                 });
             }else {
-                alert('请求数据失败');
+                Alert.alert("提示", action);
+                this.setState({
+                    loaded: true
+                });
             }
         });
     }
@@ -131,19 +137,25 @@ class Message extends Component {
                         this.props.navigator.pop()
                     }}
                 />            
-                <ListView
-                    dataSource = {this.state.dataSource}
-                    renderRow = {this.renderCell}
-                    refreshControl = {
-                        <RefreshControl
-                            refreshing = {false}
-                            onRefresh = {this.refresh}
-                            colors = {['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
-                            progressBackgroundColor = "#ffffff"
-                        />
-                    }
-                    enableEmptySections = {true}
-                />
+                {
+                    this.state.dataSource.length > 0 ?
+                    <ListView
+                        dataSource = {this.state.dataSource}
+                        renderRow = {this.renderCell}
+                        refreshControl = {
+                            <RefreshControl
+                                refreshing = {false}
+                                onRefresh = {this.refresh}
+                                colors = {['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
+                                progressBackgroundColor = "#ffffff"
+                            />
+                        }
+                        enableEmptySections = {true}
+                    /> :
+                    <View style = {styles.empty}>
+                        <Text>数据为空</Text>
+                    </View>
+                }
             </View>
         )
     }
@@ -158,6 +170,12 @@ export default connect((state)=> {
 
 let styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#fff'
+    },
+    empty: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
     }
 })

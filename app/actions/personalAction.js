@@ -54,11 +54,10 @@ export let fetchScores = (userId, cb)=> {
                 value: data.DATA[0]
             });
         }else {
-            cb('error');
+            cb(JSON.stringify(data));
         }
     }, (err) => {
-        console.log(err);
-        cb('error');
+        cb(JSON.stringify(err));
     });
 }
 
@@ -147,16 +146,22 @@ export let fetchMessage = (userId, cb)=> {
             "LOGIN_USER_ID": userId
         }
     }, (data) => {
-        if(data["RESULT_CODE"] === '0') {
+        //alert(JSON.stringify(data));
+        if(data["RESULT_CODE"] === '0' && data.DATA.MESSAGES) {
             cb({
                 type: types.FETCH_MESSAGE,
-                value: data.DATA
+                value: data.DATA.MESSAGES
+            });
+        }else if(data.RESULT_CODE === "0" && !data.DATA.MESSAGES) {
+            cb({
+                type: types.FETCH_MESSAGE,
+                value: []
             });
         }else {
-            cb('error');
+            cb(JSON.stringify(data));
         }
     }, (err) => {
-        cb('error');
+        cb(JSON.stringify(err));
     });
 };
 

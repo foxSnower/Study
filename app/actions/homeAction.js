@@ -15,21 +15,6 @@ export function updateHome(value) {
         value: value
     };
 }
-export function initIndex(cb) {
-    UserDefaults.objectForKey("userInfo", userInfo => {
-        if(userInfo){
-            UserDefaults.objectForKey("carInfo", carInfo=> {
-                cb({
-                    type: "initIndex",
-                    value: {
-                        userInfo,
-                        carInfo
-                    }
-                });
-            })
-        }
-    });
-};
 
 //首页头部活动接口数据
 export let fetchAction = () => {

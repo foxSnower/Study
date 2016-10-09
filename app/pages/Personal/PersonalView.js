@@ -150,10 +150,10 @@ class PersonalView extends Component{
 
                 // 使用用户id 去查询积分
                 fetchScores(userInfo.LOGIN_USER_ID, (action)=> {
-                    if(action !== 'error') {
+                    if(action.type) {
                         dispatch(action);
                     }else {
-                        alert('获取积分失败');
+                        alert(action);
                     }
                 });
             }

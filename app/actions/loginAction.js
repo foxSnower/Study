@@ -21,6 +21,23 @@ export function updateLogin(value) {
         value: value
     }
 }
+export function initIndex(cb) {
+    UserDefaults.objectForKey("userInfo", userInfo => {
+        if(userInfo){
+            UserDefaults.objectForKey("carInfo", carInfo=> {
+                // 
+                //alert(JSON.stringify(carInfo));
+                cb({
+                    type: "initIndex",
+                    value: {
+                        userInfo,
+                        carInfo
+                    }
+                });
+            })
+        }
+    });
+};
 //获取车辆信息
 // export let getCarInfo = (userId,callback) => {
 //     requestPOST(

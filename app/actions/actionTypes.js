@@ -25,6 +25,10 @@ export const FETCH_QUESTION = 'FETCH_QUESTION';
 export const SEARCH_QUESTION = 'SEARCH_QUESTION';
 // 获取问题详情
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
+// 获取纯正备件
+export const FETCH_REPLACEMENT = "FETCH_REPLACEMENT";
+// 获取纯正备件详情
+export const FETCH_REPLACEMENT_DETAIL = "FETCH_REPLACEMENT_DETAIL";
 /*------------------
     我的
 ------------------*/

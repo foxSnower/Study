@@ -177,19 +177,20 @@ export let fetchReplacement = (value, cb)=> {
     requestPOST(HANDLER, {
             "API_CODE":"PureSparePartsList",
             "PARAM":{
+
             }
-        },
-        (data) => {
-            console.log(data)
+        }, (data) => {
+            //alert(JSON.stringify(data));
             if(data["RESULT_CODE"] === '0') {
                 cb({
                     type: types.FETCH_REPLACEMENT,
                     value: data["DATA"]
                 })
+            }else {
+                cb(JSON.stringify(data));
             }
-        },
-        (error) => {
-            //alert(JSON.stringify(error))
+        }, (error) => {
+            cb(JSON.stringify(error))
         }
     )
 }

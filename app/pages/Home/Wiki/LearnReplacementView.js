@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 // util
 import UserDefaults from '../../../utils/GlobalStorage';
 import imgUrl from '../../../utils/RequestURL';
+import {BGColor} from '../../../utils/CommonUtil';
 // action
 import {fetchReplacement} from '../../../actions/wikiAction'
 // common Component
@@ -36,12 +37,18 @@ class LearnReplacement extends Component {
       const {dispatch, wiki} = this.props
 
       fetchReplacement("", (action)=> {
-        console.log(action)
-        dispatch(action)
-        this.setState({
-          loaded: true,
-          dataSource: this.state.dataSource.cloneWithRows(action.value)
-        })
+        if(action.type) {
+          dispatch(action)
+          this.setState({
+            loaded: true,
+            dataSource: this.state.dataSource.cloneWithRows(action.value)
+          })
+        }else {
+          alert(JSON.stringify(action));
+          this.setState({
+            loaded: true
+          })
+        }
       })
 
     }
@@ -88,7 +95,7 @@ class LearnReplacement extends Component {
                           title = {obj["TITLE"]}
                           description = {obj["SUMMARY"]}
                           image = {{uri: obj["HTTP_URL"]}}
-                          imgStyle = {{marginLeft: 10, marginRight: 10, maxWidth: 120, maxHeight: 80, width: 120, height: 80}}
+                          imgStyle = {{marginLeft: 5, marginRight: 5, maxWidth: 120, maxHeight: 80, width: 120, height: 80}}
                       />
                     }}
                   />
@@ -107,6 +114,6 @@ export default connect((state)=> {
 let styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: BGColor
   }
 })

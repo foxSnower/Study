@@ -72,7 +72,11 @@ class PersonalInfoView extends Component {
         UserDefaults.objectForKey("userInfo",userInfo => {
             if(userInfo){
                 const { dispatch } = this.props;
-                getUserInfo(userInfo["LOGIN_USER_ID"], res=>{ dispatch(res);});
+                // 获取用户信息
+                getUserInfo(userInfo["LOGIN_USER_ID"], res=>{ 
+                    alert(JSON.stringify(res));
+                    dispatch(res);
+                });
                 getVIPInfo(userInfo["LOGIN_USER_ID"],res=>{ dispatch(res);});
                 // getCarInfo(userInfo["LOGIN_USER_ID"],res=>{
                 //     dispatch(res);

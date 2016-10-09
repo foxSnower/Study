@@ -33,7 +33,7 @@ class Cyclopedia extends Component {
         let {dispatch, login} = props;
         // 获取数据
         let userId = login.userInfo.LOGIN_USER_ID;
-        let carSeriesCode = login.carInfo.CAR_SERIES_CODE;
+        let carSeriesCode = login.carInfo.CARS[0].CAR_SERIES_CODE;
         if (userId) {
             // 如果用户id存在，就改变用车百科页面图片
             if(carSeriesCode){

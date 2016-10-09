@@ -51,12 +51,12 @@ class Answer extends Component {
 
     componentDidMount() {
       // 获取数据
-      const {dispatch, wiki, quesType, keyword} = this.props
+      const {dispatch, wiki, quesType, keyword, login} = this.props
       if(keyword) {
         // 如果是从搜索框跳转过来的，使用搜索关键词进行查询
         this.search(keyword)
       }else {
-        fetchQuestion(wiki.car["CAR_SERIES_ID"], quesType, (action)=> {
+        fetchQuestion(login.carInfo.CARS[0].CAR_SERIES_ID, quesType, (action)=> {
           // dispatch 改变数据后，需要得到改变后的 state
           console.log('fetchQuestion action is :', action)
           dispatch(action)
@@ -73,7 +73,7 @@ class Answer extends Component {
       //alert(JSON.stringify(wiki))
       if(!this.state.loaded) {
         return (
-          <View style = {{flex: 1}}>
+          <View style = {styles.container}>
             <NavBar
                 title="常见问题"
                 onBack={()=>{
@@ -88,7 +88,7 @@ class Answer extends Component {
 
       //渲染内容
       return (
-          <View>
+          <View style = {styles.container}>
               <NavBar
                   title="常见问题"
                   onBack={()=>{
@@ -135,14 +135,16 @@ class Answer extends Component {
 }
 
 export default connect((state)=> {
-  const {wiki} = state;
+  const {wiki, login} = state;
   return {
-    wiki
+    wiki,
+    login
   }
 })(Answer)
 
 let styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#fff'
   },
   item: {

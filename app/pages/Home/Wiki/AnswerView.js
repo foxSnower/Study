@@ -146,9 +146,10 @@ class Answer extends Component {
 }
 
 export default connect((state)=> {
-  const {wiki} = state;
+  const {wiki, login} = state;
   return {
-    wiki
+    wiki,
+    login
   }
 })(Answer)
 

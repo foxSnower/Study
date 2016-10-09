@@ -18,7 +18,8 @@ import {connect} from 'react-redux';
 import Swiper from 'react-native-swiper';
 import DeviceInfo from 'react-native-device-info';
 // action
-import {initIndex, fetchAction, fetchWeatherInfo,handleDeviceInfo} from '../../actions/homeAction';
+import {fetchAction, fetchWeatherInfo,handleDeviceInfo} from '../../actions/homeAction';
+import {initIndex} from '../../actions/loginAction';
 // utils
 import {Screen, pixel1,Debug, ly_Toast} from '../../utils/CommonUtil';
 import UserDefaults from '../../utils/GlobalStorage';

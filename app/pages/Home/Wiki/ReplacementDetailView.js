@@ -10,7 +10,7 @@ import {
 import {connect} from 'react-redux';
 // util
 import UserDefaults from '../../../utils/GlobalStorage';
-import {Screen} from '../../../utils/CommonUtil';
+import {Screen, BGColor} from '../../../utils/CommonUtil';
 // action
 import {fetchReplacementDetail} from '../../../actions/wikiAction'
 // common Component
@@ -62,9 +62,11 @@ class ReplacementDetail extends Component {
               this.props.navigator.pop()
           }}
         />
-        <Text style = {styles.title}>{wiki.replacementDetail["TITLE"]}</Text>
-        <Text style = {styles.description}>{wiki.replacementDetail["SUMMARY"]}</Text>
-        <Text style = {styles.content}>{wiki.replacementDetail["URL_CONTENT"]}</Text>
+        <View style = {styles.content}>
+          <Text style = {styles.title}>{wiki.replacementDetail["TITLE"]}</Text>
+          <Text style = {styles.description}>{wiki.replacementDetail["SUMMARY"]}</Text>
+          <Text>{wiki.replacementDetail["URL_CONTENT"]}</Text>
+        </View>
         {/*
         <WebView
           ref={'webview'}
@@ -92,25 +94,14 @@ export default connect((state)=> {
 let styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
+    backgroundColor: BGColor
   },
-  img: {
-    maxWidth: 50,
-    maxHeight: 50,
-    marginRight: 10
+  content: {
+    alignItems: "center",
+    paddingHorizontal: 10
   },
-  item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10
-  },
-  quesDescription: {
-    fontSize: 16
-  },
-  ansDescription: {
-    fontSize: 18,
-    width: Screen.width-80
+  title: {
+    fontSize: 20
   },
   webView: {
 
