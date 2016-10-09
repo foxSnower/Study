@@ -135,6 +135,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-update')
     compile project(':react-native-baidu-map')
     compile project(':react-native-fs')
     compile project(':jpush-react-native')

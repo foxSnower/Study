@@ -36,6 +36,8 @@ import Point from './PointView';
 // 意见反馈
 import Suggest from './SuggestView';
 
+import SettingView from './SettingView'
+
 import PersonalInfoView from './PersonalInfoView'
 
 const userType1 = [
@@ -409,7 +411,12 @@ class PersonalView extends Component{
                             </Text>
                             <Image style={styles.arrow} source={{uri:icon_go}} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.li} activeOpacity={0.7}>
+                        <TouchableOpacity style={styles.li} activeOpacity={0.7}
+                                                onPress={()=>{
+                                                    this.props.navigator.push({
+                                                        component:SettingView
+                                                    })
+                                                }}>
                             <Image  style={{width:20,height:20}}
                                     source={{uri:icon_set}} />
                             <Text style={{marginLeft:15,flex:5}}>设置

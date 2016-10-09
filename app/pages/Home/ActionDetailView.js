@@ -16,12 +16,13 @@ import {connect} from 'react-redux';
 import {Screen, pixel1,BTNColor,BGColor} from '../../utils/CommonUtil'
 import {updateHome,fetchActionDetail} from '../../actions/homeAction'
 import NavBar from '../../components/DefaultNavBar'
+import LoaderView from '../../components/LoaderView'
 
 class ActionDetailView extends Component {
     constructor(props){
         super(props);
         this.state = {
-            isLoad:false,
+            loaded:false,
             html:''
         }
     }
@@ -41,7 +42,7 @@ class ActionDetailView extends Component {
                           </body>
                         </html>
                         `;
-            this.setState({isLoad:true,html:html});
+            this.setState({loaded:true,html:html});
 
         }));
     }
@@ -49,15 +50,18 @@ class ActionDetailView extends Component {
     render(){
         const {actionDetail} = this.props.home;
 
-        // if(!loaded){
-        //     return (
-        //         <View style={styles.container}>
-        //             <View style={styles.loading}>
-        //                 <ActivityIndicator size="large" color={BTNColor} />
-        //             </View>
-        //         </View>
-        //     )
-        // }
+        if(!this.state.loaded){
+            return (
+                <View style={styles.container}>
+                    <NavBar title="活动详情"
+                            onBack={()=>{
+                                this.props.navigator.pop()
+                            }}
+                    />
+                    <LoaderView/>
+                </View>
+            )
+        }
         let html11 =`<!DOCTYPE html>\n
                         <html>
                           <head>
@@ -78,7 +82,7 @@ class ActionDetailView extends Component {
                         }}
                 />
                 <View style={{flex:1}}>
-                    <View style={{padding:10,borderBottomWidth:1,borderBottomColor:"#888"}}>
+                    <View style={{padding:10,borderBottomWidth:pixel1,borderBottomColor:"#888"}}>
                         <Text style={styles.title}>{actionDetail.ACT_TITLE}</Text>
                         <Text style={styles.date}>活动时间: {actionDetail.ACT_START_TIME} 到 {actionDetail.ACT_END_TIME}</Text>
                     </View>
@@ -105,6 +109,10 @@ export default connect((state)=>{
 })(ActionDetailView)
 
 const styles = StyleSheet.create({
+    container:{
+        flex:1,
+
+    },
     content:{
         //backgroundColor:"red"
     },

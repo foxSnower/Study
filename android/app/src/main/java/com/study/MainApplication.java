@@ -3,6 +3,7 @@ package com.study;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.reactnative.modules.update.UpdatePackage;
 import org.lovebing.reactnative.baidumap.BaiduMapPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -11,6 +12,7 @@ import com.imagepicker.ImagePickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rnfs.RNFSPackage;
+import cn.reactnative.modules.update.UpdateContext;
 
 import org.lovebing.reactnative.baidumap.BaiduMapPackage;
 
@@ -28,9 +30,15 @@ public class MainApplication extends Application implements ReactApplication {
     }
 
     @Override
+    protected String getJSBundleFile() {
+      return UpdateContext.getBundleUrl(MainApplication.this);
+    }
+
+    @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new UpdatePackage(),
             new BaiduMapPackage(getApplicationContext()),
             new RNFSPackage(),
             new JPushPackage(true,true),

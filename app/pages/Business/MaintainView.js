@@ -229,7 +229,7 @@ class MaintainView extends Component {
                                 } />
                 </View>
                 <View style={{marginTop:15}}>
-                    <LabelInput style={{height:50}}
+                    <LabelInput
                                 inputStyle={{color:"#2b2b2b"}}
                                 label="保养里程"
                                 max={6}

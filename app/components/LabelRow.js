@@ -35,21 +35,21 @@ export default class LabelRow extends Component {
     render(){
         const {vstyle,title,titleStyle,content,contentStyle,hasRightIcon,iconStyle,iconUrl,onPress} = this.props;
         return(
-            <View style={[styles.row, vstyle]}
-
+            <TouchableOpacity style={[styles.row, vstyle]} activeOpacity={0.7}
+                              onPress={ onPress }
             >
                 <Text style={[styles.title, titleStyle]}>{title}</Text>
                 <Text style={[styles.content, contentStyle]}>{content}</Text>
                 {
                     hasRightIcon ?
-                        <TouchableOpacity style={styles.rightBtn} onPress={ onPress } >
+                        <View style={styles.rightBtn}  >
                             <Image style={[styles.img,iconStyle]}
-                                   source={{uri:iconUrl}}></Image>
-                        </TouchableOpacity>
+                                   source={{uri:iconUrl}} />
+                        </View>
                         :null
 
                 }
-            </View>
+            </TouchableOpacity>
         )
     }
 }
