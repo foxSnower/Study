@@ -17,6 +17,8 @@
 #import "RCTRootView.h"
 #import "RCTBaiduMapViewManager.h"
 
+#import "RCTHotUpdate.h"
+
 static NSString *appKey = @"f13507c108f636d6135a9148";     //填写appkey
 static NSString *channel = @"";    //填写channel   一般为nil
 static BOOL isProduction = false;  //填写isProdurion  平时测试时为false ，生产时填写true
@@ -51,7 +53,16 @@ static BOOL isProduction = false;  //填写isProdurion  平时测试时为false 
   
   NSURL *jsCodeLocation;
 
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+#if DEBUG
+  // 原来的jsCodeLocation
+    jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  
+  //jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#else
+  jsCodeLocation=[RCTHotUpdate bundleURL];
+#endif
+  
+
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Study"
