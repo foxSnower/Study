@@ -5,13 +5,14 @@ import {
     StyleSheet,
     View,
     Text,
+    Alert,
     Image
 } from 'react-native';
 
 import {connect} from 'react-redux';
 // util
 // action
-import {fetchOrderDetail} from '../../actions/personalAction';
+import {fetchOrderDetail,cancalBook} from '../../actions/personalAction';
 // common component
 import Button from '../../components/Button';
 import NavBar from '../../components/DefaultNavBar';
@@ -26,7 +27,10 @@ class OrderView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loaded: false
+            loaded: false,
+            commissionBtn:false,
+            repairBtn:false,
+            maintainBtn:false,
         };
     }
 
@@ -47,7 +51,32 @@ class OrderView extends Component {
 
     //取消维修预约
     handleReapirCancelBook = () => {
-
+        const { orderId ,dispatch } = this.props;
+        cancalBook(orderId,2,action=>{
+            if(action.type){
+                dispatch(action);
+                Alert.alert("温馨提示", "取消成功",
+                    [{
+                        text: "确定",
+                        onPress: () => {
+                            return;
+                        }
+                    }]
+                )
+            }else{
+                Alert.alert("温馨提示", JSON.stringify(action),
+                    [{
+                        text: "确定",
+                        onPress: () => {
+                            return;
+                        }
+                    }]
+                )
+            }
+            this.setState({
+                repairBtn: true
+            });
+        })
     }
 
     //处理不同的状态情况 ( 维修
@@ -57,7 +86,9 @@ class OrderView extends Component {
             return (
                 <Button text="取消"
                         style={styles.btn}
-                        onPress={this.handleReapirCancelBook}/>
+                        onPress={this.handleReapirCancelBook}
+                        disabled= { this.state.repairBtn}
+                />
             )
         }else if(status == "1"){
             return (
@@ -87,6 +118,36 @@ class OrderView extends Component {
         }
     }
 
+    //取消保养
+    handleMaintainCancelBook = () => {
+        const { orderId ,dispatch } = this.props;
+        cancalBook(orderId,2,action=>{
+            if(action.type){
+                dispatch(action);
+                Alert.alert("温馨提示", "取消成功",
+                    [{
+                        text: "确定",
+                        onPress: () => {
+                            return;
+                        }
+                    }]
+                )
+            }else{
+                Alert.alert("温馨提示", JSON.stringify(action),
+                    [{
+                        text: "确定",
+                        onPress: () => {
+                            return;
+                        }
+                    }]
+                )
+            }
+            this.setState({
+                maintainBtn: true
+            });
+        })
+    }
+
     //处理不同的状态情况 ( 保养
     handleMaintainStatus = () => {
         //0申请中，1已确认，2已回厂 ，3已评价 -2已取消
@@ -94,7 +155,9 @@ class OrderView extends Component {
             return (
                 <Button text="取消"
                         style={[styles.btn]}
-                        onPress={this.handleMaintainCancelBook}/>
+                        disabled={this.state.maintainBtn}
+                        onPress={this.handleMaintainCancelBook}
+                />
             )
         }else if(status == "1"){
             return (
@@ -126,7 +189,32 @@ class OrderView extends Component {
 
     //取消代办预约
     handleCommissonCancelBook = () => {
-
+        const { orderId ,dispatch } = this.props;
+        cancalBook(orderId,1,action=>{
+            if(action.type){
+                dispatch(action);
+                Alert.alert("温馨提示", "取消成功",
+                    [{
+                        text: "确定",
+                        onPress: () => {
+                            return;
+                        }
+                    }]
+                )
+            }else{
+                Alert.alert("温馨提示", JSON.stringify(action),
+                    [{
+                        text: "确定",
+                        onPress: () => {
+                            return;
+                        }
+                    }]
+                )
+            }
+            this.setState({
+                commissionBtn: true
+            });
+        })
     }
 
     //处理不同的状态情况 ( 代办
@@ -136,7 +224,9 @@ class OrderView extends Component {
             return (
                 <Button text="取消"
                         style={[styles.btn]}
-                        onPress={this.handleCommissonCancelBook}/>
+                        onPress={this.handleCommissonCancelBook}
+                        disabled = {this.state.commissionBtn}
+                />
             )
         }else if(status == "1"){
             return (

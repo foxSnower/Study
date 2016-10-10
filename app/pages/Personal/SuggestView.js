@@ -7,6 +7,7 @@ import {
     Text,
     TouchableOpacity,
     TextInput,
+    Alert,
     Image,
     Platform,
     ScrollView
@@ -35,7 +36,8 @@ class Suggest extends Component {
             currentType: "1",
             faultDesc: '',
             faultDescCount: 0,
-            btnText: '提交'
+            btnText: '提交',
+            btnDisabled:false
         };
 
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
@@ -141,7 +143,8 @@ class Suggest extends Component {
             return;
         }
         this.setState({
-            btnText: '提交中...'
+            btnText: '提交中...',
+            btnDisabled:true
         });
         let submitContent = {
             content,
@@ -151,23 +154,31 @@ class Suggest extends Component {
             deviceModel,
             deviceName
         };
-        UserDefaults.objectForKey("userInfo",userInfo => {
-            if(userInfo){
-                submitSuggest(submitContent, userInfo.LOGIN_USER_ID, (action)=> {
-                    //
-                    if(action.type) {
-                        // 如果有 type，就表示成功
-                        dispatch(action);
-                        this.setState({
-                            btnText: '提交成功'
-                        });
-                        alert("提交成功，感谢您的支持");
-                    }else {
-                        ly_Toast(JSON.stringify(action));
-                    }
-                });
-            }
-        });
+        const { userInfo } = this.props.login
+        if(userInfo){
+            submitSuggest(submitContent, userInfo.LOGIN_USER_ID, (action)=> {
+                //
+                if(action.type) {
+                    // 如果有 type，就表示成功
+                    const { dispatch } = this.props;
+                    dispatch(action);
+                    this.setState({
+                        btnText: '提交',
+                        btnDisabled:false
+                    });
+                    Alert.alert("温馨提示", "提交成功",
+                        [{
+                            text: "确定",
+                            onPress: () => {
+                                return;
+                            }
+                        }]
+                    )
+                }else {
+                    ly_Toast(JSON.stringify(action));
+                }
+            });
+        }
     }
 
     render() {
@@ -314,9 +325,10 @@ class Suggest extends Component {
 }
 
 export default connect((state)=> {
-    const {personal} = state;
+    const {personal,login} = state;
     return {
-        personal
+        personal,
+        login
     }
 })(Suggest)
 

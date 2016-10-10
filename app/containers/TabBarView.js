@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import TabNavigator from 'react-native-tab-navigator';
-import AdvertisementView from './AdvertisementView'
+
 import MyView from '../pages/Home/HomeView'
 import PersonalView from '../pages/Personal/PersonalView'
 import BussinessView from '../pages/Home/BussinessView'
@@ -50,7 +50,6 @@ class TabBarView extends Component {
         super(props);
         this.state = {
             selectedTab: tabBarItems[0].title,
-            adsLoaed: false
         };
     }
 
@@ -90,13 +89,6 @@ class TabBarView extends Component {
         const {userInfo} = this.props.login;
         return (
             <View style={{flex:1}}>
-
-                {
-                    !this.state.adsLoaed ?
-                        <AdvertisementView hideAds={ () => {
-                            this.setState({adsLoaed: true})
-                        }}/>
-                        :
                         <TabNavigator>
                             {
                                 tabBarItems.map((item, i) => {
@@ -138,7 +130,6 @@ class TabBarView extends Component {
                                 })
                             }
                         </TabNavigator>
-                }
             </View>
         )
     }

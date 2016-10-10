@@ -15,12 +15,15 @@ import TabBarView from './TabBarView';
 import {updateFields} from '../actions/fieldsAction'
 import {PlatformiOS} from '../utils/CommonUtil'
 import JPushModule from 'jpush-react-native';
+import AdvertisementView from './AdvertisementView'
 
 class App extends Component {
 
     constructor(props) {
         super(props);
-
+        this.state ={
+            adsLoaed: false
+        }
         const {dispatch} = this.props;
         dispatch(updateFields({count: 2016}));
     }
@@ -61,7 +64,12 @@ class App extends Component {
     render() {
 
         return (
-            <View style={{flex:1}}>
+
+            !this.state.adsLoaed ?
+                <AdvertisementView hideAds={ () => {
+                    this.setState({adsLoaed: true})
+                }}/>
+                :<View style={{flex:1}}>
                 <StatusBar
                     barStyle="light-content"
                 />
@@ -78,6 +86,8 @@ class App extends Component {
                            }}
                 />
             </View>
+
+
         )
     }
 }
