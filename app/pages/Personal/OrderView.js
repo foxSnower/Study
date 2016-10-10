@@ -111,10 +111,9 @@ class Order extends Component {
     // 单行样式，会传入数组中的单个元素
     //require('../../image/mine/mait.png')
     renderCell(row) {
-        alert(JSON.stringify(row))
         return (
-            <View style = {styles.item}>
-                <TouchableOpacity
+            <View >
+                <TouchableOpacity style = {styles.item}
                     onPress = {()=> {
                         this.props.navigator.push({
                             component: OrderDetail,
@@ -135,7 +134,7 @@ class Order extends Component {
                     </View>
                     <View style = {styles.orderStatus}>
                         <Text>{row["BILL_STATUS_NAME"]}</Text>
-                        <Text>{row["BILL_TIME"]}</Text>
+                        <Text style={{marginTop:10}}>{row["BILL_TIME"]}</Text>
                     </View>    
                 </TouchableOpacity>
             </View>
@@ -203,19 +202,25 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: BGColor
     },
+    dlrName:{
+        color:"red"
+    },
     item: {
+        flex:1,
         backgroundColor: '#fff',
+        flexWrap:"nowrap",
         flexDirection:"row",
+        justifyContent:"space-between",
         marginTop: 20,
         padding: 20,
-        justifyContent:"space-between"
+        alignItems:"center",
     },
     icon: {
         height: 50,
         width: 50,
     },
-    orderInfo: {
-        width: Screen.width*0.6
+    time: {
+        marginTop:10
     },
     orderStatus: {
     }

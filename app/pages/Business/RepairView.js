@@ -110,6 +110,7 @@ class RepairView extends Component {
                     }else{
                         post_img = [];
                     }
+                    alert(post_img[0].length)
                     dispatch(handleRepairBook({
                         ATTACHS: post_img,
                         BOOK_TIME: this.state.strBookTime,

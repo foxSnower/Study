@@ -229,7 +229,7 @@ export let loginSubim = (mobile, password,nav) =>{
                     JPush.setTags([userInfoData.DATA[0]["LOGIN_USER_ID"]],()=>{
                         ly_Toast("设置tag成功")
                     },()=>{
-                        ly_Toast("设置tag失败")
+                       // ly_Toast("设置tag失败")
                     })
 
                     //登陆成功将用户信息写入缓存中

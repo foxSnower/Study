@@ -68,10 +68,7 @@ class CarBindView extends Component {
                 ly_Toast("请输入手机号");
                 return;
             }
-            if (!validateMobile(this.state.mobile)) {
-                ly_Toast("手机号码格式不正确");
-                return;
-            }
+
         }else if(this.state.bindTypeValue == "1"){
             if (this.state.cardNo == null || this.state.cardNo == '') {
                 ly_Toast("请输入会员卡号");

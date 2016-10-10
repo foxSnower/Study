@@ -85,7 +85,7 @@ class TestDriveBook extends Component {
             btnText:"正在提交...",
             btnDisabled:true
         })
-        dispatch(handleBook(LOGIN_USER_ID,this.state.userName,this.state.mobile,td_time,this.state.dlrInfo.DLR_CODE,CAR_SERIES_CODE,"NA",res =>{
+        dispatch(handleBook(LOGIN_USER_ID,this.state.userName,this.state.mobile,this.state.dlrInfo.DLR_CODE,td_time,CAR_SERIES_CODE,"NA",res =>{
             this.setState({
                 btnText:"提交预约",
                 btnDisabled:false

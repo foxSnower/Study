@@ -44,9 +44,9 @@ export default class AdvertisementView extends Component {
             <View style={styles.container}>
                 <Image style={{width: Screen.width, height: Screen.height}}
                        source={{uri: 'http://upload-images.jianshu.io/upload_images/953718-542ce9d4633374a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240'}}>
-                    <TouchableOpacity style={{width: 80, height: 40, backgroundColor: 'lime', marginTop: 40}}
+                    <TouchableOpacity style={{width: 80, height: 40,borderWidth:1,borderColor:"#999",justifyContent:"center",alignItems:"center", borderRadius:10, backgroundColor: 'transparent', position:"absolute",right:30,bottom:30}}
                                       onPress={this.props.hideAds}>
-                        <Text>{`跳过${this.state.second}`}</Text>
+                        <Text style={{fontSize:20}}>{`跳过${this.state.second}`}</Text>
                     </TouchableOpacity>
                 </Image>
             </View>
