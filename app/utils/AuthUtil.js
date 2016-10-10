@@ -21,13 +21,13 @@ export default function auth(type, component, navigator) {
   }else if(type === "1" || type === "3") {
     // 用户已经登录，但是没有绑定车辆
     Alert.alert("温馨提示", "您还未绑定车辆，是否现在进行绑定？", [
+      {"text": "取消", onPress: ()=>{
+        return;
+      }},
       {"text": "确定", onPress: ()=>{
         navigator.push({
           component: CarBindView
         });
-      }},
-      {"text": "取消", onPress: ()=>{
-        return;
       }}
     ]);
   }else {

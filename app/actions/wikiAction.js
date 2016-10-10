@@ -3,27 +3,30 @@ import * as types from './actionTypes';
 // utils
 import {requestPOST} from '../utils/FetchUtil';
 import {HANDLER, IMGURL} from '../utils/RequestURL';
+import UserDefaults from '../utils/GlobalStorage';
 
 // Carinfo 获取车辆信息
 export let fetchCarInfo = (value, cb) => {
     requestPOST(HANDLER, {
         "API_CODE": "CarInfo",
+        "PAGE_SIZE": "20",
+        "PAGE_INDEX": 1,
+        "SORT": "BUY_DATE DESC",
         "PARAM": {
             "LOGIN_USER_ID": value
         }
     }, (data) => {
         if(data.RESULT_CODE === '0') {
+            UserDefaults.setObject("carInfo", data.DATA);
             cb({
                 type: types.FETCH_CAR_INFO,
-                value: {
-                    car: data.DATA.CARS[0]
-                }
+                value: data.DATA.CARS
             });
         }else {
-            cb(data);
+            cb(JSON.stringify(data));
         }
     }, (err) => {
-        cb(err);
+        cb(JSON.stringify(err));
     });
 };
     // GetCarSeriesIMG 获取用车百科顶部图片

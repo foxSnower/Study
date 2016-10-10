@@ -10,6 +10,7 @@ import { ly_Toast } from '../utils/CommonUtil'
 const initialState = {
     code: 60,
     find_code:60,
+    // 按钮文本
     loginBtnText: '登 录',
     reSendText:'发送验证码',
     reSendBtnDisabled:false,
@@ -19,13 +20,24 @@ const initialState = {
     findSendBtnDisabled:false,
     userInfo:{},
     VIPInfo:{},
-    carInfo:{}
+    carInfo:{},
+    cars: []
 };
 
 export default function fields(state = initialState, action = {}) {
     switch (action.type) {
         case types.UPDATE_LOGIN:
             return Object.assign({}, state, action.value);
+        // 获取用户信息
+        case types.LOGIN:
+            return Object.assign({}, state, {
+                userInfo: action.value
+            });
+        // 获取车辆信息
+        case types.FETCH_CAR_INFO:
+            return Object.assign({}, state, {
+                cars: action.value
+            });
         case "initIndex":
             return Object.assign({}, state, {
                 userInfo: action.value.userInfo,

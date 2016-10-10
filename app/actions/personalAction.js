@@ -27,16 +27,19 @@ export let handleCarUnbind = (userId,callback) => {
             "LOGIN_USER_ID": userId
         }
     }, (data) => {
+        //console.log('handleCarUnbind 处理成功的请', data);
         if(data["RESULT_CODE"] === '0') {
             callback({
                 type: "carUnbind"
             });
         }else {
-            alert(data["RESULT_DESC"])
+            //alert(data["RESULT_DESC"])
             // alert("解绑失败")
+            callback(JSON.stringify(data));
         }
     }, (err) => {
-        console.log(err);
+        //console.log('handleCarUnbind 处理失败的情况', err);
+        callback(JSON.stringify(err));
     });
 }
 // 获取积分

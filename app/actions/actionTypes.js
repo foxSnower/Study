@@ -11,6 +11,12 @@ export const UPDATE_LOGIN = 'UPDATE_LOGIN';
 // 初始化首页
 export const INIT_INDEX = "INIT_INDEX";
 /*------------------
+    用户登录
+------------------*/
+export const LOGIN = "LOGIN";
+// 用户信息
+
+/*------------------
     用车百科
 ------------------*/
 // 获取车辆信息

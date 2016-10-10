@@ -8,7 +8,7 @@ import {
 } from  'react-native';
 import Toast from 'react-native-root-toast';
 
-export const Debug = false;    //设置开发模式
+export const Debug = true;    //设置开发模式
 export const BAIDU_MAP_KEY = 'IfMMDZYerUgh6yfc7MtKqOpCv0e4hMLd';
 export const GM_CALL = "400-830-8899";   //登录异常客服电话
 export const Screen = Dimensions.get('window');   //获取屏幕

@@ -5,7 +5,8 @@ import * as types from '../actions/actionTypes';
 import {IMGURL} from '../utils/RequestURL';
 
 const initialiState = {
-    car: null,
+    // 用户车辆列表
+    cars: [],
     title: '补缺通用',
     path: `${IMGURL}/image/car/big/补缺通用.jpg`,
     list: [],
@@ -23,8 +24,12 @@ const initialiState = {
 
 export default function wiki(state = initialiState, action = {}) {
     switch (action.type) {
-        case types.FETCH_CAR_INFO:
-            return Object.assign({}, state, action.value)
+        // 获取车辆信息
+        // case types.FETCH_CAR_INFO:
+        //     return Object.assign({}, state, {
+        //         cars: action.value
+        //     });
+        // 获取车辆图片
         case types.FETCH_IMG:
             return Object.assign({}, state, {
                 path: action.path,
