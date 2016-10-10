@@ -15,38 +15,27 @@ export function updateBook(val) {
 }
 
 //获取当前地理位置信息
-export let getCurrentLocatiom = (callback) => {
+export let getRescueDlrInfo = (lng,lat,callback) => {
     return dispatch => {
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                requestPOST(
-                    HANDLER,
-                    {
-                        API_CODE : 'DLR_Info',
-                        PARAM : {
-                            LNG : Math.abs(position.coords.longitude).toString(),
-                            LAT : Math.abs(position.coords.latitude).toString(),
-                        },
-                        PAGE_SIZE : 5,
-                        PAGE_INDEX : 1,
-                        SORT : "DISTANCE2 ASC"
+            requestPOST(
+                HANDLER,
+                {
+                    API_CODE : 'DLR_Info',
+                    PARAM : {
+                        LNG : lng,
+                        LAT : lat,
                     },
-                    (data) => {
-                        //alert(JSON.stringify(data.DATA[0]))
-                        callback({dlrInfo:data.DATA[0],lng:Math.abs(position.coords.longitude).toString(),lat:Math.abs(position.coords.latitude).toString()})
-                    },
-                    (error) => {
-                        ly_Toast(error.message,1000,-20);
-                    }
-                )
-            },
-            (error) => {
-                ly_Toast(error.message,1000,-20)
-            },
-            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-        );
-
+                    PAGE_SIZE : 5,
+                    PAGE_INDEX : 1,
+                    SORT : "DISTANCE2 ASC"
+                },
+                (data) => {
+                    callback(data)
+                },
+                (error) => {
+                    console.log(error.message,1000,-20);
+                }
+            )
     }
 }
 

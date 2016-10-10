@@ -45,7 +45,7 @@ class RepairView extends Component {
             minTime: setDefaultTime(2, false),
             userName: CUST_NAME,
             mobile: LOGIN_MOBILE,
-            height:0,
+            height:50,
             btnDisabled:false,
             btnText:"立即预约",
             carInfoArr:[],
@@ -434,7 +434,6 @@ const styles = StyleSheet.create({
         paddingLeft: 18,
         borderWidth:2,
         borderColor:BORDERColor,
-        flex:1,
         backgroundColor:"#fff",
         borderRadius:4
     },

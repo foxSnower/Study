@@ -28,6 +28,7 @@ class Suggest extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            height:50,
             deviceOs: '未知',
             deviceModel: '未知',
             deviceName: '未知',
@@ -127,6 +128,13 @@ class Suggest extends Component {
         let deviceOs = this.state.deviceOs;
         let deviceModel = this.state.deviceModel;
         let deviceName = this.state.deviceName;
+        if(deviceOs.toUpperCase() == "IOS" ){
+            deviceName = 2;
+        }else if(deviceOs.toUpperCase() == "ANDROID" ){
+            deviceName = 4;
+        }else{
+            deviceName = 0;
+        }
         // 判断问题描述是否有值
         if(content === "" || !content) {
             ly_Toast("请输入问题描述", 1000, -20);

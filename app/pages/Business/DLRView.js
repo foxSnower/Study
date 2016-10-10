@@ -14,6 +14,7 @@ import{
 }from 'react-native';
 
 import PickerAndroid from '../../components/PickerAndroid';
+import DlrMapView from './DlrMapView'
 
 let Picker = Platform.OS === 'ios' ? PickerIOS : PickerAndroid;
 
@@ -26,7 +27,6 @@ import SearchInput from '../../components/SearchInput';
 import {updateDlr, getCityData, searchDlr} from '../../actions/dlrAction'
 import UserDefaults from '../../utils/GlobalStorage';
 import SelectPickerView from '../../components/SelectPickerView';
-import DLRMapView from './DLRMapView';
 import LoaderView from '../../components/LoaderView'
 
 let pageIndex = 0;
@@ -53,14 +53,14 @@ class DLRView extends Component {
         pageIndex = 1;
         const {dispatch}= this.props;
         const { province_id, city_id,dlrName } =this.props.dlr;
-        //UserDefaults.objectForKey("locationInfo",(data)=>{
+        UserDefaults.objectForKey("locationInfo",(data)=>{
             let params ={};
             if(dlrName && dlrName!=null){
                 params.DLR_NAME = dlrName;
             }
-           // if(data && data != null){  //获取到地理位置
-           //     params.LNG = data["LNG"];
-          //      params.LAT = data["LAT"];
+           if(data && data != null){  //获取到地理位置
+               params.LNG = data["LNG"];
+               params.LAT = data["LAT"];
                 params.PROVINCE_ID = province_id;
                 params.CITY_ID = city_id;
                 //ly_Toast(JSON.stringify(params))
@@ -77,10 +77,10 @@ class DLRView extends Component {
                     });
 
                 }));
-           // }else{
-           //     ly_Toast("无法获取到定位信息",2000,0);
-           // }
-        //})
+           }else{
+               ly_Toast("无法获取到定位信息",2000,0);
+           }
+        })
 
     };
 
@@ -298,7 +298,7 @@ class DLRView extends Component {
                         <Text style={{alignItems: "flex-end"}}>{rowData.LINK_ADDR}</Text>
                     </View>
                 </TouchableOpacity>
-                <View style={{flex: 1, flexDirection: "row"}}>
+                <View style={{flex: 1, flexDirection: "row",paddingVertical:8}}>
                     <TouchableOpacity onPress={()=> {
                         this.props.navigator.push({
                             component: DLRMapView,
@@ -319,7 +319,19 @@ class DLRView extends Component {
                                resizeMode="contain">
 
                         </Image>
-                        <Text style={{fontSize: 18, marginLeft: 15}}>地图</Text>
+                        <TouchableOpacity onPress={()=>{
+                            this.props.navigator.push({
+                                component:DlrMapView,
+                                params:{
+                                    navTitle:rowData.DLR_SHORT_NAME,
+                                    lat:rowData.LAT,
+                                    lng:rowData.LNG
+                                }
+                            })
+                        }}>
+                            <Text style={{fontSize: 18, marginLeft: 15}}>地图</Text>
+                        </TouchableOpacity>
+
                     </TouchableOpacity>
                     <TouchableOpacity onPress={()=> {
                         Linking.openURL(`tel:${rowData.SERVICE_TEL}`);
@@ -354,7 +366,6 @@ export default connect((state) => {
 
 const styles = StyleSheet.create({
     cellView: {
-        height: 110,
         marginTop: 10,
         backgroundColor: "#fff",
     },
