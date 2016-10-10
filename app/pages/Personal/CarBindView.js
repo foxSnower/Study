@@ -117,9 +117,7 @@ class CarBindView extends Component {
                                     onPress:()=>{
                                         const { navigator } = that.props;
                                         if(navigator) {
-                                            navigator.push({
-                                                component:PersonalView
-                                            });
+                                            navigator.pop()
                                         }
                                     }
                                 }

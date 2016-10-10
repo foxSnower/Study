@@ -74,7 +74,6 @@ class PersonalInfoView extends Component {
                 const { dispatch } = this.props;
                 // 获取用户信息
                 getUserInfo(userInfo["LOGIN_USER_ID"], res=>{ 
-                    alert(JSON.stringify(res));
                     dispatch(res);
                 });
                 getVIPInfo(userInfo["LOGIN_USER_ID"],res=>{ dispatch(res);});
@@ -114,14 +113,16 @@ class PersonalInfoView extends Component {
         return(
                 <ScrollView tabLabel="车辆信息">
                     <View>
-                        <TouchableOpacity style={[styles.row,{backgroundColor:"rgba(200,250,100,1)"}]}
+                        <TouchableOpacity style={styles.row}
                                             onPress={()=>{
                                                 this.selectViewLocale.onShow()
                                             }}>
                             <Text style={styles.title}>车牌</Text>
-                            <Text style={styles.content}>{this.state.carInfo.carNo}
-                            </Text>
-                            <Image source={{uri:icon_go}} style={{paddingTop:15,width:10,height:20}} />
+                            <View style={{flexDirection:"row"}}>
+                                <Text style={[styles.content,{marginRight:10}]}>{this.state.carInfo.carNo}
+                                </Text>
+                                <Image source={{uri:icon_go}} style={{paddingTop:15,width:10,height:20}} />
+                            </View>
                         </TouchableOpacity>
                         <SelectPickerView ref={(p)=>this.selectViewLocale = p}
                                           pickerArr={this.state.carInfoArr}
