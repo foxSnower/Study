@@ -9,20 +9,23 @@ import {
     Alert,
     TouchableOpacity
 } from 'react-native';
-
-import {connect} from 'react-redux'
-import NavBar from '../../components/DefaultNavBar'
-import {IMGURL} from '../../utils/RequestURL'
-import {BGColor,BTNColor,Screen,GetDateStr,ly_Toast,validateMobile} from '../../utils/CommonUtil'
-import LabelRow from '../../components/LabelRow'
-import LabelInput from '../../components/LabelInput'
-
-import SelectPickerView from '../Business/CarBrandPicker'
-
-import Button from '../../components/Button'
-import { handleCarBind ,ReGetCarInfo} from '../../actions/carBindAction'
-import UserDefaults from '../../utils/GlobalStorage'
-import PersonalView from './PersonalView'
+// 
+import {connect} from 'react-redux';
+// action
+import { handleCarBind ,ReGetCarInfo} from '../../actions/carBindAction';
+import {fetchCarInfo} from '../../actions/loginAction';
+// util
+import {IMGURL} from '../../utils/RequestURL';
+import {BGColor,BTNColor,Screen,GetDateStr,ly_Toast,validateMobile} from '../../utils/CommonUtil';
+import UserDefaults from '../../utils/GlobalStorage';
+// common component
+import NavBar from '../../components/DefaultNavBar';
+import LabelRow from '../../components/LabelRow';
+import LabelInput from '../../components/LabelInput';
+import Button from '../../components/Button';
+// page component
+import SelectPickerView from '../Business/CarBrandPicker';
+import PersonalView from './PersonalView';
 
 
 
@@ -55,6 +58,8 @@ class CarBindView extends Component {
     }
     //点击车辆绑定
     handleCarBindClick = () => {
+        const { dispatch, login } = this.props;
+
         if(this.state.bindTypeValue == "3"){
             if (this.state.carNo == null || this.state.carNo == '') {
                 ly_Toast("请输入车牌号");
@@ -88,59 +93,69 @@ class CarBindView extends Component {
             btnDisabled:true
         })
         let that = this ;
-        UserDefaults.objectForKey("userInfo",userInfo => {
-            if(userInfo){
-                const { dispatch } = this.props;
-                dispatch(handleCarBind({
-                    "LOGIN_USER_ID": userInfo["LOGIN_USER_ID"],
-                    "BIND_TYPE": this.state.bindTypeValue,
-                    "CARD_NO": this.state.cardNo,
-                    "VIN": this.state.vin,
-                    "CAR_NO": this.state.carNo,
-                    "CUST_NAME": this.state.userName,
-                    "CUST_TEL": this.state.mobile
-                },res => {
-                    this.setState({
-                        btnText:"立即绑定",
-                        btnDisabled:false
-                    })
-                    if(res.RESULT_CODE == "0"){
-                        let userInfo2 = res.DATA[0]
-                        userInfo2["LOGIN_USER_ID"] = userInfo["LOGIN_USER_ID"]
-                        userInfo2["USER_TYPE"] = '2';
-                        UserDefaults.setObject("userInfo",userInfo2);
-                        dispatch(ReGetCarInfo(userInfo["LOGIN_USER_ID"]))
-                        Alert.alert("温馨提示","恭喜您,车辆绑定成功!",
-                            [
-                                {
-                                    text:"确定",
-                                    onPress:()=>{
-                                        const { navigator } = that.props;
-                                        if(navigator) {
-                                            navigator.pop()
-                                        }
+        const userInfo = login.userInfo;
+        console.log("handleCarBindClick", userInfo)
+        if(userInfo){
+            let postContent = {
+                "LOGIN_USER_ID": userInfo["LOGIN_USER_ID"],
+                "BIND_TYPE": this.state.bindTypeValue,
+                "CARD_NO": this.state.cardNo,
+                "VIN": this.state.vin,
+                "CAR_NO": this.state.carNo,
+                "CUST_NAME": this.state.userName,
+                "CUST_TEL": this.state.mobile
+            };
+            handleCarBind(postContent, action => {
+                this.setState({
+                    btnText:"立即绑定",
+                    btnDisabled:false
+                })
+                if(action.type){
+                    // 绑定成功
+                    let userInfo2 = action.value;
+                    userInfo2["LOGIN_USER_ID"] = userInfo["LOGIN_USER_ID"]
+                    userInfo2["USER_TYPE"] = '2';
+                    // 将用户信息写入缓存
+                    UserDefaults.setObject("userInfo",userInfo2);
+                    // 同时写一份到 reducer 中
+                    dispatch({
+                        type: "LOGIN",
+                        value: userInfo2
+                    });
+                    // 获取车辆信息
+                    fetchCarInfo(userInfo.LOGIN_USER_ID, action=> {
+                        dispatch(action);
+                    });
+                    Alert.alert("温馨提示","恭喜您,车辆绑定成功!",
+                        [
+                            {
+                                text:"确定",
+                                onPress:()=>{
+                                    const { navigator } = that.props;
+                                    if(navigator) {
+                                        navigator.pop()
                                     }
                                 }
-                            ]
-                        )
-                    }else{
-                        Alert.alert("温馨提示",res.RESULT_DESC,
-                            [
-                                {
-                                    text:"确定",
-                                    onPress:()=>{
-                                        return;
-                                    }
+                            }
+                        ]
+                    )
+                }else{
+                    Alert.alert("温馨提示", action,
+                        [
+                            {
+                                text:"确定",
+                                onPress:()=>{
+                                    return;
                                 }
-                            ]
-                        )
-                    }
-                }))
-            }else{
-                ly_Toast("请先登录!")
-                return
-            }
-        })
+                            }
+                        ]
+                    )
+                }
+            })
+        }else{
+            ly_Toast("请先登录!");
+            return;
+        }
     };
 
     //根据绑定类型不同改变下面的内容

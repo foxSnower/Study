@@ -11,7 +11,7 @@ import {
     BackAndroid,
     ToastAndroid
 } from 'react-native';
-
+import {connect} from 'react-redux';
 import TabNavigator from 'react-native-tab-navigator';
 import AdvertisementView from './AdvertisementView'
 import MyView from '../pages/Home/HomeView'
@@ -44,7 +44,7 @@ const tabBarItems = [
     }
 ];
 
-export default class TabBarView extends Component {
+class TabBarView extends Component {
 
     constructor(props) {
         super(props);
@@ -87,7 +87,7 @@ export default class TabBarView extends Component {
     };
 
     render() {
-
+        const {userInfo} = this.props.login;
         return (
             <View style={{flex:1}}>
 
@@ -115,17 +115,15 @@ export default class TabBarView extends Component {
                                                                              source={item.renderSelectedIcon}/>}
                                             onPress={() => {
                                                 if (item.title === "我的") {
-                                                    UserDefaults.objectForKey("userInfo", (data)=> {
-                                                        if (!data || !data["LOGIN_USER_ID"]) {
-                                                            this.props.navigator.push({
-                                                                component: LoginView
-                                                            })
-                                                        } else {
-                                                            this.setState({
-                                                                selectedTab: item.title
-                                                            })
-                                                        }
-                                                    });
+                                                    if (!userInfo || !userInfo.LOGIN_USER_ID) {
+                                                        this.props.navigator.push({
+                                                            component: LoginView
+                                                        })
+                                                    } else {
+                                                        this.setState({
+                                                            selectedTab: item.title
+                                                        })
+                                                    }
                                                 } else {
                                                     this.setState({
                                                         selectedTab: item.title
@@ -145,3 +143,10 @@ export default class TabBarView extends Component {
         )
     }
 }
+
+export default connect((state)=> {
+    const {login} = state;
+    return {
+        login
+    }
+})(TabBarView);

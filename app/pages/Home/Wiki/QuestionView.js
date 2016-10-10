@@ -34,10 +34,10 @@ class Answer extends Component {
     }
     // 从数据库查询数据
     search(keyword) {
-        // 开始搜索时将 loaded 设置为 false
-        this.setState({
-            loaded: false
-        })
+      // 开始搜索时将 loaded 设置为 false
+      this.setState({
+          loaded: false
+      })
       //alert(keyword)
       const {dispatch} = this.props
       searchQuestion(keyword, (action)=> {
@@ -56,7 +56,7 @@ class Answer extends Component {
         // 如果是从搜索框跳转过来的，使用搜索关键词进行查询
         this.search(keyword)
       }else {
-        fetchQuestion(login.carInfo.CARS[0].CAR_SERIES_ID, quesType, (action)=> {
+        fetchQuestion(login.cars[0].CAR_SERIES_ID, quesType, (action)=> {
           // dispatch 改变数据后，需要得到改变后的 state
           console.log('fetchQuestion action is :', action)
           dispatch(action)
@@ -113,7 +113,7 @@ class Answer extends Component {
                     renderRow = {(obj)=> {
 
                       return <Item
-                          style = {styles.item}
+                          style = {[styles.item, {alignItems: "flex-start"}]}
                           onPress = {()=> {
                               this.props.navigator.push({
                                   component: Detail,

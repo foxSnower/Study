@@ -300,3 +300,10 @@ export let fetchCarInfo = (value, cb) => {
         cb(JSON.stringify(err));
     });
 };
+
+// 退出登录
+export let logout = () => {
+    return {
+        type: types.LOGOUT
+    };
+};

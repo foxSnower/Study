@@ -401,7 +401,6 @@ class PersonalView extends Component {
         const icon_ip = `${IMGURL}/images/icon_uc_opinion.png`;
         const icon_set = `${IMGURL}/images/icon_uc_set.png`;
 
-
         return (
             <ScrollView>
                 <View style={{backgroundColor:"#efeff4"}}>
@@ -421,7 +420,7 @@ class PersonalView extends Component {
                             </Text>
                             <Text style={styles.type}>
                                 {userInfo.USER_TYPE == 2 ? `会员卡号: ${userInfo.CARD_NO}`:
-                                 `手机号: ${userInfo.CUST_TEL}`
+                                 `手机号: ${userInfo.LOGIN_MOBILE}`
                                 }
                             </Text>
                         </View>
@@ -474,18 +473,6 @@ class PersonalView extends Component {
                             <Image  style={{width:20,height:20}}
                                     source={{uri:icon_set}} />
                             <Text style={{marginLeft:15,flex:5}}>设置
-                            </Text>
-                            <Image style={styles.arrow} source={{uri:icon_go}} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.li} activeOpacity={0.7}
-                                                onPress={()=>{
-                                                    this.props.navigator.push({
-                                                        component:Message
-                                                    })
-                                                }}>
-                            <Image  style={{width:20,height:20}}
-                                    source={{uri:icon_set}} />
-                            <Text style={{marginLeft:15,flex:5}}>测试
                             </Text>
                             <Image style={styles.arrow} source={{uri:icon_go}} />
                         </TouchableOpacity>

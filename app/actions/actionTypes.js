@@ -14,6 +14,7 @@ export const INIT_INDEX = "INIT_INDEX";
     用户登录
 ------------------*/
 export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
 // 用户信息
 
 /*------------------
@@ -70,3 +71,6 @@ export const UPDATE_DRIVE = 'UPDATE_DRIVE';
 export const UPDATE_DLR = 'UPDATE_DLR';
 //车辆绑定
 export const UPDATE_CARBIND = 'UPDATE_CARBIND';
+// 在车辆绑定页面的车辆绑定 by litao
+export const CAR_BIND = 'CAR_BIND';
+

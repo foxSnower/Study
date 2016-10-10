@@ -137,6 +137,7 @@ class Answer extends Component {
                     }}
                     title = {`${obj["LOOKUP_VALUE_NAME"]}问题`}
                     image = {require('../../../image/icon_wiki_q.png')}
+                    center = {true}
                 />
               }}
             />

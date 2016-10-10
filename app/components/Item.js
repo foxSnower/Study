@@ -22,7 +22,8 @@ export default class Item extends Component {
         onPress: PropTypes.fun,
         imgStyle: PropTypes.object,
         rightText: PropTypes.string,
-        tip: PropTypes.string
+        tip: PropTypes.string,
+        center: PropTypes.boolean
     };
 
     render() {
@@ -33,8 +34,12 @@ export default class Item extends Component {
             onPress, 
             imgStyle, 
             rightText, 
-            tip
+            tip,
+            center
         } = this.props;
+        const centerStyle = center ? null : {
+            alignSelf: "flex-start"
+        };
         return (
             <View>
                 <TouchableOpacity
@@ -50,10 +55,10 @@ export default class Item extends Component {
                         <Text style = {styles.tip}>{tip}</Text> :
                         null
                     }
-                    <View style = {styles.touch}>
-                            <Text 
-                                style = {styles.title}
-                            >{title}</Text>
+                    <View style = {[styles.touch, centerStyle]}>
+                        <Text 
+                            style = {styles.title}
+                        >{title}</Text>
                         {description ?
                             <Text
                                 style = {styles.description}
@@ -79,7 +84,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-around',
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: '#fff',
       paddingTop: 10,
       paddingBottom: 10,

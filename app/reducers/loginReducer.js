@@ -38,10 +38,11 @@ export default function fields(state = initialState, action = {}) {
             return Object.assign({}, state, {
                 cars: action.value
             });
+        // 初始化页面
         case "initIndex":
             return Object.assign({}, state, {
                 userInfo: action.value.userInfo,
-                carInfo: action.value.carInfo
+                cars: action.value.carInfo.CARS
             });
         case "getUserInfo":
             return Object.assign({}, state,{
@@ -60,6 +61,12 @@ export default function fields(state = initialState, action = {}) {
                     carInfo:action.value
                 });
             }
+        // 退出登录
+        case types.LOGOUT:
+            return Object.assign({}, state, {
+                userInfo: {},
+                cars: []
+            });
         default:
             return state;
     }

@@ -47,20 +47,26 @@ export let ReGetCarInfo = (userId) => {
 
 //车辆绑定
 export let handleCarBind = (post_data,callback) => {
-    return dispatch =>{
-        requestPOST(
-            HANDLER,
-            {
-                "API_CODE": "Bind_Carowner",
-                "PARAM": post_data
-            },
-            (data)=>{
-                callback(data);
-            },
-            (err)=>{
-                console.log(err);
+    requestPOST(
+        HANDLER,
+        {
+            "API_CODE": "Bind_Carowner",
+            "PARAM": post_data
+        },
+        (data)=>{
+            console.log("绑定车辆", data);
+            if(data.RESULT_CODE === "0") {
+                callback({
+                    type: types.CAR_BIND,
+                    value: data.DATA[0]
+                });
+            }else {
+                callback(JSON.stringify(data));
             }
-        )
-    }
+        },
+        (err)=>{
+            callback(JSON.stringify(err));
+        }
+    )
 }
 

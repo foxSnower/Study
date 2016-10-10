@@ -14,6 +14,8 @@ import {
     BackAndroid,
     Platform
 } from 'react-native';
+// 
+import {logout} from '../../actions/loginAction';
 import { IMGURL } from '../../utils/RequestURL'
 import LoginView from '../Login/LoginView'
 import NavBar from '../../components/DefaultNavBar'
@@ -44,10 +46,13 @@ class CommonRow extends Component{
 export default class SettingView extends Component {
 
     handleExitLogin = () => {
+        const {dispatch} = this.props;
         //清空用户信息
         UserDefaults.setObject("userInfo",{});
         //清空车辆信息
         UserDefaults.setObject("carInfo",{});
+        dispatch(logout());
+
         this.props.navigator.resetTo({
             component: TabBarView
         });
