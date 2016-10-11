@@ -97,11 +97,12 @@ class Suggest extends Component {
                 } else {
                     source = {uri: response.uri.replace('file://', ''), isStatic: true};
                 }
+                source = {uri:`data:image/png;base64,${response.data}`} ;
                 // 这里是得到了当前选择的图片，需要将其和之前reducer中的放到一起
                 let showAry = personal.img.showAry;
                 let uploadAry = personal.img.uploadAry;
                 showAry.push(source);
-                uploadAry.push(response.data);
+                uploadAry.push({FILE_NAME:new Date().getTime(),IMAGE_URL:response.data});
                 let imgObj = {
                     showAry,
                     uploadAry
@@ -131,11 +132,11 @@ class Suggest extends Component {
         let deviceModel = this.state.deviceModel;
         let deviceName = this.state.deviceName;
         if(deviceOs.toUpperCase() == "IOS" ){
-            deviceName = 2;
+            deviceModel = 2;
         }else if(deviceOs.toUpperCase() == "ANDROID" ){
-            deviceName = 4;
+            deviceModel = 4;
         }else{
-            deviceName = 0;
+            deviceModel = 0;
         }
         // 判断问题描述是否有值
         if(content === "" || !content) {
