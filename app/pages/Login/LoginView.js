@@ -141,14 +141,14 @@ class LoginView extends Component {
                             }, {
                                 text: "暂不绑定",
                                 onPress: () => {
-                                    this.props.navigator.replace({
+                                    this.props.navigator.resetTo({
                                         component: TabBarView
                                     })
                                 }
                             }]
                         )
                     } else {
-                        this.props.navigator.replace({
+                        this.props.navigator.resetTo({
                             component: TabBarView
                         })
                     }
@@ -162,7 +162,7 @@ class LoginView extends Component {
             }else {
                 if(Debug) {
                     // 如果是调试环境
-                    alert(action);
+                    alert("loginSubim  ", action);
                 }else {
                     // 登录失败
                     ly_Toast("登录失败", 2000);

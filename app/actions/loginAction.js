@@ -36,7 +36,7 @@ export function initIndex(cb) {
                 // 
                 //alert(JSON.stringify(carInfo));
                 cb({
-                    type: "initIndex",
+                    type: types.INIT_INDEX,
                     value: {
                         userInfo,
                         carInfo
@@ -88,17 +88,15 @@ export let getVIPInfo = (userId, callback) => {
         (data) => {
             if (data.RESULT_CODE == "0") {
                 callback({
-                    type: "getVIPInfo",
+                    type: types.FETCH_VIP_INFO,
                     value: data.DATA[0]
                 })
             } else {
-                ly_Toast(data.RESULT_DESC);
-                return;
+                callback(JSON.stringify(data));
             }
         },
         (err) => {
-            ly_Toast(err.message, -20)
-            return;
+            callback(JSON.stringify(err));
         }
     )
 }
@@ -115,17 +113,15 @@ export let getUserInfo = (userId, callback) => {
             (data) => {
                 if (data.RESULT_CODE == "0") {
                     callback({
-                        type: "getUserInfo",
+                        type: types.FETCH_USER_INFO,
                         value: data.DATA[0]
                     })
                 } else {
-                    ly_Toast(data.RESULT_DESC);
-                    return;
+                    callback(JSON.stringify(data));
                 }
             },
             (err) => {
-                ly_Toast(err.message, -20)
-                return;
+                callback(JSON.stringify(err));
             }
         )
     }
@@ -237,7 +233,7 @@ export let loginSubim = (mobile, password, cb) => {
                 //登陆成功将用户信息写入缓存中
                 UserDefaults.setObject("userInfo", userInfoData.DATA[0]);
                 cb({
-                    type: types.LOGIN,
+                    type: types.UPDATE_USER_INFO,
                     value: userInfoData.DATA[0]
                 });
 

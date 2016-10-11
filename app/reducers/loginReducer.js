@@ -12,15 +12,19 @@ const initialState = {
     find_code:60,
     // 按钮文本
     loginBtnText: '登 录',
+    loginBtnDisabled: false,
     reSendText:'发送验证码',
     reSendBtnDisabled:false,
-    loginBtnDisabled: false,
     alreadyReg:false,
     findSendText:'发送验证码',
     findSendBtnDisabled:false,
-    userInfo:{},
-    VIPInfo:{},
-    carInfo:{},
+    // 用户登录后的信息，包含车辆信息等
+    userInfo: {},
+    // 用户个人信息，比如地址、省会等
+    userDetail: {},
+    // 用户会员信息
+    VIPInfo: {},
+    //carInfo:{},
     cars: []
 };
 
@@ -28,25 +32,29 @@ export default function fields(state = initialState, action = {}) {
     switch (action.type) {
         case types.UPDATE_LOGIN:
             return Object.assign({}, state, action.value);
-        // 获取用户信息
-        case types.LOGIN:
+        // 更新用户信息
+        case types.UPDATE_USER_INFO:
             return Object.assign({}, state, {
                 userInfo: action.value
+            });
+        case types.FETCH_VIP_INFO:
+            return Object.assign({}, state, {
+                VIPInfo: action.value
             });
         // 获取车辆信息
         case types.FETCH_CAR_INFO:
             return Object.assign({}, state, {
                 cars: action.value
             });
-        // 初始化页面
-        case "initIndex":
+        // 首页加载
+        case types.INIT_INDEX:
             return Object.assign({}, state, {
                 userInfo: action.value.userInfo,
                 cars: action.value.carInfo.CARS
             });
-        case "getUserInfo":
+        case types.FETCH_USER_INFO:
             return Object.assign({}, state,{
-                userInfo:action.value
+                userDetail: action.value
             });
         case "getVIPInfo":
             return Object.assign({}, state,{

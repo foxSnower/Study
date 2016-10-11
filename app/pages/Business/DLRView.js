@@ -14,7 +14,7 @@ import{
 }from 'react-native';
 
 import PickerAndroid from '../../components/PickerAndroid';
-import DlrMapView from './DlrMapView'
+import DlrMapView from './DLRMapView';
 
 let Picker = Platform.OS === 'ios' ? PickerIOS : PickerAndroid;
 
@@ -301,7 +301,7 @@ class DLRView extends Component {
                 <View style={{flex: 1, flexDirection: "row",paddingVertical:8}}>
                     <TouchableOpacity onPress={()=> {
                         this.props.navigator.push({
-                            component: DLRMapView,
+                            component: DlrMapView,
                             params: {
                                 LAT: rowData.LAT,
                                 LNG: rowData.LNG,

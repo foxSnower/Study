@@ -8,14 +8,18 @@ export const UPDATE_LOGIN = 'UPDATE_LOGIN';
 /*------------------
     首页
 ------------------*/
-// 初始化首页
+// 首页加载
 export const INIT_INDEX = "INIT_INDEX";
 /*------------------
     用户登录
 ------------------*/
-export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
+// 更新用户信息
+export const UPDATE_USER_INFO = "UPDATE_USER_INFO";
 // 用户信息
+export const FETCH_USER_INFO = "FETCH_USER_INFO";
+// 会员信息
+export const FETCH_VIP_INFO = "FETCH_VIP_INFO";
 
 /*------------------
     用车百科

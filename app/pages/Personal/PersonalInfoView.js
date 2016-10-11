@@ -1,34 +1,60 @@
 /**
  * Created by 楚寒 on 2016/10/8.
  */
-import React, {Component} from 'react';
+import React, {
+    Component
+} from 'react';
 import {
     StyleSheet,
     View,
     Text,
-    TextInput,ScrollView,
+    TextInput,
+    ScrollView,
     Image,
     TouchableOpacity
 } from 'react-native';
-
-import {connect} from 'react-redux';
-import ScrollableTabView, {ScrollableTabBar,} from 'react-native-scrollable-tab-view';
-import {BGColor, BTNColor, Screen, pixel1,ly_Toast} from '../../utils/CommonUtil';
+// third module
+import {
+    connect
+} from 'react-redux';
+import ScrollableTabView, {
+    ScrollableTabBar,
+} from 'react-native-scrollable-tab-view';
+// action
+import {
+    updateLogin,
+    getUserInfo,
+    getVIPInfo,
+    getCarInfo
+} from '../../actions/loginAction';
+// util
+import {
+    BGColor,
+    BTNColor,
+    Screen,
+    pixel1,
+    ly_Toast,
+    Debug
+} from '../../utils/CommonUtil';
+import {
+    IMGURL
+} from '../../utils/RequestURL';
 import NavBar from '../../components/DefaultNavBar';
-import LoaderView from '../../components/LoaderView'
-import {IMGURL} from '../../utils/RequestURL'
-import { updateLogin,getUserInfo,getVIPInfo,getCarInfo } from '../../actions/loginAction'
-import UserDefaults from '../../utils/GlobalStorage'
-import SelectPickerView from '../Business/CarBrandPicker'
+import LoaderView from '../../components/LoaderView';
+import UserDefaults from '../../utils/GlobalStorage';
+import SelectPickerView from '../Business/CarBrandPicker';
 
-class PersonalRow extends Component{
-    constructor(props){
+class PersonalRow extends Component {
+    constructor(props) {
         super(props)
     }
 
-    render(){
-        const {title,content } = this.props;
-        return(
+    render() {
+        const {
+            title,
+            content
+        } = this.props;
+        return (
             <View style={styles.row}>
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.content}>{content}</Text>
@@ -38,85 +64,102 @@ class PersonalRow extends Component{
 }
 
 class PersonalInfoView extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state={
-            carInfoArr:[],
-            carInfo:{},
-            loaded:false
+        this.state = {
+            carInfoArr: [],
+            carInfo: {},
+            loaded: false
         }
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.timer && clearTimeout(this.timer)
     }
 
-    componentDidMount(){
-        this.timer = setTimeout(()=>{
+    componentDidMount() {
+        const {
+            dispatch
+        } = this.props;
+        const {
+            cars,
+            userInfo
+        } = this.props.login;
+        this.timer = setTimeout(() => {
             this.setState({
-                loaded:true
+                loaded: true
             })
-        },1500)
-        const { carInfo } = this.props.login;
+        }, 1500); 
         this.setState({
-            carInfoArr:carInfo.CARS,
-            carInfo:{
-                carNo:carInfo.CARS[0].CAR_NO,
-                vin:carInfo.CARS[0].VIN,
-                carSeriesName: carInfo.CARS[0].CAR_SERIES_NAME,
-                carColor:carInfo.CARS[0].CAR_COLOR,
-                dlrShortName:carInfo.CARS[0].DLR_SHORT_NAME,
-                buyDate:carInfo.CARS[0].BUY_DATE,
-                lastRepairDate:carInfo.CARS[0].LAST_REPAIR_DATE,
+            carInfoArr: cars,
+            carInfo: {
+                carNo: cars[0].CAR_NO,
+                vin: cars[0].VIN,
+                carSeriesName: cars[0].CAR_SERIES_NAME,
+                carColor: cars[0].CAR_COLOR,
+                dlrShortName: cars[0].DLR_SHORT_NAME,
+                buyDate: cars[0].BUY_DATE,
+                lastRepairDate: cars[0].LAST_REPAIR_DATE,
             }
-        })
-        UserDefaults.objectForKey("userInfo",userInfo => {
-            if(userInfo){
-                const { dispatch } = this.props;
-                // 获取用户信息
-                getUserInfo(userInfo["LOGIN_USER_ID"], res=>{ 
-                    dispatch(res);
-                });
-                getVIPInfo(userInfo["LOGIN_USER_ID"],res=>{ dispatch(res);});
-                // getCarInfo(userInfo["LOGIN_USER_ID"],res=>{
-                //     dispatch(res);
-                // });
-
-            }else{
-                ly_Toast("您还有登录吗")
-                return
-            }
-        })
+        });
+        if (userInfo && userInfo.LOGIN_USER_ID) {
+            // 获取用户详细信息
+            getUserInfo(userInfo.LOGIN_USER_ID, action => {
+                    if (action.type) {
+                        dispatch(action);
+                    } else {
+                        Debug ? alert(action) : ly_Toast("暂未获取到，请稍后尝试");
+                    }
+                })
+                // 获取会员信息
+            getVIPInfo(userInfo.LOGIN_USER_ID, action => {
+                if (action.type) {
+                    // 获取会员信息成功
+                    dispatch(action);
+                } else {
+                    Debug ? alert(action) : ly_Toast("暂未获取到，请稍后尝试");
+                }
+            });
+        } else {
+            ly_Toast("您还有登录吗")
+            return;
+        }
     }
 
-     //个人信息
+    //个人信息
     infoLeft = () => {
-        const { login } = this.props
-        return(
-            <ScrollView tabLabel="个人信息">
+            const {
+                login
+            } = this.props;
+            return (
+                <ScrollView tabLabel="个人信息">
                 <View>
                     <PersonalRow title="姓名" content={login.userInfo.CUST_NAME} />
-                    <PersonalRow title="性别" content={login.userInfo.GENDER} />
+                    <PersonalRow title="性别" content={login.userInfo.GENDER === "1"? "男" : "女"} />
                     <PersonalRow title="手机号码" content={login.userInfo.CUST_TEL} />
-                    <PersonalRow title="省份" content={login.userInfo.PROVINCE} />
-                    <PersonalRow title="城市" content={login.userInfo.CITY} />
-                    <PersonalRow title="区县" content={login.userInfo.COUNTRY} />
-                    <PersonalRow title="详细地址" content={login.userInfo.CUST_ADDR} />
+                    <PersonalRow title="省份" content={login.userDetail.PROVINCE} />
+                    <PersonalRow title="城市" content={login.userDetail.CITY} />
+                    <PersonalRow title="区县" content={login.userDetail.COUNTRY} />
+                    <PersonalRow title="详细地址" content={login.userDetail.CUST_ADDR} />
                 </View>
 
             </ScrollView>
-        )
-    }
-    //车辆信息
+            )
+        }
+        //车辆信息
     infoCenter = () => {
-        const icon_go = `${IMGURL}/images/icon_link_go2.png`;
-        const { carInfo } = this.props.login;
-        return(
+            const {
+                cars
+            } = this.props.login;
+            const carInfo = cars[0];
+            const icon_go = `${IMGURL}/images/icon_link_go2.png`;
+            return (
                 <ScrollView tabLabel="车辆信息">
                     <View>
                         <TouchableOpacity style={styles.row}
-                                            onPress={()=>{
-                                                this.selectViewLocale.onShow()
-                                            }}>
+                            onPress={()=>{
+                                this.selectViewLocale.onShow()
+                            }}
+                        >
                             <Text style={styles.title}>车牌</Text>
                             <View style={{flexDirection:"row"}}>
                                 <Text style={[styles.content,{marginRight:10}]}>{this.state.carInfo.carNo}
@@ -124,23 +167,27 @@ class PersonalInfoView extends Component {
                                 <Image source={{uri:icon_go}} style={{paddingTop:15,width:10,height:20}} />
                             </View>
                         </TouchableOpacity>
-                        <SelectPickerView ref={(p)=>this.selectViewLocale = p}
-                                          pickerArr={this.state.carInfoArr}
-                                          defaultValue={this.state.carInfo.CAR_NO}
-                                          onChange={(itemValue, itemPosition)=> {
-                                              this.setState({
-                                                  carInfo:{
-                                                      carNo:this.state.carInfoArr[itemPosition].CAR_NO,
-                                                      vin:this.state.carInfoArr[itemPosition].VIN,
-                                                      carSeriesName: this.state.carInfoArr[itemPosition].CAR_SERIES_NAME,
-                                                      carColor:this.state.carInfoArr[itemPosition].CAR_COLOR,
-                                                      dlrShortName:this.state.carInfoArr[itemPosition].DLR_SHORT_NAME,
-                                                      buyDate:this.state.carInfoArr[itemPosition].BUY_DATE,
-                                                      lastRepairDate:this.state.carInfoArr[itemPosition].LAST_REPAIR_DATE,
-                                                  }
-                                              })
-                                          }}
-                                          type={true}
+                        <SelectPickerView 
+                            ref={(p)=>this.selectViewLocale = p}
+                            pickerArr={this.state.carInfoArr}
+                            defaultValue={this.state.carInfo.CAR_NO}
+                            onChange={(itemValue, itemPosition)=> {
+                                this.setState({
+                                    carInfo:{
+                                        carNo:this.state.carInfoArr[itemPosition].CAR_NO,
+                                        vin:this.state.carInfoArr[itemPosition].VIN,
+                                        carSeriesName: this.state.carInfoArr[itemPosition].CAR_SERIES_NAME,
+                                        carColor:this.state.carInfoArr[itemPosition].CAR_COLOR,
+                                        dlrShortName:this.state.carInfoArr[itemPosition].DLR_SHORT_NAME,
+                                        buyDate:this.state.carInfoArr[itemPosition].BUY_DATE,
+                                        lastRepairDate:this.state.carInfoArr[itemPosition].LAST_REPAIR_DATE,
+                                    }
+                                })
+                            }}
+                            type={true}
+                            onPressConfirm = {()=> {
+                                return;
+                            }}
                         />
                         <PersonalRow title="车系" content={this.state.carInfo.carSeriesName} />
                         <PersonalRow title="车身颜色" content={this.state.carInfo.carColor} />
@@ -151,12 +198,14 @@ class PersonalInfoView extends Component {
                     </View>
                 </ScrollView>
             )
-    }
-    //会员信息
+        }
+        //会员信息
     infoRight = () => {
         const icon_code = `${IMGURL}/images/icon_code.png`;
-        const  { login } = this.props;
-        return(
+        const {
+            login
+        } = this.props;
+        return (
             <ScrollView tabLabel="会员信息">
                 <View>
                     <PersonalRow title="会员卡号" content={login.VIPInfo.CARD_NO} />
@@ -171,8 +220,8 @@ class PersonalInfoView extends Component {
 
 
     render() {
-        if(!this.state.loaded){
-            return(
+        if (!this.state.loaded) {
+            return (
                 <View style={styles.page}>
                     <NavBar title="个人信息"
                             onBack={()=> {
@@ -211,36 +260,38 @@ class PersonalInfoView extends Component {
     }
 }
 
-export default connect ((state) => {
-    const { login } = state;
+export default connect((state) => {
+    const {
+        login
+    } = state;
     return {
         login
     }
 })(PersonalInfoView)
 
 const styles = StyleSheet.create({
-    page:{
-        backgroundColor:BGColor,
-        flex:1
+    page: {
+        backgroundColor: BGColor,
+        flex: 1
     },
-    row:{
-        borderBottomWidth:0.8,
-        borderBottomColor:"#d9d9d9",
+    row: {
+        borderBottomWidth: 0.8,
+        borderBottomColor: "#d9d9d9",
         flexDirection: "row",
-        alignItems:"center",
-        padding:10,
-        backgroundColor:"#fff",
+        alignItems: "center",
+        padding: 10,
+        backgroundColor: "#fff",
         justifyContent: "space-between",
-        height:55
+        height: 55
     },
-    title:{
-        color:"#2b2b2b",
-        marginLeft:10,
-        marginRight:10,
+    title: {
+        color: "#2b2b2b",
+        marginLeft: 10,
+        marginRight: 10,
     },
-    content:{
-        color:"#2b2b2b",
+    content: {
+        color: "#2b2b2b",
         justifyContent: "center",
-        alignItems:"center"
+        alignItems: "center"
     }
 })

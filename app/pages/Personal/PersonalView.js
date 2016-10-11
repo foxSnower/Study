@@ -56,7 +56,7 @@ import SettingView from './SettingView'
 import PersonalInfoView from './PersonalInfoView'
 import MyActivity from './MyActivity'
 
-let userInfoPerson = {};
+
 const userType1 = [
     [{
         text: "车主绑定",
@@ -141,7 +141,8 @@ class PersonalView extends Component {
             login
         } = this.props;
         // 使用用户id 去查询积分
-        if(login.userInfo.LOGIN_USER_ID && login.userInfo.CARD_NO) {
+        //alert(login.userInfo.USER_TYPE);
+        if(login.userInfo.USER_TYPE === "2") {
             // 用户id存在且是会员
             fetchScores(login.userInfo.LOGIN_USER_ID, (action) => {
                 if (action.type) {
@@ -295,6 +296,7 @@ class PersonalView extends Component {
                             TOTAL_POINT: 0
                         }
                     });
+                    const userInfoPerson = this.props.login.userInfo;
                     //清空用户信息缓存
                     let clearUserInfo = {
                         LOGIN_USER_ID: userInfoPerson["LOGIN_USER_ID"],
@@ -312,7 +314,7 @@ class PersonalView extends Component {
                     // 重置用户信息
                     UserDefaults.setObject("userInfo", clearUserInfo)
                     dispatch({
-                        type: "LOGIN",
+                        type: "UPDATE_USER_INFO",
                         value: clearUserInfo
                     });
                     // 重置车辆信息
@@ -425,7 +427,7 @@ class PersonalView extends Component {
                             </Text>
                         </View>
                         {
-                            login.userInfo.CARD_NO ? 
+                            login.userInfo.USER_TYPE === "2" ? 
                             <TouchableOpacity 
                                 style={styles.point}
                                 onPress = {()=> {
